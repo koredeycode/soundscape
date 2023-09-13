@@ -34,5 +34,7 @@ class UserSerializer:
         serialized_data = {
             'id': str(self.instance.id),
             'username': str(self.instance.username),
+            'first_name': str(self.instance.first_name),
+            'last_name': str(self.instance.last_name),
         }
         return serialized_data

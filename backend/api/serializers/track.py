@@ -39,11 +39,13 @@ class TrackSerializer:
             'description': str(self.instance.description),
             'artist': ArtistSerializer(self.instance.artist).data,
             'genre': GenreSerializer(self.instance.genre).data,
-            'duration': str(self.instance.duration),
+            'duration': self.instance.duration,
+            'streams': self.instance.streams,
             'release_date': str(self.instance.release_date),
             'featured_artists': [ArtistSerializer(artist).data for artist in self.instance.featured_artists.all()]
         }
 
         if hasattr(self.instance, 'albumtrack'):
-            serialized_data['album_id'] = self.instance.albumtrack.album_id
+            serialized_data['album_id'] = str(
+                self.instance.albumtrack.album_id)
         return serialized_data

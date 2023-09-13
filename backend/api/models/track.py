@@ -13,6 +13,7 @@ class Track(Base, TitleDescriptionModel):
         featured_artists (ManyToManyField): A many-to-many relationship with Artist model for featured artists.
         release_date (date): The release date of the track.
         duration (int): The duration of the track in seconds.
+        streams (int): The stream number of the track.
         genre (Genre): A reference to the genre of the track.
         audio_file (FileField): An uploaded audio file for the track.
     """
@@ -21,6 +22,7 @@ class Track(Base, TitleDescriptionModel):
         'Artist', related_name='track_featured_artist', blank=True)
     release_date = models.DateField()
     duration = models.PositiveIntegerField()  # Duration in seconds
+    streams = models.PositiveIntegerField(default=0)
     genre = models.ForeignKey('Genre', on_delete=models.CASCADE)
     audio_file = models.FileField(upload_to='files/tracks/')
 

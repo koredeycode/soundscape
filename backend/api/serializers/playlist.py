@@ -32,7 +32,7 @@ class PlaylistSerializer:
 
     @property
     def data(self):
-        # Serialize the instance to a dictionary
+        # Serialize the instance to a dictionarys
         serialized_data = {
             'id': str(self.instance.id),
             'title': str(self.instance.title),
@@ -41,4 +41,6 @@ class PlaylistSerializer:
         }
         if hasattr(self.instance, 'userplaylist'):
             serialized_data['user'] = str(self.instance.userplaylist.user.id)
+        if hasattr(self.instance, 'siteplaylist'):
+            serialized_data['isPublic'] = self.instance.siteplaylist.isPublic
         return serialized_data

@@ -12,7 +12,7 @@ class Artist(Base):
         bio (str): A textual biography or description of the artist.
         user (User): A reference to the user account associated with the artist.
     """
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, blank=False, unique=True)
     bio = models.TextField(blank=True)
     user = models.OneToOneField('User', on_delete=models.CASCADE)
 

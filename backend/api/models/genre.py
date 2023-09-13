@@ -9,7 +9,7 @@ class Genre(Base):
     Attributes:
         name (str): The name of the music genre.
     """
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, blank=False, unique=True)
 
     def __str__(self):
         return self.name
