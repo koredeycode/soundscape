@@ -1,31 +1,31 @@
 from django.views import View
 from django.http import JsonResponse
 import json
-from api.models import Track, SingleTrack
-from api.serializers import TrackSerializer, SingleTrackSerializer
+from api.models import Album
+from api.serializers import AlbumSerializer
 from django.utils.decorators import method_decorator
 from api.auth.decorators import user_required, artist_required
 
 
-class TrackView(View):
+class AlbumView(View):
     @method_decorator(user_required)
     def get(self, request, id):
         """
-        tracks/id
+        albums/id
         """
-        track = self.get_track(id=id)
-        if track:
-            return JsonResponse(TrackSerializer(track).data)
-        return JsonResponse({"error": "Track not found"}, status=404)
+        album = self.get_album(id=id)
+        if album:
+            return JsonResponse(AlbumSerializer(album).data)
+        return JsonResponse({"error": "Album not found"}, status=404)
 
     @method_decorator(artist_required)
     def post(self, request):
         """
-        tracks/
+        albums/
         """
         data = self.parse_request_data(request)
         data['artist_id'] = request.user.artist.id
-        serializer = SingleTrackSerializer(data=data)
+        serializer = AlbumSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             if serializer.errors:
@@ -37,14 +37,14 @@ class TrackView(View):
     @method_decorator(artist_required)
     def put(self, request, id):
         """
-        tracks/id
+        albums/id
         """
-        track = self.get_singletrack(id=id)
-        if track:
-            if track.artist.id != request.user.artist.id:
-                return JsonResponse({"error": "You don't have permission to edit this track"}, status=403)
+        album = self.get_album(id=id)
+        if album:
+            if album.artist.id != request.user.artist.id:
+                return JsonResponse({"error": "You don't have permission to delete this album"}, status=403)
             data = self.parse_request_data(request)
-            serializer = SingleTrackSerializer(instance=track, data=data)
+            serializer = AlbumSerializer(instance=album, data=data)
             if serializer.is_valid():
                 serializer.save()
                 if serializer.errors:
@@ -52,20 +52,20 @@ class TrackView(View):
                 return JsonResponse(serializer.data, status=200)
             else:
                 return JsonResponse(serializer.errors, status=400)
-        return JsonResponse({"error": "Track not found"}, status=404)
+        return JsonResponse({"error": "Album not found"}, status=404)
 
     @method_decorator(artist_required)
     def delete(self, request, id):
         """
-        tracks/id
+        albums/id
         """
-        track = self.get_singletrack(id=id)
-        if track:
-            if track.artist.id != request.user.artist.id:
-                return JsonResponse({"error": "You don't have permission to delete this track"}, status=403)
-            track.delete()
+        album = self.get_album(id=id)
+        if album:
+            if album.artist.id != request.user.artist.id:
+                return JsonResponse({"error": "You don't have permission to delete this album"}, status=403)
+            album.delete()
             return JsonResponse({}, status=204)
-        return JsonResponse({"error": "Track not found"}, status=404)
+        return JsonResponse({"error": "Album not found"}, status=404)
 
     def parse_request_data(self, request):
         # Helper function to parse request data (e.g., JSON) and return a dictionary
@@ -74,16 +74,9 @@ class TrackView(View):
         except json.JSONDecodeError:
             return {}
 
-    def get_track(self, id):
-        # Helper function to get an instance of Track by ID
+    def get_album(self, id):
+        # Helper function to get an instance of Album by ID
         try:
-            return Track.objects.get(id=id)
-        except Exception as e:
-            return None
-
-    def get_singletrack(self, id):
-        # Helper function to get an instance of Track by ID
-        try:
-            return SingleTrack.objects.get(id=id)
+            return Album.objects.get(id=id)
         except Exception as e:
             return None

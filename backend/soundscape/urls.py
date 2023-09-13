@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from api.views import custom_404_view
 from api.auth.views import GetArtistView, LoginView, LogoutView, RegisterView, GetUserView
-from api.views import GenreView, SitePlaylistView, UserPlaylistView, TrackView
+from api.views import GenreView, SitePlaylistView, UserPlaylistView, TrackView, AlbumView, ArtistView
 
 authpatterns = [
     path('login/', LoginView.as_view(), name='login'),
@@ -38,6 +38,9 @@ api_patterns = [
          UserPlaylistView.as_view(), name='user-playlist'),
     path('tracks/', TrackView.as_view(), name='tracks'),
     path('tracks/<uuid:id>/', TrackView.as_view(), name='track'),
+    path('albums/', AlbumView.as_view(), name='albums'),
+    path('albums/<uuid:id>/', AlbumView.as_view(), name='album'),
+    path('artists/<uuid:id>/', ArtistView.as_view(), name='artist')
 ]
 
 urlpatterns = [

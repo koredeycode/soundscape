@@ -3,6 +3,8 @@ from .genre import GenreView
 from .site_playlist import SitePlaylistView
 from .user_playlist import UserPlaylistView
 from .track import TrackView
+from .album import AlbumView
+from .artist import *
 
 
 def custom_404_view(request, exception=None):
