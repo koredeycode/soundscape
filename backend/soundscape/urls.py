@@ -16,14 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from api.views import custom_404_view
-from api.auth.views import LoginView, LogoutView, RegisterView, GetMeView
+from api.auth.views import GetArtistView, LoginView, LogoutView, RegisterView, GetUserView
 from api.views import GenreView, SitePlaylistView, UserPlaylistView, TrackView
 
 authpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('register/', RegisterView.as_view(), name='register'),
-    path('me/', GetMeView.as_view(), name='get-me'),
+    path('isuser/', GetUserView.as_view(), name='get-user'),
+    path('isartist/', GetArtistView.as_view(), name='get-artist')
 ]
 
 api_patterns = [

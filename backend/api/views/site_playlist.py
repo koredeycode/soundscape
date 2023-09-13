@@ -15,13 +15,13 @@ class SitePlaylistView(View):
         site_playlists/id
         """
         if id:
-            playlist = self.get_playlist(id=id, user=request.user)
+            playlist = self.get_playlist(id=id)
             if playlist:
                 return JsonResponse(SitePlaylistSerializer(playlist).data)
             return JsonResponse({"error": "Playlist not found"}, status=404)
         else:
-            playlists = self.get_playlists(user=request.user)
-            return JsonResponse([SitePlaylistSerializer(playlist).data for playlist in playlists])
+            playlists = self.get_playlists()
+            return JsonResponse([SitePlaylistSerializer(playlist).data for playlist in playlists], safe=False)
 
     @method_decorator(admin_required)
     def post(self, request, id=None):
@@ -44,7 +44,7 @@ class SitePlaylistView(View):
         """
         site_playlists/id
         """
-        playlist = self.get_playlist(id=id, user=request.user)
+        playlist = self.get_playlist(id=id)
         if playlist:
             data = self.parse_request_data(request)
             serializer = SitePlaylistSerializer(instance=playlist, data=data)
@@ -62,7 +62,7 @@ class SitePlaylistView(View):
         """
         site_playlists/id
         """
-        playlist = self.get_playlist(id=id, user=request.user)
+        playlist = self.get_playlist(id=id)
         if playlist:
             playlist.delete()
             return JsonResponse({}, status=204)
@@ -75,15 +75,15 @@ class SitePlaylistView(View):
         except json.JSONDecodeError:
             return {}
 
-    def get_playlist(self, user, id):
+    def get_playlist(self, id):
         # Helper function to get an instance of SitePlaylist by ID
         try:
-            return SitePlaylist.objects.get(id=id, user=user)
+            return SitePlaylist.objects.get(id=id)
         except Exception as e:
             return None
 
-    def get_playlists(self, user):
+    def get_playlists(self):
         try:
-            return SitePlaylist.objects.filter(user=user)
+            return SitePlaylist.objects.filter()
         except Exception as e:
             return []

@@ -4,7 +4,6 @@ from api.models import AuthToken
 
 def user_required(view_func):
     def wrapper(request, *args, **kwargs):
-        print(request.headers)
         token_value = request.headers.get(
             'Authorization', '').split('Token ')[-1].strip()
         try:
@@ -24,10 +23,9 @@ def artist_required(view_func):
         try:
             token = AuthToken.objects.get(id=token_value)
             request.user = token.user
-            if request.user.artist:
+            if hasattr(request.user, 'artist'):
                 return view_func(request, *args, **kwargs)
-            else:
-                return JsonResponse({'error': 'Unauthorized'}, status=401)
+            return JsonResponse({'error': 'Unauthorized'}, status=401)
         except Exception as e:
             return JsonResponse({'error': 'Unauthorized'}, status=401)
     return wrapper
@@ -41,10 +39,9 @@ def admin_required(view_func):
             token = AuthToken.objects.get(id=token_value)
             request.user = token.user
             # alway  true though to be edited
-            if 2 == 2 or request.user.admin:
+            if 2 == 2 or hasattr(request.user, 'admin'):
                 return view_func(request, *args, **kwargs)
-            else:
-                return JsonResponse({'error': 'Unauthorized'}, status=401)
+            return JsonResponse({'error': 'Unauthorized'}, status=401)
         except Exception as e:
             return JsonResponse({'error': 'Unauthorized'}, status=401)
     return wrapper

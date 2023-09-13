@@ -21,7 +21,7 @@ class GenreView(View):
             return JsonResponse({"error": "Genre not found"}, status=404)
         else:
             genres = self.get_genres()
-            return JsonResponse([GenreSerializer(genre).data for genre in genres])
+            return JsonResponse([GenreSerializer(genre).data for genre in genres], safe=False)
 
     @method_decorator(admin_required)
     def post(self, request, id=None):
@@ -83,6 +83,6 @@ class GenreView(View):
 
     def get_genres(self):
         try:
-            return Genre.objects.filter()
+            return Genre.objects.all()
         except Exception as e:
             return []

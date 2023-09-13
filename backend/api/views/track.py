@@ -9,7 +9,7 @@ from api.auth.decorators import user_required, artist_required
 
 class TrackView(View):
     @method_decorator(user_required)
-    def get(self, request, id):
+    def get(self, request, id=None):
         """
         tracks/id
         """

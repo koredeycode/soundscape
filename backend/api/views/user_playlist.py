@@ -21,7 +21,7 @@ class UserPlaylistView(View):
             return JsonResponse({"error": "Playlist not found"}, status=404)
         else:
             playlists = self.get_playlists(user=request.user)
-            return JsonResponse([UserPlaylistSerializer(playlist).data for playlist in playlists])
+            return JsonResponse([UserPlaylistSerializer(playlist).data for playlist in playlists], safe=False)
 
     @method_decorator(user_required)
     def post(self, request, id=None):
