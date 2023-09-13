@@ -1,0 +1,211 @@
+[
+  {
+    "id": "97d2f2d4-727c-428d-9fd2-531a09c7fcf6",
+    "title": "Top songs",
+    "description": "None",
+    "tracks": [
+      {
+        "id": "0d058878-416e-4a9d-9db5-b423caf19d22",
+        "title": "Question",
+        "description": "None",
+        "artist": {
+          "id": "88fe146c-ac98-41b1-a39d-8037c390a79d",
+          "name": "Burna",
+          "bio": "Big 7, elmejor",
+          "user": {
+            "id": "99e3bf78-4f07-434d-a986-c19ae9e52df8",
+            "username": "burna"
+          }
+        },
+        "genre": {
+          "id": "81b2ed9d-f389-47ab-bab4-f0a8f59c5d44",
+          "name": "Drill"
+        },
+        "duration": "180",
+        "release_date": "2023-01-01",
+        "featured_artists": []
+      },
+      {
+        "id": "0eacf523-20ac-4aff-b665-1b1512e23385",
+        "title": "Normal",
+        "description": "None",
+        "artist": {
+          "id": "88fe146c-ac98-41b1-a39d-8037c390a79d",
+          "name": "Burna",
+          "bio": "Big 7, elmejor",
+          "user": {
+            "id": "99e3bf78-4f07-434d-a986-c19ae9e52df8",
+            "username": "burna"
+          }
+        },
+        "genre": {
+          "id": "5bfdb7df-1948-490b-b313-529acab6486c",
+          "name": "Afrofusion"
+        },
+        "duration": "300",
+        "release_date": "2023-01-01",
+        "featured_artists": [],
+        "album_id": "b8f153fe-a7c5-426c-9b06-725d330000f8"
+      },
+      {
+        "id": "26b568af-8057-4a16-a1bc-b9df7fe4e5f3",
+        "title": "City Boy",
+        "description": "None",
+        "artist": {
+          "id": "88fe146c-ac98-41b1-a39d-8037c390a79d",
+          "name": "Burna",
+          "bio": "Big 7, elmejor",
+          "user": {
+            "id": "99e3bf78-4f07-434d-a986-c19ae9e52df8",
+            "username": "burna"
+          }
+        },
+        "genre": {
+          "id": "5bfdb7df-1948-490b-b313-529acab6486c",
+          "name": "Afrofusion"
+        },
+        "duration": "300",
+        "release_date": "2023-01-01",
+        "featured_artists": [],
+        "album_id": "b8f153fe-a7c5-426c-9b06-725d330000f8"
+      },
+      {
+        "id": "859f0b20-1882-4d58-af80-fc574f05c5f1",
+        "title": "Giza",
+        "description": "None",
+        "artist": {
+          "id": "88fe146c-ac98-41b1-a39d-8037c390a79d",
+          "name": "Burna",
+          "bio": "Big 7, elmejor",
+          "user": {
+            "id": "99e3bf78-4f07-434d-a986-c19ae9e52df8",
+            "username": "burna"
+          }
+        },
+        "genre": {
+          "id": "5bfdb7df-1948-490b-b313-529acab6486c",
+          "name": "Afrofusion"
+        },
+        "duration": "300",
+        "release_date": "2023-01-01",
+        "featured_artists": [],
+        "album_id": "b8f153fe-a7c5-426c-9b06-725d330000f8"
+      },
+      {
+        "id": "abe3549d-292d-4a03-bed6-0fd8a75b8d26",
+        "title": "Want It All",
+        "description": "None",
+        "artist": {
+          "id": "88fe146c-ac98-41b1-a39d-8037c390a79d",
+          "name": "Burna",
+          "bio": "Big 7, elmejor",
+          "user": {
+            "id": "99e3bf78-4f07-434d-a986-c19ae9e52df8",
+            "username": "burna"
+          }
+        },
+        "genre": {
+          "id": "5bfdb7df-1948-490b-b313-529acab6486c",
+          "name": "Afrofusion"
+        },
+        "duration": "180",
+        "release_date": "2023-01-01",
+        "featured_artists": []
+      }
+    ]
+  },
+  {
+    "id": "1fc3768a-143b-4e50-81b3-674ce3101404",
+    "title": "Tunny Playlist",
+    "description": "None",
+    "tracks": [
+      {
+        "id": "0d058878-416e-4a9d-9db5-b423caf19d22",
+        "title": "Question",
+        "description": "None",
+        "artist": {
+          "id": "88fe146c-ac98-41b1-a39d-8037c390a79d",
+          "name": "Burna",
+          "bio": "Big 7, elmejor",
+          "user": {
+            "id": "99e3bf78-4f07-434d-a986-c19ae9e52df8",
+            "username": "burna"
+          }
+        },
+        "genre": {
+          "id": "81b2ed9d-f389-47ab-bab4-f0a8f59c5d44",
+          "name": "Drill"
+        },
+        "duration": "180",
+        "release_date": "2023-01-01",
+        "featured_artists": []
+      },
+      {
+        "id": "0eacf523-20ac-4aff-b665-1b1512e23385",
+        "title": "Normal",
+        "description": "None",
+        "artist": {
+          "id": "88fe146c-ac98-41b1-a39d-8037c390a79d",
+          "name": "Burna",
+          "bio": "Big 7, elmejor",
+          "user": {
+            "id": "99e3bf78-4f07-434d-a986-c19ae9e52df8",
+            "username": "burna"
+          }
+        },
+        "genre": {
+          "id": "5bfdb7df-1948-490b-b313-529acab6486c",
+          "name": "Afrofusion"
+        },
+        "duration": "300",
+        "release_date": "2023-01-01",
+        "featured_artists": [],
+        "album_id": "b8f153fe-a7c5-426c-9b06-725d330000f8"
+      },
+      {
+        "id": "26b568af-8057-4a16-a1bc-b9df7fe4e5f3",
+        "title": "City Boy",
+        "description": "None",
+        "artist": {
+          "id": "88fe146c-ac98-41b1-a39d-8037c390a79d",
+          "name": "Burna",
+          "bio": "Big 7, elmejor",
+          "user": {
+            "id": "99e3bf78-4f07-434d-a986-c19ae9e52df8",
+            "username": "burna"
+          }
+        },
+        "genre": {
+          "id": "5bfdb7df-1948-490b-b313-529acab6486c",
+          "name": "Afrofusion"
+        },
+        "duration": "300",
+        "release_date": "2023-01-01",
+        "featured_artists": [],
+        "album_id": "b8f153fe-a7c5-426c-9b06-725d330000f8"
+      },
+      {
+        "id": "abe3549d-292d-4a03-bed6-0fd8a75b8d26",
+        "title": "Want It All",
+        "description": "None",
+        "artist": {
+          "id": "88fe146c-ac98-41b1-a39d-8037c390a79d",
+          "name": "Burna",
+          "bio": "Big 7, elmejor",
+          "user": {
+            "id": "99e3bf78-4f07-434d-a986-c19ae9e52df8",
+            "username": "burna"
+          }
+        },
+        "genre": {
+          "id": "5bfdb7df-1948-490b-b313-529acab6486c",
+          "name": "Afrofusion"
+        },
+        "duration": "180",
+        "release_date": "2023-01-01",
+        "featured_artists": []
+      }
+    ],
+    "user": "99e3bf78-4f07-434d-a986-c19ae9e52df8"
+  }
+]
