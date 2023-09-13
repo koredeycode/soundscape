@@ -1,5 +1,5 @@
 from api.serializers.user import UserSerializer
-from .decorators import token_required
+from .decorators import user_required
 from django.http import JsonResponse
 from django.views import View
 from django.utils.decorators import method_decorator
@@ -26,7 +26,7 @@ class LoginView(View):
 
 
 class LogoutView(View):
-    @method_decorator(token_required)
+    @method_decorator(user_required)
     def post(self, request):
         token = AuthToken.objects.get(user=request.user)
         token.delete()
@@ -54,6 +54,6 @@ class RegisterView(View):
 
 
 class GetMeView(View):
-    @method_decorator(token_required)
+    @method_decorator(user_required)
     def get(self, request):
         return JsonResponse(UserSerializer(request.user).data)

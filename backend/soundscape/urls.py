@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from api.views import custom_404_view
 from api.auth.views import LoginView, LogoutView, RegisterView, GetMeView
-
+from api.views import GenreView, SitePlaylistView, UserPlaylistView, TrackView
 
 authpatterns = [
     path('login/', LoginView.as_view(), name='login'),
@@ -26,11 +26,24 @@ authpatterns = [
     path('me/', GetMeView.as_view(), name='get-me'),
 ]
 
+api_patterns = [
+    path('genres/', GenreView.as_view(), name='genres'),
+    path('genres/<uuid:id>/', GenreView.as_view(), name='genre'),
+    path('site_playlists/', SitePlaylistView.as_view(), name='site-playlists'),
+    path('site_playlists/<uuid:id>/',
+         SitePlaylistView.as_view(), name='site-playlist'),
+    path('user_playlists/', UserPlaylistView.as_view(), name='user-playlists'),
+    path('user_playlists/<uuid:id>/',
+         UserPlaylistView.as_view(), name='user-playlist'),
+    path('tracks/', TrackView.as_view(), name='tracks'),
+    path('tracks/<uuid:id>/', TrackView.as_view(), name='track'),
+]
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 
 urlpatterns += authpatterns
+urlpatterns += api_patterns
 
 handler404 = custom_404_view

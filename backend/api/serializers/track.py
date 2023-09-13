@@ -1,5 +1,5 @@
 # serializers.py
-from api.models import Track
+from api.models import Track, SingleTrack
 from api.serializers.artist import ArtistSerializer
 from api.serializers.genre import GenreSerializer
 
@@ -49,3 +49,20 @@ class TrackSerializer:
             serialized_data['album_id'] = str(
                 self.instance.albumtrack.album_id)
         return serialized_data
+
+
+class SingleTrackSerializer(TrackSerializer):
+    def save(self):
+        try:
+            if self.instance is None:
+                # Create a new track instance if it doesn't exist
+                self.instance = SingleTrack(**self.validated_data)
+                self.instance.save()
+            else:
+                # Update existing track instance
+                for attr, value in self.validated_data.items():
+                    setattr(self.instance, attr, value)
+                self.instance.save()
+            return self.instance
+        except Exception as e:
+            self.errors = {'error': str(e)}
