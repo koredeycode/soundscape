@@ -14,40 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from api.views import custom_404_view
-from api.auth.views import GetArtistView, LoginView, LogoutView, RegisterView, GetUserView
-from api.views import GenreView, SitePlaylistView, UserPlaylistView, TrackView, AlbumView, ArtistView
-
-authpatterns = [
-    path('login/', LoginView.as_view(), name='login'),
-    path('logout/', LogoutView.as_view(), name='logout'),
-    path('register/', RegisterView.as_view(), name='register'),
-    path('isuser/', GetUserView.as_view(), name='get-user'),
-    path('isartist/', GetArtistView.as_view(), name='get-artist')
-]
-
-api_patterns = [
-    path('genres/', GenreView.as_view(), name='genres'),
-    path('genres/<uuid:id>/', GenreView.as_view(), name='genre'),
-    path('site_playlists/', SitePlaylistView.as_view(), name='site-playlists'),
-    path('site_playlists/<uuid:id>/',
-         SitePlaylistView.as_view(), name='site-playlist'),
-    path('user_playlists/', UserPlaylistView.as_view(), name='user-playlists'),
-    path('user_playlists/<uuid:id>/',
-         UserPlaylistView.as_view(), name='user-playlist'),
-    path('tracks/', TrackView.as_view(), name='tracks'),
-    path('tracks/<uuid:id>/', TrackView.as_view(), name='track'),
-    path('albums/', AlbumView.as_view(), name='albums'),
-    path('albums/<uuid:id>/', AlbumView.as_view(), name='album'),
-    path('artists/<uuid:id>/', ArtistView.as_view(), name='artist')
-]
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('api.urls'))
 ]
 
-urlpatterns += authpatterns
-urlpatterns += api_patterns
 
 handler404 = custom_404_view
