@@ -1,10 +1,10 @@
 from api.serializers import ArtistSerializer, UserSerializer
-from .decorators import artist_required, user_required
+from .decorators import user_required
 from django.http import JsonResponse
 from django.views import View
 from django.utils.decorators import method_decorator
-from api.models import AuthToken, User
-
+from api.models import User, TokenBlacklist
+from .jwt_utils import generate_jwt_token
 import json
 
 
@@ -17,20 +17,20 @@ class LoginView(View):
             try:
                 user = User.objects.get(username=username)
             except User.DoesNotExist:
-                return JsonResponse({'error': "Username does not exist"})
+                return JsonResponse({'error': "Username does not exist"}, status=404)
             if not user.check_password(password):
-                return JsonResponse({'error': "Incorrect password"})
-            token, _ = AuthToken.objects.get_or_create(user=user)
-            return JsonResponse({'token': token.id})
+                return JsonResponse({'error': "Incorrect password"}, status=404)
+            token = generate_jwt_token(user.id)
+            return JsonResponse({'token': token})
         except json.JSONDecodeError:
-            return JsonResponse({"error": "invalid data"})
+            return JsonResponse({"error": "invalid data"}, status=400)
 
 
 class LogoutView(View):
     @method_decorator(user_required)
     def post(self, request):
-        token = AuthToken.objects.get(user=request.user)
-        token.delete()
+        # BlacklistToken
+        TokenBlacklist.objects.create(token=request.jwt_token)
         return JsonResponse({'message': 'Logout successful'})
 
 
@@ -59,7 +59,7 @@ class GetUserView(View):
         return JsonResponse(UserSerializer(request.user).data)
 
 
-class GetArtistView(View):
-    @method_decorator(artist_required)
-    def get(self, request):
-        return JsonResponse(ArtistSerializer(request.user.artist).data)
+# class GetArtistView(View):
+#     @method_decorator(artist_required)
+#     def get(self, request):
+#         return JsonResponse(ArtistSerializer(request.user.artist).data)

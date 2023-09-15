@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from api.auth.views import GetArtistView, LoginView, LogoutView, RegisterView, GetUserView
+from api.auth.session_auth.views import GetArtistView, LoginView, LogoutView, RegisterView, GetUserView
 from api.views import GenreView, SitePlaylistView, UserPlaylistView, TrackView, AlbumView, ArtistView
 
 authpatterns = [

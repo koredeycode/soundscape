@@ -4,6 +4,7 @@ from api.models import AuthToken
 
 def user_required(view_func):
     def wrapper(request, *args, **kwargs):
+        print(request.COOKIES)
         token_value = request.headers.get(
             'Authorization', '').split('Token ')[-1].strip()
         try:
