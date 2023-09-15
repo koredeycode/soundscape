@@ -4,7 +4,7 @@ import json
 from api.models import Album, SingleTrack
 from api.serializers import AlbumSerializer, TrackSerializer
 from django.utils.decorators import method_decorator
-from api.auth.decorators import user_required
+from api.auth.session_auth.decorators import user_required, artist_required
 
 
 class ArtistView(View):

@@ -81,6 +81,14 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'soundscape',
+    #     'USER': 'postgres',
+    #     'PASSWORD': 'postgres',
+    #     'HOST': 'localhost',
+    #     'PORT': '',
+    # }
 }
 
 
@@ -137,7 +145,6 @@ CORS_ALLOW_METHODS = [
     'PUT',
     'PATCH',
     'DELETE',
-    'OPTIONS',  # Include OPTIONS if you're handling preflight requests
 ]
 
 CORS_ALLOW_HEADERS = [

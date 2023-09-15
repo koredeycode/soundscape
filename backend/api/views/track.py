@@ -4,7 +4,7 @@ import json
 from api.models import Track, SingleTrack
 from api.serializers import TrackSerializer, SingleTrackSerializer
 from django.utils.decorators import method_decorator
-from api.auth.decorators import user_required, artist_required
+from api.auth.session_auth.decorators import user_required, artist_required
 
 
 class TrackView(View):
