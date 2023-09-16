@@ -145,11 +145,12 @@ CORS_ALLOW_METHODS = [
     'PUT',
     'PATCH',
     'DELETE',
+    'OPTION'
 ]
 
 CORS_ALLOW_HEADERS = [
-    'Content-Type',  # Adjust this based on your needs
-    'Authorization',  # If you're using tokens or custom headers
+    'Content-Type',
+    'Authorization',
 ]
 
 JWT_SECRET_KEY = SECRET_KEY

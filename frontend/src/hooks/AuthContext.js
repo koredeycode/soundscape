@@ -54,7 +54,7 @@ export function AuthProvider({ children }) {
       return '/login';
     } catch (error) {
       console.log(error);
-      return '/';
+      return '/register';
     }
   };
 

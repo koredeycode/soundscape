@@ -18,7 +18,7 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const to = register(formData);
+    const to = await register(formData);
     navigate(to);
   };
 
