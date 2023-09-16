@@ -20,8 +20,8 @@ class LoginView(View):
                 return JsonResponse({'error': "Username does not exist"}, status=404)
             if not user.check_password(password):
                 return JsonResponse({'error': "Incorrect password"}, status=404)
-            token = generate_jwt_token(user.id)
-            return JsonResponse({'token': token})
+            token = generate_jwt_token(str(user.id))
+            return JsonResponse({'token': str(token)})
         except json.JSONDecodeError:
             return JsonResponse({"error": "invalid data"}, status=400)
 
@@ -30,7 +30,7 @@ class LogoutView(View):
     @method_decorator(user_required)
     def post(self, request):
         # BlacklistToken
-        TokenBlacklist.objects.create(token=request.jwt_token)
+        TokenBlacklist.objects.create(TOKEN=request.jwt_token)
         return JsonResponse({'message': 'Logout successful'})
 
 

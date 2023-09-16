@@ -155,4 +155,4 @@ CORS_ALLOW_HEADERS = [
 JWT_SECRET_KEY = SECRET_KEY
 
 # Set the JWT expiration time (in seconds)
-JWT_EXPIRATION = 10  # 1 hour (adjust as needed)
+JWT_EXPIRATION = 60 * 60  # 1 hour (adjust as needed)

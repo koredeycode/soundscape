@@ -1,9 +1,8 @@
-from django_extensions.db.models import TitleDescriptionModel
-from .base import Base
+from .base import Base, TitleSlugDescriptionModel
 from django.db import models
 
 
-class Album(Base, TitleDescriptionModel):
+class Album(Base, TitleSlugDescriptionModel):
     """
     Model representing a music album.
 

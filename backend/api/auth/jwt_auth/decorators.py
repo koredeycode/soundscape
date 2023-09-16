@@ -7,7 +7,7 @@ def user_required(view_func):
     def wrapper(request, *args, **kwargs):
         token = request.headers.get(
             'Authorization', '').split('Token ')[-1].strip()
-        if TokenBlacklist.objects.filter(token=token).exists():
+        if TokenBlacklist.objects.filter(TOKEN=token).exists():
             return JsonResponse({'error': 'Unauthorized'}, status=401)
         payload = decode_jwt_token(token)
         if payload:

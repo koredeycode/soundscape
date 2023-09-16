@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-function LoginForm({ appauth }) {
+function LoginForm({ setAuth }) {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -25,10 +25,17 @@ function LoginForm({ appauth }) {
         formData,
       );
       console.log('Login successful:', response.data);
-      console.log(response.headers);
-      sessionStorage.setItem('token', response.data.token);
       Cookies.set('token', response.data.token);
-      appauth(true);
+      const userData = await axios.get('http://localhost:8000/isuser/', {
+        headers: {
+          Authorization: `Token ${Cookies.get('token')}`,
+        },
+      });
+      setAuth({
+        isAuthenticated: true,
+        user: userData.data,
+        token: Cookies.get('token'),
+      });
       // Handle successful login here (e.g., redirect or set user state)
     } catch (error) {
       console.error('Login failed:', error);

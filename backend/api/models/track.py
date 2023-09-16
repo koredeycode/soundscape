@@ -1,9 +1,8 @@
-from django_extensions.db.models import TitleDescriptionModel
-from .base import Base
+from .base import Base, TitleSlugDescriptionModel
 from django.db import models
 
 
-class Track(Base, TitleDescriptionModel):
+class Track(Base, TitleSlugDescriptionModel):
     """
     Model representing a music track.
 

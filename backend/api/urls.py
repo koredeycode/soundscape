@@ -13,9 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path
-from api.auth.session_auth.views import GetArtistView, LoginView, LogoutView, RegisterView, GetUserView
+from api.auth import LoginView, LogoutView, RegisterView, GetUserView
+# from api.auth import GetArtistView, LoginView, LogoutView, RegisterView, GetUserView
 from api.views import GenreView, SitePlaylistView, UserPlaylistView, TrackView, AlbumView, ArtistView
 
 authpatterns = [
@@ -23,7 +23,7 @@ authpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('register/', RegisterView.as_view(), name='register'),
     path('isuser/', GetUserView.as_view(), name='get-user'),
-    path('isartist/', GetArtistView.as_view(), name='get-artist')
+    # path('isartist/', GetArtistView.as_view(), name='get-artist')
 ]
 
 api_patterns = [
