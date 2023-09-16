@@ -3,7 +3,7 @@ from django.db import models
 
 
 class TokenBlacklist(Base):
-    TOKEN = models.TextField(unique=True)
+    token = models.TextField(unique=True)
 
     def __str__(self):
-        return str(self.TOKEN)
+        return str(self.token)

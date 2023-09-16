@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import {
   BrowserRouter as Router,
   Route,
@@ -7,28 +6,15 @@ import {
 } from 'react-router-dom';
 import HomePage from './components/HomePage';
 import Login from './components/Login';
-import Signup from './components/Signup';
+import Signup from './components/Register';
 import Dashboard from './components/Dashboard';
-import Cookies from 'js-cookie';
+import NotFound from './components/NotFound';
+import { useAuth } from './hooks/AuthContext';
 
 function App() {
   // const [user, setUser] = useState(null);
-  const [auth, setAuth] = useState({
-    isAuthenticated: false,
-    token: null,
-    user: null,
-  });
-
-  const handleLogout = () => {
-    // Implement logout logic, e.g., clear user state
-    setAuth({
-      isAuthenticated: false,
-      token: null,
-      user: null,
-    });
-    Cookies.remove('token');
-  };
-
+  const { auth } = useAuth();
+  console.log(auth);
   return (
     <Router>
       <Routes>
@@ -36,15 +22,11 @@ function App() {
         <Route
           path="/login"
           element={
-            auth.isAuthenticated ? (
-              <Navigate to="/dashboard" />
-            ) : (
-              <Login setAuth={setAuth} />
-            )
+            auth.isAuthenticated ? <Navigate to="/dashboard" /> : <Login />
           }
         />
         <Route
-          path="/signup"
+          path="/register"
           element={
             auth.isAuthenticated ? <Navigate to="/dashboard" /> : <Signup />
           }
@@ -52,13 +34,10 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            auth.isAuthenticated ? (
-              <Dashboard user={auth.user} onLogout={handleLogout} />
-            ) : (
-              <Navigate to="/login" />
-            )
+            auth.isAuthenticated ? <Dashboard /> : <Navigate to="/login" />
           }
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );

@@ -2,59 +2,61 @@ import React, { useState } from 'react';
 import { useAuth } from '../hooks/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
-function LoginForm() {
+function Register() {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
+    email: '',
   });
-  const { login } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const to = await login(formData);
-    console.log(to);
+    const to = register(formData);
     navigate(to);
   };
 
   return (
     <div>
-      <h2>Login</h2>
+      <h2>Register</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="username">Username</label>
           <input
             type="text"
-            id="username"
             name="username"
+            placeholder="Username"
             value={formData.username}
-            onChange={handleChange}
-            required
+            onChange={handleInputChange}
           />
         </div>
         <div>
-          <label htmlFor="password">Password</label>
           <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleInputChange}
           />
         </div>
-        <button type="submit">Login</button>
+        <div>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleInputChange}
+          />
+        </div>
+        <button type="submit">Sign Up</button>
       </form>
     </div>
   );
 }
 
-export default LoginForm;
+export default Register;

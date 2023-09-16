@@ -30,7 +30,7 @@ class LogoutView(View):
     @method_decorator(user_required)
     def post(self, request):
         # BlacklistToken
-        TokenBlacklist.objects.create(TOKEN=request.jwt_token)
+        TokenBlacklist.objects.create(token=request.jwt_token)
         return JsonResponse({'message': 'Logout successful'})
 
 
