@@ -7,11 +7,22 @@ class UserSerializer:
         self.instance = instance
         self.validated_data = data
         self.errors = {}
+        self.required_fields = ['username', 'email', 'password']
 
     def is_valid(self):
-        # Implement your validation logic here
-        # For simplicity, assume it's always valid
-        return True
+        if not self.validated_data:
+            # If there is no data provided, consider it invalid
+            self.errors['non_field_errors'] = ['No data provided.']
+            return False
+
+        # Check if required fields are present
+        for field in self.required_fields:
+            if field not in self.validated_data:
+                self.errors[field] = ['This field is required.']
+
+        # Custom validation checks can be added here
+
+        return not bool(self.errors)
 
     def save(self):
         try:

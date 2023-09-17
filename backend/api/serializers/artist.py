@@ -8,10 +8,26 @@ class ArtistSerializer:
         self.instance = instance
         self.validated_data = data
         self.errors = {}
+        self.required_fields = ['name', 'user_id']
 
     def is_valid(self):
-        # Implement your validation logic here
-        # For simplicity, assume it's always valid
+        if not self.validated_data:
+            # If there is no data provided, consider it invalid
+            self.errors['non_field_errors'] = ['No data provided.']
+            return False
+
+        # Check if required fields are present
+        for field in self.required_fields:
+            if field not in self.validated_data:
+                self.errors[field] = ['This field is required.']
+
+        if 'name' in self.validated_data and not self.validated_data['name'].strip():
+            self.errors['name'] = [
+                'Name must not be empty or contain only whitespace characters.']
+
+        # Custom validation checks can be added here
+
+        return not bool(self.errors)
         return True
 
     def save(self):

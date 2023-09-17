@@ -4,7 +4,7 @@ import json
 from api.models import Genre
 from api.serializers import GenreSerializer
 from django.utils.decorators import method_decorator
-from api.auth.session_auth.decorators import user_required, artist_required, admin_required
+from api.auth import user_required, artist_required, admin_required
 
 
 class GenreView(View):

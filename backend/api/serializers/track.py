@@ -9,10 +9,26 @@ class TrackSerializer:
         self.instance = instance
         self.validated_data = data
         self.errors = {}
+        self.required_fields = ['title', 'artist_id',
+                                'release_date', 'duration', 'genre_id']
 
     def is_valid(self):
-        # Implement your validation logic here
-        # For simplicity, assume it's always valid
+        if not self.validated_data:
+            # If there is no data provided, consider it invalid
+            self.errors['non_field_errors'] = ['No data provided.']
+            return False
+
+        # Check if required fields are present
+        for field in self.required_fields:
+            if field not in self.validated_data:
+                self.errors[field] = ['This field is required.']
+
+        if self.validated_data.get('duration', 0) <= 0:
+            self.errors['duration'] = ['Duration must be a positive integer.']
+
+        if 'release_date' in self.validated_data and not isinstance(self.validated_data['release_date'], str):
+            self.errors['release_date'] = [
+                'Release date must be a valid date string.']
         return True
 
     def save(self):

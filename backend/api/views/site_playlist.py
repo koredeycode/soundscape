@@ -4,7 +4,7 @@ import json
 from api.models import SitePlaylist
 from api.serializers import SitePlaylistSerializer
 from django.utils.decorators import method_decorator
-from api.auth.session_auth.decorators import user_required, admin_required
+from api.auth import user_required, admin_required
 
 
 class SitePlaylistView(View):
