@@ -33,7 +33,7 @@ class ArtistView(View):
     #             return JsonResponse(serializer.errors, status=400)
     #         return JsonResponse(serializer.data, status=201)
     #     else:
-    #         return JsonResponse({'error': 'Invalid data'}, status=400)
+    #         return JsonResponse(serializer.errors, status=400)
 
     # @method_decorator(artist_required)
     # def put(self, request, id):

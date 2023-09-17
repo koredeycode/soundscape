@@ -28,7 +28,6 @@ class ArtistSerializer:
         # Custom validation checks can be added here
 
         return not bool(self.errors)
-        return True
 
     def save(self):
         try:

@@ -43,7 +43,7 @@ class TrackView(View):
         #         return JsonResponse(serializer.errors, status=400)
         #     return JsonResponse(serializer.data, status=201)
         # else:
-        #     return JsonResponse({'error': 'Invalid data'}, status=400)
+        #     return JsonResponse(serializer.errors, status=400)
         return JsonResponse({'DONE': True}, status=201)
 
     @method_decorator(artist_required)
