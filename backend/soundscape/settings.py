@@ -158,5 +158,5 @@ JWT_SECRET_KEY = SECRET_KEY
 # Set the JWT expiration time (in seconds)
 JWT_EXPIRATION = 60 * 60  # 1 hour (adjust as needed)
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/uploads/'
+MEDIA_ROOT = BASE_DIR / 'uploads'

@@ -1,5 +1,6 @@
 from .base import Base, TitleSlugDescriptionModel
 from django.db import models
+from .storage import UUIDStorage
 
 
 class Track(Base, TitleSlugDescriptionModel):
@@ -23,7 +24,8 @@ class Track(Base, TitleSlugDescriptionModel):
     duration = models.PositiveIntegerField()  # Duration in seconds
     streams = models.PositiveIntegerField(default=0)
     genre = models.ForeignKey('Genre', on_delete=models.CASCADE)
-    audio_file = models.FileField(upload_to='files/tracks/')
+    audio_file = models.FileField(
+        upload_to='files/tracks/', storage=UUIDStorage())
 
     def __str__(self):
         return self.title
@@ -36,7 +38,8 @@ class SingleTrack(Track):
     Attributes:
         cover_image (ImageField): An uploaded image file representing the track's cover.
     """
-    cover_image = models.ImageField(upload_to='images/tracks/')
+    cover_image = models.ImageField(
+        upload_to='images/tracks/', storage=UUIDStorage())
 
 
 class AlbumTrack(Track):

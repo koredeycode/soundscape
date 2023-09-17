@@ -1,13 +1,10 @@
 from django.views import View
 from django.http import JsonResponse
-import json
+# import json
 from api.models import Track, SingleTrack
 from api.serializers import TrackSerializer, SingleTrackSerializer
 from django.utils.decorators import method_decorator
 from api.auth import user_required, artist_required
-
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
 
 
 class TrackView(View):
@@ -30,21 +27,20 @@ class TrackView(View):
         print(request.FILES)
         audio = request.FILES.get('audio_file')
         image = request.FILES.get('cover_image')
-        image_file_name = default_storage.save(
-            'images/' + image.name, ContentFile(image.read()))
-        print(image_file_name)
-        data = self.parse_request_data(request)
-        print(data)
+        data = request.POST.dict()
+        print(request.POST)
         data['artist_id'] = request.user.artist.id
-        # serializer = SingleTrackSerializer(data=data)
-        # if serializer.is_valid():
-        #     serializer.save()
-        #     if serializer.errors:
-        #         return JsonResponse(serializer.errors, status=400)
-        #     return JsonResponse(serializer.data, status=201)
-        # else:
-        #     return JsonResponse(serializer.errors, status=400)
-        return JsonResponse({'DONE': True}, status=201)
+        data['audio_file'] = audio
+        data['cover_image'] = image
+        print(data)
+        serializer = SingleTrackSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            if serializer.errors:
+                return JsonResponse(serializer.errors, status=400)
+            return JsonResponse(serializer.data, status=201)
+        else:
+            return JsonResponse(serializer.errors, status=400)
 
     @method_decorator(artist_required)
     def put(self, request, id):
@@ -79,14 +75,14 @@ class TrackView(View):
             return JsonResponse({}, status=204)
         return JsonResponse({"error": "Track not found"}, status=404)
 
-    def parse_request_data(self, request):
-        # Helper function to parse request data (e.g., JSON) and return a dictionary
-        # try:
-        #     return json.loads(request.body.decode('utf-8'))
-        # except json.JSONDecodeError:
-        #     return {}
-        print(dir(request.POST))
-        return request.POST.dict()
+    # def parse_request_data(self, request):
+    #     # Helper function to parse request data (e.g., JSON) and return a dictionary
+    #     # try:
+    #     #     return json.loads(request.body.decode('utf-8'))
+    #     # except json.JSONDecodeError:
+    #     #     return {}
+    #     print(dir(request.POST))
+    #     return request.POST.dict()
 
     def get_track(self, id):
         # Helper function to get an instance of Track by ID

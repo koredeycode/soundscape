@@ -1,3 +1,4 @@
+from .storage import UUIDStorage
 from .base import Base, TitleSlugDescriptionModel
 from django.db import models
 
@@ -17,7 +18,8 @@ class Album(Base, TitleSlugDescriptionModel):
     featured_artists = models.ManyToManyField(
         'Artist', related_name='album_featured_artist', blank=True)
     release_date = models.DateField()
-    cover_image = models.ImageField(upload_to='images/albums/')
+    cover_image = models.ImageField(
+        upload_to='images/albums/', storage=UUIDStorage())
 
     def __str__(self):
         return self.title
