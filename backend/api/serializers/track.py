@@ -58,6 +58,8 @@ class TrackSerializer:
             'duration': self.instance.duration,
             'streams': self.instance.streams,
             'release_date': str(self.instance.release_date),
+            'cover_image': 'http://localhost:8000/media/images/tracks/' + str(self.instance.id),
+            'audio_file': 'http://localhost:8000/media/tracks/' + str(self.instance.id),
             'featured_artists': [ArtistSerializer(artist).data for artist in self.instance.featured_artists.all()]
         }
 

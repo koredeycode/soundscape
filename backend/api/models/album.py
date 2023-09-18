@@ -19,7 +19,7 @@ class Album(Base, TitleSlugDescriptionModel):
         'Artist', related_name='album_featured_artist', blank=True)
     release_date = models.DateField()
     cover_image = models.ImageField(
-        upload_to='images/albums/', storage=UUIDStorage())
+        upload_to='images/albums/', default='/images/albums/default.jpg', storage=UUIDStorage())
 
     def __str__(self):
         return self.title

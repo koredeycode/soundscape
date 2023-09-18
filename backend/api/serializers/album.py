@@ -55,6 +55,7 @@ class AlbumSerializer:
             'artist': ArtistSerializer(self.instance.artist).data,
             'total_duration': str(sum([track.duration for track in self.instance.albumtrack_set.all()])),
             'tracks': [TrackSerializer(track).data for track in self.instance.albumtrack_set.all()],
+            'cover_image': 'http://localhost:8000/media/images/album/' + str(self.instance.id),
             'release_date': str(self.instance.release_date),
             'featured_artists': [ArtistSerializer(artist).data for artist in self.instance.featured_artists.all()]
         }

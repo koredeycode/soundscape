@@ -9,6 +9,7 @@ class UUIDStorage(FileSystemStorage):
         Returns a filename that's free on the target storage system, and
         available for new content to be written to.
         """
-        root, ext = os.path.splitext(name)
-        unique_name = f"{root}_{str(uuid.uuid4())}{ext}"
+        dir, filename = os.path.split(name)
+        _, ext = os.path.splitext(filename)
+        unique_name = f"{dir}/{str(uuid.uuid4())}{ext}"
         return super().get_available_name(unique_name, max_length)

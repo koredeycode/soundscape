@@ -4,7 +4,8 @@ from .site_playlist import SitePlaylistView
 from .user_playlist import UserPlaylistView
 from .track import TrackView
 from .album import AlbumView
-from .artist import *
+from .artist import ArtistView
+from .media import TrackCoverMediaView, AlbumCoverMediaView, TrackMediaView
 
 
 def custom_404_view(request, exception=None):

@@ -16,7 +16,8 @@ Including another URLconf
 from django.urls import path
 from api.auth import LoginView, LogoutView, RegisterView, GetUserView
 # from api.auth import GetArtistView, LoginView, LogoutView, RegisterView, GetUserView
-from api.views import GenreView, SitePlaylistView, UserPlaylistView, TrackView, AlbumView, ArtistView
+from api.views import (GenreView, SitePlaylistView, UserPlaylistView, TrackView,
+                       AlbumView, ArtistView, TrackMediaView, TrackCoverMediaView, AlbumCoverMediaView)
 
 authpatterns = [
     path('login/', LoginView.as_view(), name='login'),
@@ -39,7 +40,12 @@ api_patterns = [
     path('tracks/<uuid:id>/', TrackView.as_view(), name='track'),
     path('albums/', AlbumView.as_view(), name='albums'),
     path('albums/<uuid:id>/', AlbumView.as_view(), name='album'),
-    path('artists/<uuid:id>/', ArtistView.as_view(), name='artist')
+    path('artists/<uuid:id>/', ArtistView.as_view(), name='artist'),
+    path('media/tracks/<uuid:id>', TrackMediaView.as_view(), name='track-media'),
+    path('media/images/tracks/<uuid:id>',
+         TrackCoverMediaView.as_view(), name='track-cover-media'),
+    path('media/images/album/<uuid:id>', AlbumCoverMediaView.as_view(),
+         name='album-cover-media'),
 ]
 
 urlpatterns = []

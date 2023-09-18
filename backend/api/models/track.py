@@ -30,6 +30,12 @@ class Track(Base, TitleSlugDescriptionModel):
     def __str__(self):
         return self.title
 
+    @property
+    def image_file(self):
+        if hasattr(self, 'singletrack'):
+            return self.singletrack.cover_image
+        return self.albumtrack.album.cover_image
+
 
 class SingleTrack(Track):
     """
@@ -39,7 +45,7 @@ class SingleTrack(Track):
         cover_image (ImageField): An uploaded image file representing the track's cover.
     """
     cover_image = models.ImageField(
-        upload_to='images/tracks/', storage=UUIDStorage())
+        upload_to='images/tracks/', default='/images/tracks/default.jpg', storage=UUIDStorage())
 
 
 class AlbumTrack(Track):
