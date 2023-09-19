@@ -51,13 +51,10 @@ class PlaylistSerializer:
         serialized_data = {
             'id': str(self.instance.id),
             'title': str(self.instance.title),
+            'slug': str(self.instance.slug),
             'description': str(self.instance.description),
-            'tracks': [TrackSerializer(track).data for track in self.instance.tracks.all()],
+            'track_ids': [str(track.id) for track in self.instance.albumtrack_set.all()],
         }
-        # if hasattr(self.instance, 'userplaylist'):
-        #     serialized_data['user'] = str(self.instance.userplaylist.user.id)
-        # if hasattr(self.instance, 'siteplaylist'):
-        #     serialized_data['isPublic'] = self.instance.siteplaylist.isPublic
         return serialized_data
 
 
@@ -80,7 +77,7 @@ class UserPlaylistSerializer(PlaylistSerializer):
     @property
     def data(self):
         serialized_data = super().data
-        serialized_data['user'] = UserSerializer(self.instance.user).data
+        serialized_data['user_id'] = str(self.instance.userplaylist.user.id)
         return serialized_data
 
 

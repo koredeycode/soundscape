@@ -47,5 +47,6 @@ class UserSerializer:
             'username': str(self.instance.username),
             'first_name': str(self.instance.first_name),
             'last_name': str(self.instance.last_name),
+            'is_artist': True if hasattr(self.instance, 'artist') else False,
         }
         return serialized_data

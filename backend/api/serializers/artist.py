@@ -1,12 +1,16 @@
 # serializers.py
 from api.models import Artist
 from api.serializers.user import UserSerializer
+from django.conf import settings
+
+BASE_URL = settings.BASE_URL
 
 
 class ArtistSerializer:
-    def __init__(self, instance=None, data=None):
+    def __init__(self, instance=None, data=None, complete_data=False):
         self.instance = instance
         self.validated_data = data
+        self.complete_data = complete_data
         self.errors = {}
         self.required_fields = ['name', 'user_id']
 
@@ -51,6 +55,8 @@ class ArtistSerializer:
             'id': str(self.instance.id),
             'name': str(self.instance.name),
             'bio': str(self.instance.bio),
-            'user': UserSerializer(self.instance.user).data
+            'profile_image': f'{BASE_URL}/media/images/artists/{self.instance.id}',
         }
+        if self.complete_data:
+            serialized_data['user'] = UserSerializer(self.instance.user).data
         return serialized_data

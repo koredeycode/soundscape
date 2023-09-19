@@ -1,8 +1,8 @@
 from django.views import View
 from django.http import FileResponse
-from api.models import Track, SingleTrack, Album
+from api.models import Track, SingleTrack, Album, Artist
 from django.utils.decorators import method_decorator
-from api.auth.session_auth.decorators import user_required
+from api.auth import user_required
 
 
 class TrackMediaView(View):
@@ -33,3 +33,13 @@ class AlbumCoverMediaView(View):
         """
         album = Album.objects.get(id=id)
         return FileResponse(album.cover_image)
+
+
+class ArtistProfileMediaView(View):
+    # @method_decorator(user_required)
+    def get(self, request, id=None):
+        """
+        media/images/artist/id
+        """
+        artist = Artist.objects.get(id=id)
+        return FileResponse(artist.profile_image)

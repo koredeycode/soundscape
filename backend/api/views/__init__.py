@@ -5,7 +5,7 @@ from .user_playlist import UserPlaylistView
 from .track import TrackView
 from .album import AlbumView
 from .artist import ArtistView
-from .media import TrackCoverMediaView, AlbumCoverMediaView, TrackMediaView
+from .media import TrackCoverMediaView, AlbumCoverMediaView, TrackMediaView, ArtistProfileMediaView
 
 
 def custom_404_view(request, exception=None):

@@ -160,3 +160,5 @@ JWT_EXPIRATION = 60 * 60  # 1 hour (adjust as needed)
 
 MEDIA_URL = '/uploads/'
 MEDIA_ROOT = BASE_DIR / 'uploads'
+
+BASE_URL = 'http://localhost:8000'

@@ -44,8 +44,10 @@ api_patterns = [
     path('media/tracks/<uuid:id>', TrackMediaView.as_view(), name='track-media'),
     path('media/images/tracks/<uuid:id>',
          TrackCoverMediaView.as_view(), name='track-cover-media'),
-    path('media/images/album/<uuid:id>', AlbumCoverMediaView.as_view(),
+    path('media/images/albums/<uuid:id>', AlbumCoverMediaView.as_view(),
          name='album-cover-media'),
+    path('media/images/artists/<uuid:id>',
+         AlbumCoverMediaView.as_view(), name='artist-profile-media')
 ]
 
 urlpatterns = []
