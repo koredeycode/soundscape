@@ -12,12 +12,13 @@ class LoginView(View):
     def post(self, request):
         try:
             data = json.loads(request.body.decode('utf-8'))
-            username = data.get('username')
+            email = data.get('email')
             password = data.get('password')
+
             try:
-                user = User.objects.get(username=username)
+                user = User.objects.get(email=email)
             except User.DoesNotExist:
-                return JsonResponse({'error': "Username does not exist"}, status=404)
+                return JsonResponse({'error': "Email does not exist"}, status=404)
             if not user.check_password(password):
                 return JsonResponse({'error': "Incorrect password"}, status=404)
             token = generate_jwt_token(str(user.id))
@@ -41,9 +42,12 @@ class RegisterView(View):
             username = data.get('username')
             password = data.get('password')
             email = data.get('email')
+            first_name = data.get('first_name')
+            last_name = data.get('last_name')
             if User.objects.filter(username=username).exists():
                 return JsonResponse({'error': 'User already exists'})
-            user = User.objects.create(username=username, email=email)
+            user = User.objects.create(
+                username=username, email=email, first_name=first_name, last_name=last_name)
             user.set_password(password)
             user.save()
             return JsonResponse(UserSerializer(user).data)

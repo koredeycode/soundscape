@@ -1,7 +1,7 @@
-// authContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import { useToast } from '@chakra-ui/react';
 
 const AuthContext = createContext();
 
@@ -11,10 +11,23 @@ export function AuthProvider({ children }) {
     token: null,
   });
   const url = 'http://127.0.0.1:8000';
+  const toast = useToast();
 
+  const showToast = (title, description, status) => {
+    toast({
+      title,
+      description,
+      status,
+      duration: 5000,
+      isClosable: true,
+      position: 'bottom-right',
+    });
+  };
   // You can use useEffect to check the user's authentication status
   useEffect(() => {
-    storeUser();
+    (async () => {
+      await storeUser();
+    })();
   }, []);
 
   const storeUser = async () => {
@@ -34,26 +47,31 @@ export function AuthProvider({ children }) {
       });
     }
   };
-  const login = async (userData) => {
+  const login = async userData => {
     try {
       const response = await axios.post(`${url}/login/`, userData);
       console.log(response.data);
       Cookies.set('token', response.data.token);
       storeUser();
+      showToast('Success', 'Logged in successfully', 'success');
       return '/dashboard';
     } catch (error) {
       console.log(error);
+      showToast('Error', error.response.data?.error, 'error');
     }
   };
 
-  const register = async (userData) => {
+  const register = async userData => {
     console.log(userData);
     try {
       const response = await axios.post(`${url}/register/`, userData);
       console.log(response.data);
+      showToast('Success', 'Registered successfully', 'success');
       return '/login';
     } catch (error) {
       console.log(error);
+      console.log(error);
+      showToast('Error', error.response.data?.error, 'error');
       return '/register';
     }
   };
@@ -66,6 +84,7 @@ export function AuthProvider({ children }) {
     });
     Cookies.remove('token');
     localStorage.clear();
+    showToast('Success', 'Logged out successfully', 'success');
     // navigate('/login');
   };
   const sendAuthorizedRequest = async (endpoint, method, data) => {
@@ -84,7 +103,8 @@ export function AuthProvider({ children }) {
       return response.data;
     } catch (error) {
       console.error(error);
-      throw error; // Rethrow the error to handle it in calling code
+      showToast('Error', error.response.data?.error, 'error');
+      // throw error; // Rethrow the error to handle it in calling code
     }
   };
 
