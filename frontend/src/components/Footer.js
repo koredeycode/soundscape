@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Container, Stack, useColorModeValue } from '@chakra-ui/react';
+import { Box, useColorModeValue } from '@chakra-ui/react';
 import MusicPlayer from './MusicPlayer';
 
 const tracks = [
@@ -16,6 +16,13 @@ const tracks = [
     audio_file:
       'http://localhost:8000/media/tracks/6781f12f-99f0-4e15-8a1e-241013a091f8',
     title: 'Track 2',
+  },
+  {
+    cover_image:
+      'http://localhost:8000/media/images/tracks/5a3adf9f-fc51-4bd1-bb10-85ef4193671e',
+    audio_file:
+      'http://localhost:8000/media/tracks/5a3adf9f-fc51-4bd1-bb10-85ef4193671e',
+    title: 'Track 3',
   },
   // {
   //   cover_image: 'https://via.placeholder.com/100',
@@ -35,19 +42,10 @@ export default function Footer() {
       color={useColorModeValue('gray.700', 'gray.200')}
       pos="fixed"
       bottom="0"
-      p="3"
+      p="5"
       w="100%"
     >
-      <Container
-        as={Stack}
-        maxW={'6xl'}
-        py={4}
-        spacing={4}
-        justify={'center'}
-        align={'center'}
-      >
-        <MusicPlayer tracks={tracks} />
-      </Container>
+      <MusicPlayer tracks={tracks} />
     </Box>
   );
 }

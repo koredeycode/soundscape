@@ -21,24 +21,24 @@ import {
 } from '@chakra-ui/react';
 import {
   FiHome,
-  FiTrendingUp,
   FiSearch,
-  FiStar,
-  FiSettings,
   FiMenu,
   FiBell,
   FiChevronDown,
 } from 'react-icons/fi';
+import { BsGrid } from 'react-icons/bs';
+import { FaCross } from 'react-icons/fa';
+import { MdAdd } from 'react-icons/md';
 import { useAuth } from '../hooks/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Footer from './Footer';
+import Card from './Card';
 
 const LinkItems = [
   { name: 'Home', icon: FiHome },
-  { name: 'Trending', icon: FiTrendingUp },
   { name: 'Search', icon: FiSearch },
-  { name: 'Favourites', icon: FiStar },
-  { name: 'Settings', icon: FiSettings },
+  { name: 'Library', icon: BsGrid },
+  { name: 'Create Playlist', icon: MdAdd },
 ];
 
 const SidebarContent = ({ onClose, ...rest }) => {
@@ -78,8 +78,8 @@ const NavItem = ({ icon, children, ...rest }) => {
     >
       <Flex
         align="center"
-        p="4"
-        mx="4"
+        p="2"
+        mx="2"
         borderRadius="lg"
         role="group"
         cursor="pointer"
@@ -220,8 +220,7 @@ const Dashboard = () => {
         {/* mobilenav */}
         <NavBar onOpen={onOpen} handleLogout={handleLogout} user={auth.user} />
         <Box ml={{ base: 0, md: 60 }} p="4" h="100vh">
-          {/* Content */}
-          {/* <Text>Hello World</Text> */}
+          <Card />
         </Box>
       </Box>
       <Footer />
