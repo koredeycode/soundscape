@@ -12,7 +12,11 @@ class TrackMediaView(View):
         media/tracks/id
         """
         track = Track.objects.get(id=id)
-        return FileResponse(track.audio_file)
+        response = FileResponse(track.audio_file, content_type='audio/mp3')
+        response['Content-Range'] = 'bytes 0-%s/%s' % (
+            track.audio_file.size - 1, track.audio_file.size)
+        response['Accept-Ranges'] = 'bytes'
+        return response
 
 
 class TrackCoverMediaView(View):

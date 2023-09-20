@@ -45,16 +45,18 @@ class RegisterView(View):
             first_name = data.get('first_name')
             last_name = data.get('last_name')
             if User.objects.filter(username=username).exists():
-                return JsonResponse({'error': 'User already exists'})
+                return JsonResponse({'error': 'Username already taken'}, status=400)
+            if User.objects.filter(email=email).exists():
+                return JsonResponse({'error': 'User with that email exists'}, status=400)
             user = User.objects.create(
                 username=username, email=email, first_name=first_name, last_name=last_name)
             user.set_password(password)
             user.save()
             return JsonResponse(UserSerializer(user).data)
         except json.JSONDecodeError:
-            return JsonResponse({"error": "invalid data"})
+            return JsonResponse({"error": "invalid data"}, status=400)
         except Exception as e:
-            return JsonResponse({"error": str(e)})
+            return JsonResponse({"error": str(e)}, status=400)
 
 
 class GetUserView(View):

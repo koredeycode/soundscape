@@ -31,60 +31,54 @@ export function AuthProvider({ children }) {
   }, []);
 
   const storeUser = async () => {
-    const token = Cookies.get('token');
-    if (token) {
+    try {
       const data = await sendAuthorizedRequest('/isuser', 'get', {});
-      console.log(data);
       localStorage.setItem('user', JSON.stringify(data));
       setAuth({
         isAuthenticated: true,
         user: data,
       });
-    } else {
-      setAuth({
-        isAuthenticated: false,
-        user: null,
-      });
+    } catch (error) {
+      showToast('Error', error.response.data?.error, 'error');
     }
   };
   const login = async userData => {
     try {
       const response = await axios.post(`${url}/login/`, userData);
-      console.log(response.data);
       Cookies.set('token', response.data.token);
       storeUser();
       showToast('Success', 'Logged in successfully', 'success');
       return '/dashboard';
     } catch (error) {
-      console.log(error);
       showToast('Error', error.response.data?.error, 'error');
+      return '/login';
     }
   };
 
   const register = async userData => {
-    console.log(userData);
     try {
-      const response = await axios.post(`${url}/register/`, userData);
-      console.log(response.data);
+      await axios.post(`${url}/register/`, userData);
       showToast('Success', 'Registered successfully', 'success');
       return '/login';
     } catch (error) {
-      console.log(error);
-      console.log(error);
       showToast('Error', error.response.data?.error, 'error');
       return '/register';
     }
   };
 
   const logout = () => {
-    sendAuthorizedRequest('/logout', 'post', {});
-    setAuth({
-      isAuthenticated: false,
-      user: null,
-    });
-    Cookies.remove('token');
-    localStorage.clear();
-    showToast('Success', 'Logged out successfully', 'success');
+    try {
+      sendAuthorizedRequest('/logout', 'post', {});
+      setAuth({
+        isAuthenticated: false,
+        user: null,
+      });
+      Cookies.remove('token');
+      localStorage.clear();
+      showToast('Success', 'Logged out successfully', 'success');
+    } catch (error) {
+      showToast('Error', error.response.data?.error, 'error');
+    }
     // navigate('/login');
   };
   const sendAuthorizedRequest = async (endpoint, method, data) => {
@@ -102,9 +96,7 @@ export function AuthProvider({ children }) {
       });
       return response.data;
     } catch (error) {
-      console.error(error);
-      showToast('Error', error.response.data?.error, 'error');
-      // throw error; // Rethrow the error to handle it in calling code
+      throw error; // Rethrow the error to handle it in calling code
     }
   };
 
