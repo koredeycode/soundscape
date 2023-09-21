@@ -39,7 +39,7 @@ export function AuthProvider({ children }) {
         user: data,
       });
     } catch (error) {
-      showToast('Error', error.response.data?.error, 'error');
+      // showToast('Error', error.response.data?.error, 'error');
     }
   };
   const login = async userData => {
@@ -77,7 +77,7 @@ export function AuthProvider({ children }) {
       localStorage.clear();
       showToast('Success', 'Logged out successfully', 'success');
     } catch (error) {
-      showToast('Error', error.response.data?.error, 'error');
+      // showToast('Error', error.response.data?.error, 'error');
     }
     // navigate('/login');
   };
@@ -96,6 +96,7 @@ export function AuthProvider({ children }) {
       });
       return response.data;
     } catch (error) {
+      showToast('Error', error.response.data?.error, 'error');
       throw error; // Rethrow the error to handle it in calling code
     }
   };

@@ -19,30 +19,22 @@ import {
   ListItem,
 } from '@chakra-ui/react';
 import {
-  FaPlay,
-  FaPause,
-  FaVolumeUp,
-  FaVolumeMute,
-  FaStepBackward,
-  FaStepForward,
-  FaRedo,
-  FaSquare,
-  FaRandom,
-  FaListUl,
-} from 'react-icons/fa';
-import {
   MdQueueMusic,
   MdPlayCircleFilled,
   MdPauseCircleFilled,
   MdVolumeOff,
   MdVolumeUp,
+  MdSkipPrevious,
+  MdSkipNext,
+  MdShuffle,
+  MdRepeat,
+  MdReplay,
 } from 'react-icons/md';
-import { BsFillPlayFill, BsFillPauseFill } from 'react-icons/bs';
 // Icons for play modes
 const playModeIcons = {
-  single: FaSquare,
-  loop: FaRedo,
-  shuffle: FaRandom,
+  single: MdReplay,
+  loop: MdRepeat,
+  shuffle: MdShuffle,
 };
 
 function MusicPlayer({ tracks }) {
@@ -212,7 +204,7 @@ function MusicPlayer({ tracks }) {
             {tracks[currentAudioIndex].title}
           </Text>
           <Text fontSize="sm" fontWeight="thin">
-            Artist name
+            {tracks[currentAudioIndex].artist}
           </Text>
           <Text fontSize="sm" fontWeight="thin">
             Ft other artists name
@@ -225,24 +217,39 @@ function MusicPlayer({ tracks }) {
             as={playModeIcons[playMode]}
             aria-label="Toggle Play Mode"
             onClick={togglePlayMode}
+            w="1.5em"
+            h="1.5em"
           />
           {/* Previous Button */}
           <Icon
-            as={FaStepBackward}
+            as={MdSkipPrevious}
             aria-label="Previous"
             onClick={handlePreviousClick}
+            w="1.5em"
+            h="1.5em"
           />
           {/* Play and Pause Buttons */}
           <Icon
             as={isPlaying ? MdPauseCircleFilled : MdPlayCircleFilled}
             aria-label={isPlaying ? 'Pause' : 'Play'}
             onClick={handlePlayPauseClick}
+            w="2.5em"
+            h="2.5em"
           />
           {/* Next Button */}
           <Icon
-            as={FaStepForward}
+            as={MdSkipNext}
             aria-label="Next"
             onClick={handleNextClick}
+            w="1.5em"
+            h="1.5em"
+          />
+          <Icon
+            as={MdQueueMusic}
+            aria-label="Queue"
+            onClick={() => setShowQueue(!showQueue)}
+            w="1.5em"
+            h="1.5em"
           />
         </HStack>
         <HStack w="100%">
@@ -264,18 +271,21 @@ function MusicPlayer({ tracks }) {
       </VStack>
       <HStack flexGrow="2">
         {/* Volume Icons */}
-        <Icon
-          as={MdQueueMusic}
-          aria-label="Queue"
-          onClick={() => setShowQueue(!showQueue)}
-        />
+
         <Icon
           as={isMuted ? MdVolumeOff : MdVolumeUp}
           aria-label="Mute"
           onClick={() => {
             audioRef.current.muted = !isMuted;
+            if (isMuted) {
+              setVolume(0.5);
+            } else {
+              setVolume(0);
+            }
             setIsMuted(!isMuted);
           }}
+          w="1.5em"
+          h="1.5em"
         />
         <Slider
           aria-label="volume-slider"
@@ -287,6 +297,11 @@ function MusicPlayer({ tracks }) {
           onChange={value => {
             audioRef.current.volume = value;
             setVolume(value);
+            if (value <= 0) {
+              setIsMuted(true);
+            } else if (value > 0 && isMuted) {
+              setIsMuted(false);
+            }
           }}
           focusThumbOnChange={false}
         >

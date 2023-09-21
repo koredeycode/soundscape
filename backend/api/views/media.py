@@ -1,5 +1,5 @@
 from django.views import View
-from django.http import FileResponse
+from django.http import FileResponse, JsonResponse
 from api.models import Track, SingleTrack, Album, Artist
 from django.utils.decorators import method_decorator
 from api.auth import user_required
@@ -11,12 +11,15 @@ class TrackMediaView(View):
         """
         media/tracks/id
         """
-        track = Track.objects.get(id=id)
-        response = FileResponse(track.audio_file, content_type='audio/mp3')
-        response['Content-Range'] = 'bytes 0-%s/%s' % (
-            track.audio_file.size - 1, track.audio_file.size)
-        response['Accept-Ranges'] = 'bytes'
-        return response
+        try:
+            track = Track.objects.get(id=id)
+            response = FileResponse(track.audio_file, content_type='audio/mp3')
+            response['Content-Range'] = 'bytes 0-%s/%s' % (
+                track.audio_file.size - 1, track.audio_file.size)
+            response['Accept-Ranges'] = 'bytes'
+            return response
+        except Track.DoesNotExist:
+            return JsonResponse({'error': 'File not found'})
 
 
 class TrackCoverMediaView(View):
@@ -25,8 +28,11 @@ class TrackCoverMediaView(View):
         """
         media/images/track/id
         """
-        track = Track.objects.get(id=id)
-        return FileResponse(track.image_file)
+        try:
+            track = Track.objects.get(id=id)
+            return FileResponse(track.image_file)
+        except Track.DoesNotExist:
+            return JsonResponse({'error': 'File not found'})
 
 
 class AlbumCoverMediaView(View):
@@ -35,8 +41,11 @@ class AlbumCoverMediaView(View):
         """
         media/images/album/id
         """
-        album = Album.objects.get(id=id)
-        return FileResponse(album.cover_image)
+        try:
+            album = Album.objects.get(id=id)
+            return FileResponse(album.cover_image)
+        except Album.DoesNotExist:
+            return JsonResponse({'error': 'File not found'})
 
 
 class ArtistProfileMediaView(View):
@@ -45,5 +54,8 @@ class ArtistProfileMediaView(View):
         """
         media/images/artist/id
         """
-        artist = Artist.objects.get(id=id)
-        return FileResponse(artist.profile_image)
+        try:
+            artist = Artist.objects.get(id=id)
+            return FileResponse(artist.profile_image)
+        except Artist.DoesNotExist:
+            return JsonResponse({'error': 'File not found'})

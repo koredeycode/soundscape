@@ -6,6 +6,7 @@ from .track import TrackView
 from .album import AlbumView
 from .artist import ArtistView
 from .media import TrackCoverMediaView, AlbumCoverMediaView, TrackMediaView, ArtistProfileMediaView
+from .search import SearchView
 
 
 def custom_404_view(request, exception=None):

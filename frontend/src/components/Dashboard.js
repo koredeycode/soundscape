@@ -18,30 +18,29 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Heading,
 } from '@chakra-ui/react';
-import {
-  FiHome,
-  FiSearch,
-  FiMenu,
-  FiBell,
-  FiChevronDown,
-} from 'react-icons/fi';
-import { BsGrid } from 'react-icons/bs';
-import { FaCross } from 'react-icons/fa';
-import { MdAdd } from 'react-icons/md';
+import { FiMenu, FiBell, FiChevronDown } from 'react-icons/fi';
+import { MdAdd, MdLibraryMusic, MdSearch, MdHome } from 'react-icons/md';
 import { useAuth } from '../hooks/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Footer from './Footer';
-import Card from './Card';
+import Home from './pages/Home';
+import SearchPage from './pages/SearchPage';
+import PlaylistsPage from './pages/PlaylistsPage';
+import Setting from './pages/Setting';
+import ProfilePage from './pages/ProfilePage';
+import { useState } from 'react';
 
 const LinkItems = [
-  { name: 'Home', icon: FiHome },
-  { name: 'Search', icon: FiSearch },
-  { name: 'Library', icon: BsGrid },
-  { name: 'Create Playlist', icon: MdAdd },
+  { name: 'Home', icon: MdHome, page: <Home /> },
+  { name: 'Search', icon: MdSearch, page: <SearchPage /> },
+  { name: 'Playlists', icon: MdLibraryMusic, page: <PlaylistsPage /> },
 ];
+// { name: 'Create Playlist', icon: MdAdd },
 
-const SidebarContent = ({ onClose, ...rest }) => {
+const SidebarContent = ({ onClose, setContentCallBack, ...rest }) => {
+  const [activeItem, setActiveItem] = useState(0);
   return (
     <Box
       transition="3s ease"
@@ -59,16 +58,25 @@ const SidebarContent = ({ onClose, ...rest }) => {
         </Text>
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
-      {LinkItems.map(link => (
-        <NavItem key={link.name} icon={link.icon}>
+      {LinkItems.map((link, idx) => (
+        <NavItem
+          key={link.name}
+          icon={link.icon}
+          onClick={() => {
+            setContentCallBack(link.page);
+            setActiveItem(idx);
+          }}
+          isActive={activeItem === idx}
+        >
           {link.name}
         </NavItem>
       ))}
+      {/* <NavItem icon={MdAdd}>CreatePlayList </NavItem> */}
     </Box>
   );
 };
 
-const NavItem = ({ icon, children, ...rest }) => {
+const NavItem = ({ icon, children, isActive, ...rest }) => {
   return (
     <Box
       as="a"
@@ -80,13 +88,14 @@ const NavItem = ({ icon, children, ...rest }) => {
         align="center"
         p="2"
         mx="2"
-        borderRadius="lg"
         role="group"
         cursor="pointer"
-        _hover={{
-          bg: 'cyan.400',
-          color: 'white',
-        }}
+        // _hover={{
+        //   bg: 'gray.100',
+        //   color: 'black',
+        // }}
+        bg={isActive ? 'gray.100' : 'transparent'} // Apply active background color
+        color="black" // Apply active text color
         {...rest}
       >
         {icon && (
@@ -94,9 +103,11 @@ const NavItem = ({ icon, children, ...rest }) => {
             mr="4"
             fontSize="16"
             _groupHover={{
-              color: 'white',
+              color: 'black',
             }}
             as={icon}
+            w="1.5em"
+            h="1.5em"
           />
         )}
         {children}
@@ -105,12 +116,17 @@ const NavItem = ({ icon, children, ...rest }) => {
   );
 };
 
-const NavBar = ({ onOpen, handleLogout, user, ...rest }) => {
+const NavBar = ({
+  onOpen,
+  handleLogout,
+  user,
+  setContentCallBack,
+  ...rest
+}) => {
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
       px={{ base: 4, md: 4 }}
-      height="20"
       alignItems="center"
       bg={useColorModeValue('white', 'gray.900')}
       borderBottomWidth="1px"
@@ -174,9 +190,22 @@ const NavBar = ({ onOpen, handleLogout, user, ...rest }) => {
             <MenuList
               bg={useColorModeValue('white', 'gray.900')}
               borderColor={useColorModeValue('gray.200', 'gray.700')}
+              borderRadius={'0'}
             >
-              <MenuItem>Profile</MenuItem>
-              <MenuItem>Settings</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setContentCallBack(<ProfilePage />);
+                }}
+              >
+                Profile
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setContentCallBack(<Setting />);
+                }}
+              >
+                Settings
+              </MenuItem>
               <MenuDivider />
               <MenuItem onClick={handleLogout}>Sign out</MenuItem>
             </MenuList>
@@ -190,6 +219,7 @@ const NavBar = ({ onOpen, handleLogout, user, ...rest }) => {
 const Dashboard = () => {
   const { logout, auth } = useAuth();
   const navigate = useNavigate();
+  const [content, setContent] = useState(<Home />);
 
   const handleLogout = async () => {
     await logout();
@@ -203,6 +233,7 @@ const Dashboard = () => {
         <SidebarContent
           onClose={() => onClose}
           display={{ base: 'none', md: 'block' }}
+          setContentCallBack={setContent}
         />
         <Drawer
           isOpen={isOpen}
@@ -214,13 +245,18 @@ const Dashboard = () => {
         >
           <DrawerOverlay />
           <DrawerContent>
-            <SidebarContent onClose={onClose} />
+            <SidebarContent onClose={onClose} setContentCallBack={setContent} />
           </DrawerContent>
         </Drawer>
         {/* mobilenav */}
-        <NavBar onOpen={onOpen} handleLogout={handleLogout} user={auth.user} />
-        <Box ml={{ base: 0, md: 60 }} p="4" h="100vh">
-          <Card />
+        <NavBar
+          onOpen={onOpen}
+          handleLogout={handleLogout}
+          user={auth.user}
+          setContentCallBack={setContent}
+        />
+        <Box ml={{ base: 0, md: 60 }} h="100vh" p="1">
+          {content}
         </Box>
       </Box>
       <Footer />

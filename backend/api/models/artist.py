@@ -16,7 +16,7 @@ class Artist(Base):
     bio = models.TextField(blank=True)
     user = models.OneToOneField('User', on_delete=models.CASCADE)
     profile_image = models.ImageField(
-        upload_to='images/artists/', default='/images/profiles/default.jpg', storage=UUIDStorage())
+        upload_to='images/artists/', default='images/artists/default.jpg', storage=UUIDStorage())
 
     def __str__(self):
         return self.name

@@ -17,7 +17,8 @@ from django.urls import path
 from api.auth import LoginView, LogoutView, RegisterView, GetUserView
 # from api.auth import GetArtistView, LoginView, LogoutView, RegisterView, GetUserView
 from api.views import (GenreView, SitePlaylistView, UserPlaylistView, TrackView,
-                       AlbumView, ArtistView, TrackMediaView, TrackCoverMediaView, AlbumCoverMediaView)
+                       AlbumView, ArtistView, TrackMediaView, TrackCoverMediaView,
+                       AlbumCoverMediaView, ArtistProfileMediaView, SearchView)
 
 authpatterns = [
     path('login/', LoginView.as_view(), name='login'),
@@ -47,7 +48,8 @@ api_patterns = [
     path('media/images/albums/<uuid:id>', AlbumCoverMediaView.as_view(),
          name='album-cover-media'),
     path('media/images/artists/<uuid:id>',
-         AlbumCoverMediaView.as_view(), name='artist-profile-media')
+         ArtistProfileMediaView.as_view(), name='artist-profile-media'),
+    path('search/', SearchView.as_view(), name='search')
 ]
 
 urlpatterns = []

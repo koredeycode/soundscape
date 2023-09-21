@@ -62,6 +62,7 @@ class RegisterView(View):
 class GetUserView(View):
     @method_decorator(user_required)
     def get(self, request):
+        print(request.COOKIES)
         return JsonResponse(UserSerializer(request.user).data)
 
 

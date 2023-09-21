@@ -10,6 +10,7 @@ import {
   Tooltip,
   Square,
   Text,
+  VStack,
 } from '@chakra-ui/react';
 
 const data = {
@@ -21,26 +22,24 @@ const data = {
 
 function Card() {
   return (
-    <Flex p="4" w="full" gap="1" flexWrap="wrap">
-      <Box bg={useColorModeValue('white', 'gray.800')} maxW="sm" p="2">
-        <Square>
-          <Image
-            src={data.imageURL}
-            alt={`Picture of ${data.name}`}
-            w="200"
-            h="200"
-          />
-        </Square>
-        <Box>
-          <Text fontSize="sm" fontWeight="bold">
-            Welcome to SoundScape
-          </Text>
-          <Text fontSize="sm" fontWeight="thin">
-            Welcome to SoundScape
-          </Text>
-        </Box>
+    <VStack bg={useColorModeValue('white', 'gray.800')} p="2">
+      <Square>
+        <Image
+          src={data.imageURL}
+          alt={`Picture of ${data.name}`}
+          w="150"
+          h="150"
+        />
+      </Square>
+      <Box>
+        <Text fontSize="sm" fontWeight="bold">
+          Welcome to SoundScape
+        </Text>
+        <Text fontSize="sm" fontWeight="thin">
+          Welcome to SoundScape
+        </Text>
       </Box>
-    </Flex>
+    </VStack>
   );
 }
 
