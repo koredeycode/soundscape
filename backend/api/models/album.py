@@ -1,7 +1,6 @@
 from .storage import UUIDStorage
 from .base import Base, TitleSlugDescriptionModel
 from django.db import models
-from django.conf import settings
 
 
 class Album(Base, TitleSlugDescriptionModel):
@@ -20,7 +19,7 @@ class Album(Base, TitleSlugDescriptionModel):
         'Artist', related_name='album_featured_artist', blank=True)
     release_date = models.DateField()
     cover_image = models.ImageField(
-        upload_to='images/albums/', default=f'{settings.MEDIA_ROOT}/images/albums/default.jpg', storage=UUIDStorage())
+        upload_to='images/albums/', default='images/albums/default.jpg', storage=UUIDStorage())
 
     def __str__(self):
         return self.title

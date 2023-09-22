@@ -48,7 +48,7 @@ function UploadForm() {
         Upload Track
       </Heading>
       <form onSubmit={handleSubmit}>
-        <FormControl mb={4} isRequired>
+        <FormControl mb={4}>
           <FormLabel>Title</FormLabel>
           <Input
             type="text"
@@ -65,9 +65,10 @@ function UploadForm() {
             name="description"
             value={formData.description}
             onChange={handleInputChange}
+            required
           />
         </FormControl>
-        <FormControl mb={4} isRequired>
+        <FormControl mb={4}>
           <FormLabel>Audio File (MP3)</FormLabel>
           <Input
             type="file"

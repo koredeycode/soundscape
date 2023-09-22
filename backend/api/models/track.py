@@ -1,7 +1,6 @@
 from .base import Base, TitleSlugDescriptionModel
 from django.db import models
 from .storage import UUIDStorage
-from django.conf import settings
 
 
 class Track(Base, TitleSlugDescriptionModel):
@@ -46,7 +45,7 @@ class SingleTrack(Track):
         cover_image (ImageField): An uploaded image file representing the track's cover.
     """
     cover_image = models.ImageField(
-        upload_to='images/tracks/', default=f'{settings.MEDIA_ROOT}/images/tracks/default.jpg', storage=UUIDStorage())
+        upload_to='images/tracks/', default='images/tracks/default.jpg', storage=UUIDStorage())
 
 
 class AlbumTrack(Track):

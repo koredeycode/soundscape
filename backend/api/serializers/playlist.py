@@ -5,12 +5,11 @@ from api.serializers.user import UserSerializer
 
 
 class PlaylistSerializer:
-    def __init__(self, instance=None, data=None, fields_to_include=None):
+    def __init__(self, instance=None, data=None):
         self.instance = instance
         self.validated_data = data
         self.errors = {}
         self.required_fields = ['title']
-        self.fields_to_include = fields_to_include
 
     def is_valid(self):
         if not self.validated_data:
@@ -102,8 +101,4 @@ class SitePlaylistSerializer(PlaylistSerializer):
     def data(self):
         serialized_data = super().data
         serialized_data['isPublic'] = self.instance.isPublic
-        if self.fields_to_include:
-            filtered_data = {field: serialized_data[field]
-                             for field in self.fields_to_include}
-            return filtered_data
         return serialized_data
