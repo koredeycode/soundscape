@@ -6,12 +6,14 @@ from django.conf import settings
 
 BASE_URL = settings.BASE_URL
 
+
 class AlbumSerializer:
-    def __init__(self, instance=None, data=None):
+    def __init__(self, instance=None, data=None, fields_to_include=None):
         self.instance = instance
         self.validated_data = data
         self.errors = {}
         self.required_fields = ['title', 'artist_id', 'release_date']
+        self.fields_to_include = fields_to_include
 
     def is_valid(self):
         if not self.validated_data:
@@ -62,4 +64,8 @@ class AlbumSerializer:
             'release_date': str(self.instance.release_date),
             'featured_artists': [ArtistSerializer(artist).data for artist in self.instance.featured_artists.all()]
         }
+        if self.fields_to_include:
+            filtered_data = {field: serialized_data[field]
+                             for field in self.fields_to_include}
+            return filtered_data
         return serialized_data

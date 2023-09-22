@@ -1,6 +1,7 @@
 from .storage import UUIDStorage
 from .base import Base
 from django.db import models
+from django.conf import settings
 
 
 class Artist(Base):
@@ -16,7 +17,7 @@ class Artist(Base):
     bio = models.TextField(blank=True)
     user = models.OneToOneField('User', on_delete=models.CASCADE)
     profile_image = models.ImageField(
-        upload_to='images/artists/', default='images/artists/default.jpg', storage=UUIDStorage())
+        upload_to='images/artists/', default=f'{settings.MEDIA_ROOT}/images/artists/default.jpg', storage=UUIDStorage())
 
     def __str__(self):
         return self.name

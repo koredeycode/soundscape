@@ -7,12 +7,13 @@ BASE_URL = settings.BASE_URL
 
 
 class ArtistSerializer:
-    def __init__(self, instance=None, data=None, complete_data=False):
+    def __init__(self, instance=None, data=None, complete_data=False, fields_to_include=None):
         self.instance = instance
         self.validated_data = data
         self.complete_data = complete_data
         self.errors = {}
         self.required_fields = ['name', 'user_id']
+        self.fields_to_include = fields_to_include
 
     def is_valid(self):
         if not self.validated_data:
@@ -59,4 +60,8 @@ class ArtistSerializer:
         }
         if self.complete_data:
             serialized_data['user'] = UserSerializer(self.instance.user).data
+        if self.fields_to_include:
+            filtered_data = {field: serialized_data[field]
+                             for field in self.fields_to_include}
+            return filtered_data
         return serialized_data
