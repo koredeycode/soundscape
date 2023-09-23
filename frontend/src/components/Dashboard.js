@@ -31,6 +31,11 @@ import PlaylistsPage from './pages/PlaylistsPage';
 import Setting from './pages/Setting';
 import ProfilePage from './pages/ProfilePage';
 import { useState } from 'react';
+import {
+  useAudioPlayerContext,
+  AudioPlayerProvider,
+} from '../hooks/AudioPlayerContext';
+import { useContent, ContentProvider } from '../hooks/ContentContext';
 
 const LinkItems = [
   { name: 'Home', icon: MdHome, page: <Home /> },
@@ -39,8 +44,9 @@ const LinkItems = [
 ];
 // { name: 'Create Playlist', icon: MdAdd },
 
-const SidebarContent = ({ onClose, setContentCallBack, ...rest }) => {
+const SidebarContent = ({ onClose, ...rest }) => {
   const [activeItem, setActiveItem] = useState(0);
+  const { setContent } = useContent();
   return (
     <Box
       transition="3s ease"
@@ -63,7 +69,7 @@ const SidebarContent = ({ onClose, setContentCallBack, ...rest }) => {
           key={link.name}
           icon={link.icon}
           onClick={() => {
-            setContentCallBack(link.page);
+            setContent(link.page);
             setActiveItem(idx);
           }}
           isActive={activeItem === idx}
@@ -116,13 +122,9 @@ const NavItem = ({ icon, children, isActive, ...rest }) => {
   );
 };
 
-const NavBar = ({
-  onOpen,
-  handleLogout,
-  user,
-  setContentCallBack,
-  ...rest
-}) => {
+const NavBar = ({ onOpen, handleLogout, user, ...rest }) => {
+  const { stopAudio } = useAudioPlayerContext();
+  const { setContent } = useContent();
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -194,20 +196,27 @@ const NavBar = ({
             >
               <MenuItem
                 onClick={() => {
-                  setContentCallBack(<ProfilePage />);
+                  setContent(<ProfilePage />);
                 }}
               >
                 Profile
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  setContentCallBack(<Setting />);
+                  setContent(<Setting />);
                 }}
               >
                 Settings
               </MenuItem>
               <MenuDivider />
-              <MenuItem onClick={handleLogout}>Sign out</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  stopAudio();
+                  handleLogout();
+                }}
+              >
+                Sign out
+              </MenuItem>
             </MenuList>
           </Menu>
         </Flex>
@@ -216,10 +225,14 @@ const NavBar = ({
   );
 };
 
+const Content = () => {
+  const { content, setContent } = useContent();
+  return content;
+};
+
 const Dashboard = () => {
   const { logout, auth } = useAuth();
   const navigate = useNavigate();
-  const [content, setContent] = useState(<Home />);
 
   const handleLogout = async () => {
     await logout();
@@ -228,39 +241,41 @@ const Dashboard = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Box>
-      <Box maxH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
-        <SidebarContent
-          onClose={() => onClose}
-          display={{ base: 'none', md: 'block' }}
-          setContentCallBack={setContent}
-        />
-        <Drawer
-          isOpen={isOpen}
-          placement="left"
-          onClose={onClose}
-          returnFocusOnClose={false}
-          onOverlayClick={onClose}
-          size="xs"
-        >
-          <DrawerOverlay />
-          <DrawerContent>
-            <SidebarContent onClose={onClose} setContentCallBack={setContent} />
-          </DrawerContent>
-        </Drawer>
-        {/* mobilenav */}
-        <NavBar
-          onOpen={onOpen}
-          handleLogout={handleLogout}
-          user={auth.user}
-          setContentCallBack={setContent}
-        />
-        <Box ml={{ base: 0, md: 60 }} h="100vh" p="1">
-          {content}
+    <AudioPlayerProvider>
+      <ContentProvider>
+        <Box>
+          <Box maxH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
+            <SidebarContent
+              onClose={() => onClose}
+              display={{ base: 'none', md: 'block' }}
+            />
+            <Drawer
+              isOpen={isOpen}
+              placement="left"
+              onClose={onClose}
+              returnFocusOnClose={false}
+              onOverlayClick={onClose}
+              size="xs"
+            >
+              <DrawerOverlay />
+              <DrawerContent>
+                <SidebarContent onClose={onClose} />
+              </DrawerContent>
+            </Drawer>
+            {/* mobilenav */}
+            <NavBar
+              onOpen={onOpen}
+              handleLogout={handleLogout}
+              user={auth.user}
+            />
+            <Box ml={{ base: 0, md: 60 }} h="100vh" p="1">
+              <Content />
+            </Box>
+          </Box>
+          <Footer />
         </Box>
-      </Box>
-      <Footer />
-    </Box>
+      </ContentProvider>
+    </AudioPlayerProvider>
   );
 };
 

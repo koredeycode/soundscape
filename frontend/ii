@@ -1,0 +1,15 @@
+tracks
+isPlaying
+playModeIcons
+playMode
+togglePlayMode
+handlePreviousClick
+handlePlayPauseClick
+handleNextClick
+setShowQueue
+audioRef
+audioProgress
+isMuted,
+volume
+setVolume
+showQueue
