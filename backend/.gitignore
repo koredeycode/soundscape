@@ -3,5 +3,6 @@ venv/
 db.sqlite3
 __pycache__/
 old/
-migrations/
+migrations/*
+!/migrations/__init__.py
 uploads/
