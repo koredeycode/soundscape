@@ -30,7 +30,7 @@ import {
   MdRepeat,
   MdReplay,
 } from 'react-icons/md';
-import { useAudioPlayerContext } from '../hooks/AudioPlayerContext';
+import { useAudioPlayerContext } from '../../hooks/AudioPlayerContext';
 // Icons for play modes
 const playModeIcons = {
   single: MdReplay,
@@ -77,7 +77,7 @@ function MusicPlayer() {
               {queue[currentIndex].title}
             </Text>
             <Text fontSize="sm" fontWeight="thin">
-              {queue[currentIndex].artist}
+              {queue[currentIndex].artist.name}
             </Text>
             <Text fontSize="sm" fontWeight="thin">
               Ft other artists name

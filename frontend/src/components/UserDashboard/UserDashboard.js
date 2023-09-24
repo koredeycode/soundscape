@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import {
   IconButton,
   Avatar,
@@ -19,23 +20,33 @@ import {
   MenuItem,
   MenuList,
   Heading,
+  Link as ChakraLink,
 } from '@chakra-ui/react';
 import { FiMenu, FiBell, FiChevronDown } from 'react-icons/fi';
-import { MdAdd, MdLibraryMusic, MdSearch, MdHome } from 'react-icons/md';
-import { useAuth } from '../hooks/AuthContext';
+import {
+  MdAdd,
+  MdLibraryMusic,
+  MdSearch,
+  MdHome,
+  MdOpenInNew,
+} from 'react-icons/md';
+import { useAuth } from '../../hooks/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Footer from './Footer';
-import Home from './pages/Home';
-import SearchPage from './pages/SearchPage';
-import PlaylistsPage from './pages/PlaylistsPage';
-import Setting from './pages/Setting';
-import ProfilePage from './pages/ProfilePage';
+import Home from '../pages/Home';
+import SearchPage from '../pages/SearchPage';
+import PlaylistsPage from '../pages/PlaylistsPage';
+import Setting from '../pages/Setting';
+import ProfilePage from '../pages/ProfilePage';
 import { useState } from 'react';
 import {
   useAudioPlayerContext,
   AudioPlayerProvider,
-} from '../hooks/AudioPlayerContext';
-import { useContent, ContentProvider } from '../hooks/ContentContext';
+} from '../../hooks/AudioPlayerContext';
+import {
+  useUserContent,
+  UserContentProvider,
+} from '../../hooks/UserContentContext';
 
 const LinkItems = [
   { name: 'Home', icon: MdHome, page: <Home /> },
@@ -46,7 +57,8 @@ const LinkItems = [
 
 const SidebarContent = ({ onClose, ...rest }) => {
   const [activeItem, setActiveItem] = useState(0);
-  const { setContent } = useContent();
+  const { setUserContent } = useUserContent();
+  const { currentUser } = useAuth();
   return (
     <Box
       transition="3s ease"
@@ -69,7 +81,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
           key={link.name}
           icon={link.icon}
           onClick={() => {
-            setContent(link.page);
+            setUserContent(link.page);
             setActiveItem(idx);
           }}
           isActive={activeItem === idx}
@@ -77,7 +89,38 @@ const SidebarContent = ({ onClose, ...rest }) => {
           {link.name}
         </NavItem>
       ))}
-      {/* <NavItem icon={MdAdd}>CreatePlayList </NavItem> */}
+      {currentUser.is_artist && (
+        <Box
+          position="absolute"
+          bottom="125px"
+          left="15px"
+          m="2"
+          _hover={{
+            bg: 'gray.100',
+            color: 'black',
+          }}
+        >
+          <ChakraLink
+            as={Link}
+            to="/artist-dashboard"
+            target="_blank"
+            color="black"
+            display="inline-block"
+            p="3"
+          >
+            Artist Dashboard
+            <Icon
+              as={MdOpenInNew}
+              ml="2"
+              _groupHover={{
+                color: 'black',
+              }}
+              w="1.5em"
+              h="1.5em"
+            />
+          </ChakraLink>
+        </Box>
+      )}
     </Box>
   );
 };
@@ -124,7 +167,7 @@ const NavItem = ({ icon, children, isActive, ...rest }) => {
 
 const NavBar = ({ onOpen, handleLogout, user, ...rest }) => {
   const { stopAudio } = useAudioPlayerContext();
-  const { setContent } = useContent();
+  const { setUserContent } = useUserContent();
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -196,14 +239,14 @@ const NavBar = ({ onOpen, handleLogout, user, ...rest }) => {
             >
               <MenuItem
                 onClick={() => {
-                  setContent(<ProfilePage />);
+                  setUserContent(<ProfilePage />);
                 }}
               >
                 Profile
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  setContent(<Setting />);
+                  setUserContent(<Setting />);
                 }}
               >
                 Settings
@@ -226,12 +269,12 @@ const NavBar = ({ onOpen, handleLogout, user, ...rest }) => {
 };
 
 const Content = () => {
-  const { content, setContent } = useContent();
-  return content;
+  const { userContent } = useUserContent();
+  return userContent;
 };
 
-const Dashboard = () => {
-  const { logout, auth } = useAuth();
+const UserDashboard = () => {
+  const { logout, currentUser } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -242,7 +285,7 @@ const Dashboard = () => {
 
   return (
     <AudioPlayerProvider>
-      <ContentProvider>
+      <UserContentProvider>
         <Box>
           <Box maxH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
             <SidebarContent
@@ -255,6 +298,7 @@ const Dashboard = () => {
               onClose={onClose}
               returnFocusOnClose={false}
               onOverlayClick={onClose}
+              initialFocusRef={null}
               size="xs"
             >
               <DrawerOverlay />
@@ -266,7 +310,7 @@ const Dashboard = () => {
             <NavBar
               onOpen={onOpen}
               handleLogout={handleLogout}
-              user={auth.user}
+              user={currentUser}
             />
             <Box ml={{ base: 0, md: 60 }} h="100vh" p="1">
               <Content />
@@ -274,9 +318,9 @@ const Dashboard = () => {
           </Box>
           <Footer />
         </Box>
-      </ContentProvider>
+      </UserContentProvider>
     </AudioPlayerProvider>
   );
 };
 
-export default Dashboard;
+export default UserDashboard;

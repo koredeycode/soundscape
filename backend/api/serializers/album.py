@@ -6,6 +6,7 @@ from django.conf import settings
 
 BASE_URL = settings.BASE_URL
 
+
 class AlbumSerializer:
     def __init__(self, instance=None, data=None):
         self.instance = instance
@@ -57,7 +58,7 @@ class AlbumSerializer:
             'description': str(self.instance.description),
             'artist': ArtistSerializer(self.instance.artist).data,
             'total_duration': str(sum([track.duration for track in self.instance.albumtrack_set.all()])),
-            'track_ids': [str(track.id) for track in self.instance.albumtrack_set.all()],
+            'tracks': [TrackSerializer(track).data for track in self.instance.albumtrack_set.all()],
             'cover_image': f'{BASE_URL}/media/images/album/{str(self.instance.id)}',
             'release_date': str(self.instance.release_date),
             'featured_artists': [ArtistSerializer(artist).data for artist in self.instance.featured_artists.all()]

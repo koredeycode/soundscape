@@ -5,13 +5,20 @@ import {
   Routes,
   Navigate,
 } from 'react-router-dom';
-import { ChakraProvider, CSSReset, Box, extendTheme } from '@chakra-ui/react';
+import {
+  ChakraProvider,
+  CSSReset,
+  Box,
+  extendTheme,
+  Spinner,
+} from '@chakra-ui/react';
 import HomePage from './components/HomePage';
 import Login from './components/Login';
 import Register from './components/Register'; // Updated import
-import Dashboard from './components/Dashboard';
 import NotFound from './components/NotFound';
 import { useAuth } from './hooks/AuthContext';
+import UserDashboard from './components/UserDashboard/UserDashboard';
+import ArtistDashboard from './components/ArtistDashboard/ArtistDashboard';
 
 // Define a custom Chakra UI theme if needed
 const theme = extendTheme({
@@ -19,7 +26,12 @@ const theme = extendTheme({
 });
 
 function App() {
-  const { auth } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
+  console.log(isAuthenticated);
+
+  if (isLoading) {
+    return <Spinner w="50px" h="50px" my="auto" mx="auto" color="blue.500" />;
+  }
 
   return (
     <ChakraProvider theme={theme}>
@@ -31,23 +43,25 @@ function App() {
             <Route
               path="/dashboard"
               element={
-                auth.isAuthenticated ? <Dashboard /> : <Navigate to="/login" />
+                isAuthenticated ? <UserDashboard /> : <Navigate to="/login" />
               }
             />
             <Route
               path="/login"
               element={
-                auth.isAuthenticated ? <Navigate to="/dashboard" /> : <Login />
+                isAuthenticated ? <Navigate to="/dashboard" /> : <Login />
               }
             />
             <Route
               path="/register"
               element={
-                auth.isAuthenticated ? (
-                  <Navigate to="/dashboard" />
-                ) : (
-                  <Register />
-                )
+                isAuthenticated ? <Navigate to="/dashboard" /> : <Register />
+              }
+            />
+            <Route
+              path="/artist-dashboard"
+              element={
+                isAuthenticated ? <ArtistDashboard /> : <Navigate to="/login" />
               }
             />
             <Route path="*" element={<NotFound />} />

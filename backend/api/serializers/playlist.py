@@ -51,9 +51,9 @@ class PlaylistSerializer:
         serialized_data = {
             'id': str(self.instance.id),
             'title': str(self.instance.title),
-            'slug': str(self.instance.slug),
             'description': str(self.instance.description),
-            'track_ids': [str(track.id) for track in self.instance.albumtrack_set.all()],
+            'tracks': [TrackSerializer(track).data for track in self.instance.tracks.all()],
+
         }
         return serialized_data
 

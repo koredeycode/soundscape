@@ -6,10 +6,9 @@ import { useToast } from '@chakra-ui/react';
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [auth, setAuth] = useState({
-    isAuthenticated: false,
-    token: null,
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const url = 'http://127.0.0.1:8000';
   const toast = useToast();
 
@@ -27,6 +26,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     (async () => {
       await storeUser();
+      setIsLoading(false);
     })();
   }, []);
 
@@ -34,10 +34,8 @@ export function AuthProvider({ children }) {
     try {
       const data = await sendAuthorizedRequest('/isuser', 'get', {});
       localStorage.setItem('user', JSON.stringify(data));
-      setAuth({
-        isAuthenticated: true,
-        user: data,
-      });
+      setIsAuthenticated(true);
+      setCurrentUser(data);
     } catch (error) {
       // showToast('Error', error.response.data?.error, 'error');
     }
@@ -69,12 +67,10 @@ export function AuthProvider({ children }) {
   const logout = () => {
     try {
       sendAuthorizedRequest('/logout', 'post', {});
-      setAuth({
-        isAuthenticated: false,
-        user: null,
-      });
+      setIsAuthenticated(false);
+      setCurrentUser(null);
       Cookies.remove('token');
-      localStorage.clear();
+      localStorage.removeItem('user');
       showToast('Success', 'Logged out successfully', 'success');
     } catch (error) {
       // showToast('Error', error.response.data?.error, 'error');
@@ -103,7 +99,16 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ auth, login, logout, register, sendAuthorizedRequest }}
+      value={{
+        login,
+        logout,
+        register,
+        sendAuthorizedRequest,
+        storeUser,
+        isAuthenticated,
+        currentUser,
+        isLoading,
+      }}
     >
       {children}
     </AuthContext.Provider>

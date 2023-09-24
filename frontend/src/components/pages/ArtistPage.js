@@ -1,5 +1,4 @@
-function ArtistPage() {
-    return <div>ArtistPage</div>;
-  }
-  export default ArtistPage;
-  
+function ArtistPage({ artist_id }) {
+  return <div>ArtistPage for {`${artist_id}`}</div>;
+}
+export default ArtistPage;

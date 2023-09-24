@@ -1,25 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Stack, Text, Button, Skeleton, useToast } from '@chakra-ui/react';
+import { useAuth } from '../../hooks/AuthContext';
+import { useUserContent } from '../../hooks/UserContentContext';
+import PlaylistList from '../lists/PlaylistList';
 
 function PlaylistsPage() {
   const [playlists, setPlaylists] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { sendAuthorizedRequest } = useAuth();
+  const { setUserContent } = useUserContent();
   const toast = useToast();
 
   useEffect(() => {
     // Simulate an API request to fetch playlists (replace with actual API call)
     setIsLoading(true);
-
-    setTimeout(() => {
-      const mockPlaylists = [
-        { id: 1, name: 'Playlist 1' },
-        { id: 2, name: 'Playlist 2' },
-        { id: 3, name: 'Playlist 3' },
-      ];
-
-      setPlaylists(mockPlaylists);
+    (async () => {
+      const data = await sendAuthorizedRequest('/user_playlists', 'get', {});
+      setPlaylists(data);
       setIsLoading(false);
-    }, 2000); // Simulated delay
+    })();
 
     // In a real application, you would make an actual API call to fetch user's playlists
   }, []);
@@ -53,29 +52,7 @@ function PlaylistsPage() {
           <Skeleton height="20px" width="60%" />
         </Stack>
       ) : (
-        <Stack spacing={4}>
-          {playlists.map(playlist => (
-            <Box
-              key={playlist.id}
-              borderWidth="1px"
-              borderColor="gray.200"
-              p={3}
-              borderRadius="md"
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Text>{playlist.name}</Text>
-              <Button
-                colorScheme="red"
-                size="sm"
-                onClick={() => handleDeletePlaylist(playlist.id)}
-              >
-                Delete
-              </Button>
-            </Box>
-          ))}
-        </Stack>
+        <PlaylistList playlists={playlists} />
       )}
     </Box>
   );

@@ -70,7 +70,6 @@ export const AudioPlayerProvider = ({ children }) => {
   useEffect(() => {
     console.log('use effect 3');
     const handleKeyDown = event => {
-      event.preventDefault();
       if (event.code === 'Space') {
         if (isPlaying) {
           audioRef.current.pause();
@@ -110,7 +109,7 @@ export const AudioPlayerProvider = ({ children }) => {
   }, [isPlaying]);
 
   const calculateIndexes = currentIndex => {
-    let prevIndex, nextIndex;
+    let prevIndex, nxtIndex;
 
     if (playMode === 'shuffle') {
       // Shuffle once mode: Pick a random track different from the current one
@@ -119,8 +118,8 @@ export const AudioPlayerProvider = ({ children }) => {
       } while (prevIndex === currentIndex);
 
       do {
-        nextIndex = Math.floor(Math.random() * queue.length);
-      } while (nextIndex === currentIndex || nextIndex === prevIndex);
+        nxtIndex = Math.floor(Math.random() * queue.length);
+      } while (nxtIndex === currentIndex || nxtIndex === prevIndex);
     } else {
       // Default behavior: Calculate previous and next indexes
       if (currentIndex > 0) {
@@ -132,22 +131,22 @@ export const AudioPlayerProvider = ({ children }) => {
       }
 
       if (currentIndex < queue.length - 1) {
-        nextIndex = currentIndex + 1;
+        nxtIndex = currentIndex + 1;
       } else if (playMode === 'loop') {
-        nextIndex = 0; // Loop back to the first track in loop mode
+        nxtIndex = 0; // Loop back to the first track in loop mode
       } else {
-        nextIndex = currentIndex; // Stay on the current track in single mode
+        nxtIndex = currentIndex; // Stay on the current track in single mode
       }
     }
-    return [prevIndex, nextIndex];
+    return [prevIndex, nxtIndex];
   };
 
   useEffect(() => {
     console.log('use effect 5');
     // Calculate previous and next indexes based on current index
-    const [prevIndex, nextIndex] = calculateIndexes(currentIndex);
+    const [prevIndex, nxtIndex] = calculateIndexes(currentIndex);
     setPreviousIndex(prevIndex);
-    setNextIndex(nextIndex);
+    setNextIndex(nxtIndex);
   }, [currentIndex, playMode]);
 
   const handlePlayPauseClick = () => {
@@ -213,12 +212,13 @@ export const AudioPlayerProvider = ({ children }) => {
   const handleAddingNextTrack = track => {
     console.log(track);
     const newQueue = [...queue];
-    newQueue.splice(currentIndex, 0, track);
+    newQueue.splice(currentIndex + 1, 0, track);
 
     // Set the updated queue
-    const [_, nextIndex] = calculateIndexes(currentIndex + 1);
+    const [prevIndex, nxtIndex] = calculateIndexes(currentIndex + 1);
     setQueue(newQueue);
-    setNextIndex(nextIndex);
+    setNextIndex(nxtIndex);
+    setPreviousIndex(prevIndex);
   };
 
   const handlePlayingATrack = (tracks, index) => {

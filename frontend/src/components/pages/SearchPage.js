@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/AuthContext';
 import {
   Box,
@@ -15,6 +15,9 @@ import {
   Tab,
   TabPanel,
 } from '@chakra-ui/react';
+import TrackList from '../lists/TrackList';
+import AlbumList from '../lists/AlbumList';
+import ArtistList from '../lists/ArtistList';
 
 function SearchPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -79,17 +82,7 @@ function SearchPage() {
               {searchResults.tracks?.length > 0 ? (
                 <Box>
                   <Stack spacing={2}>
-                    {searchResults.tracks.map((track, index) => (
-                      <Box
-                        key={index}
-                        borderWidth="1px"
-                        borderColor="gray.200"
-                        p={3}
-                        borderRadius="md"
-                      >
-                        {track.title}
-                      </Box>
-                    ))}
+                    <TrackList tracks={searchResults.tracks} />
                   </Stack>
                 </Box>
               ) : (
@@ -100,17 +93,7 @@ function SearchPage() {
               {searchResults.artists?.length > 0 ? (
                 <Box>
                   <Stack spacing={2}>
-                    {searchResults.artists.map((artist, index) => (
-                      <Box
-                        key={index}
-                        borderWidth="1px"
-                        borderColor="gray.200"
-                        p={3}
-                        borderRadius="md"
-                      >
-                        {artist.name}
-                      </Box>
-                    ))}
+                    <ArtistList artists={searchResults.artists} />
                   </Stack>
                 </Box>
               ) : (
@@ -121,17 +104,7 @@ function SearchPage() {
               {searchResults.albums?.length > 0 ? (
                 <Box>
                   <Stack spacing={2}>
-                    {searchResults.albums.map((album, index) => (
-                      <Box
-                        key={index}
-                        borderWidth="1px"
-                        borderColor="gray.200"
-                        p={3}
-                        borderRadius="md"
-                      >
-                        {album.title}
-                      </Box>
-                    ))}
+                    <AlbumList albums={searchResults.albums} />
                   </Stack>
                 </Box>
               ) : (
