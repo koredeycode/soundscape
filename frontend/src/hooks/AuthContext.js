@@ -9,7 +9,9 @@ export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const url = 'http://127.0.0.1:8000';
+  const url = true
+    ? 'http://127.0.0.1:8000'
+    : 'http://soundscape-api.koredeycode.tech';
   const toast = useToast();
 
   const showToast = (title, description, status) => {

@@ -25,8 +25,6 @@ SECRET_KEY = 'django-insecure-kdxx!w4xjg1if1l%ub3vyzr0*9e=3o(n!jdghaceoqyqo5n4n*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]']
-
 
 # Application definition
 
@@ -133,9 +131,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
 
 CORS_ALLOW_CREDENTILS = True
 
@@ -161,4 +156,17 @@ JWT_EXPIRATION = 60 * 60  # 1 hour (adjust as needed)
 MEDIA_URL = '/uploads/'
 MEDIA_ROOT = BASE_DIR / 'uploads'
 
-BASE_URL = 'http://localhost:8000'
+DEV = True
+
+if DEV:
+    BASE_URL = 'http://localhost:8000'
+
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
+
+    CORS_ALLOWED_ORIGINS = [
+        "http://localhost:3000",
+    ]
+else:
+    BASE_URL = 'http://soundscape-api.koredeycode.tech'
+    ALLOWED_HOSTS = ['http://soundscape.koredeycode.tech']
+    CORS_ALLOWED_ORIGINS = ['http://soundscape.koredeycode.tech']
