@@ -168,5 +168,5 @@ if DEV:
     ]
 else:
     BASE_URL = 'http://soundscape-api.koredeycode.tech'
-    ALLOWED_HOSTS = ['http://soundscape.koredeycode.tech']
+    ALLOWED_HOSTS = ['soundscape.koredeycode.tech', '172.174.225.164']
     CORS_ALLOWED_ORIGINS = ['http://soundscape.koredeycode.tech']
