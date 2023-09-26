@@ -1,7 +1,7 @@
 from django.views import View
 from django.http import JsonResponse
 import json
-from api.models import UserPlaylist
+from api.models import UserPlaylist, Track
 from api.serializers import UserPlaylistSerializer
 from django.utils.decorators import method_decorator
 from api.auth import user_required, artist_required
@@ -30,14 +30,25 @@ class UserPlaylistView(View):
         """
         data = self.parse_request_data(request)
         data['user_id'] = request.user.id
-        serializer = UserPlaylistSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            if serializer.errors:
-                return JsonResponse(serializer.errors, status=400)
-            return JsonResponse(serializer.data, status=201)
+        if id:
+            user_playlist = self.get_playlist(id=id, user=request.user)
+            if not user_playlist:
+                return JsonResponse({"error": "Playlist not found"}, status=404)
+            track_id = data.get('track_id')
+            track = Track.objects.get(id=track_id)
+            if not track:
+                return JsonResponse({"error": "Track not found"}, status=404)
+            user_playlist.tracks.add(track)
+            return JsonResponse(UserPlaylistSerializer(user_playlist).data)
         else:
-            return JsonResponse(serializer.errors, status=400)
+            serializer = UserPlaylistSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                if serializer.errors:
+                    return JsonResponse(serializer.errors, status=400)
+                return JsonResponse(serializer.data, status=201)
+            else:
+                return JsonResponse(serializer.errors, status=400)
 
     @method_decorator(user_required)
     def put(self, request, id):

@@ -67,23 +67,23 @@ export const AudioPlayerProvider = ({ children }) => {
     };
   }, [currentIndex]);
 
-  useEffect(() => {
-    console.log('use effect 3');
-    const handleKeyDown = event => {
-      if (event.code === 'Space') {
-        if (isPlaying) {
-          audioRef.current.pause();
-        } else {
-          audioRef.current.play();
-        }
-        setIsPlaying(!isPlaying);
-      }
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isPlaying]);
+  // useEffect(() => {
+  //   console.log('use effect 3');
+  //   const handleKeyDown = event => {
+  //     if (event.code === 'Space') {
+  //       if (isPlaying) {
+  //         audioRef.current.pause();
+  //       } else {
+  //         audioRef.current.play();
+  //       }
+  //       setIsPlaying(!isPlaying);
+  //     }
+  //   };
+  //   document.addEventListener('keydown', handleKeyDown);
+  //   return () => {
+  //     document.removeEventListener('keydown', handleKeyDown);
+  //   };
+  // }, [isPlaying]);
 
   useEffect(() => {
     console.log('use effect 4');

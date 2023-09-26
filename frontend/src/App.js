@@ -19,10 +19,24 @@ import NotFound from './components/NotFound';
 import { useAuth } from './hooks/AuthContext';
 import UserDashboard from './components/UserDashboard/UserDashboard';
 import ArtistDashboard from './components/ArtistDashboard/ArtistDashboard';
-
+import { Logo } from './Logo';
 // Define a custom Chakra UI theme if needed
 const theme = extendTheme({
   // Add your custom theme configurations here
+  // components: {
+  //   Button: {
+  //     baseStyle: {
+  //       fontSize: '1rem',
+  //       padding: '0.25rem 0.5rem',
+  //     },
+  //     sizes: {
+  //       md: {
+  //         fontSize: '24px',
+  //         padding: '0.5rem 1rem',
+  //       },
+  //     },
+  //   },
+  // },
 });
 
 function App() {
@@ -30,7 +44,19 @@ function App() {
   console.log(isAuthenticated);
 
   if (isLoading) {
-    return <Spinner w="50px" h="50px" my="auto" mx="auto" color="blue.500" />;
+    return (
+      <Spinner
+        w="200px"
+        h="200px"
+        my="auto"
+        mx="auto"
+        color="blue.500"
+        position="absolute"
+        top="50%"
+        left="50%"
+      />
+    );
+    // return <Logo />;
   }
 
   return (

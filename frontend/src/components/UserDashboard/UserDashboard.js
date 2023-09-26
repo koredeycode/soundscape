@@ -19,8 +19,9 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
-  Heading,
+  Stack,
   Link as ChakraLink,
+  Tooltip,
 } from '@chakra-ui/react';
 import { FiMenu, FiBell, FiChevronDown } from 'react-icons/fi';
 import {
@@ -47,6 +48,7 @@ import {
   useUserContent,
   UserContentProvider,
 } from '../../hooks/UserContentContext';
+import MusicPlayer from './MusicPlayer';
 
 const LinkItems = [
   { name: 'Home', icon: MdHome, page: <Home /> },
@@ -55,7 +57,49 @@ const LinkItems = [
 ];
 // { name: 'Create Playlist', icon: MdAdd },
 
-const SidebarContent = ({ onClose, ...rest }) => {
+export const FootContent = () => {
+  const { setUserContent } = useUserContent();
+  const [activeItem, setActiveItem] = useState(0);
+  return (
+    <Stack
+      direction="row"
+      w="100%"
+      display={{ base: 'flex', md: 'none' }}
+      justifyContent="space-around"
+      py={{ base: 2, md: 4 }}
+      alignItems="center"
+      bg={useColorModeValue('white', 'gray.900')}
+      pos="sticky"
+      bottom="0"
+    >
+      {LinkItems.map((link, idx) => {
+        return (
+          <Box
+            onClick={() => {
+              setUserContent(link.page);
+              setActiveItem(idx);
+            }}
+            p="2"
+            bg={activeItem == idx ? 'gray.100' : 'transparent'}
+          >
+            <Tooltip label={link.name} placement="top">
+              <Icon
+                _groupHover={{
+                  color: 'black',
+                }}
+                as={link.icon}
+                w="2em"
+                h="2em"
+              />
+            </Tooltip>
+          </Box>
+        );
+      })}
+    </Stack>
+  );
+};
+
+const SidebarContent = ({ ...rest }) => {
   const [activeItem, setActiveItem] = useState(0);
   const { setUserContent } = useUserContent();
   const { currentUser } = useAuth();
@@ -74,7 +118,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
           Soundscape
         </Text>
-        <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
+        {/* <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} /> */}
       </Flex>
       {LinkItems.map((link, idx) => (
         <NavItem
@@ -89,38 +133,6 @@ const SidebarContent = ({ onClose, ...rest }) => {
           {link.name}
         </NavItem>
       ))}
-      {currentUser.is_artist && (
-        <Box
-          position="absolute"
-          bottom="125px"
-          left="15px"
-          m="2"
-          _hover={{
-            bg: 'gray.100',
-            color: 'black',
-          }}
-        >
-          <ChakraLink
-            as={Link}
-            to="/artist-dashboard"
-            target="_blank"
-            color="black"
-            display="inline-block"
-            p="3"
-          >
-            Artist Dashboard
-            <Icon
-              as={MdOpenInNew}
-              ml="2"
-              _groupHover={{
-                color: 'black',
-              }}
-              w="1.5em"
-              h="1.5em"
-            />
-          </ChakraLink>
-        </Box>
-      )}
     </Box>
   );
 };
@@ -165,13 +177,14 @@ const NavItem = ({ icon, children, isActive, ...rest }) => {
   );
 };
 
-const NavBar = ({ onOpen, handleLogout, user, ...rest }) => {
+const NavBar = ({ handleLogout, user, ...rest }) => {
   const { stopAudio } = useAudioPlayerContext();
   const { setUserContent } = useUserContent();
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
       px={{ base: 4, md: 4 }}
+      py={{ base: 2, md: 2 }}
       alignItems="center"
       bg={useColorModeValue('white', 'gray.900')}
       borderBottomWidth="1px"
@@ -181,13 +194,13 @@ const NavBar = ({ onOpen, handleLogout, user, ...rest }) => {
       pos="sticky"
       top="0"
     >
-      <IconButton
+      {/* <IconButton
         display={{ base: 'flex', md: 'none' }}
         onClick={onOpen}
         variant="outline"
         aria-label="open menu"
         icon={<FiMenu />}
-      />
+      /> */}
 
       <Text
         display={{ base: 'flex', md: 'none' }}
@@ -244,6 +257,7 @@ const NavBar = ({ onOpen, handleLogout, user, ...rest }) => {
               >
                 Profile
               </MenuItem>
+
               <MenuItem
                 onClick={() => {
                   setUserContent(<Setting />);
@@ -251,7 +265,34 @@ const NavBar = ({ onOpen, handleLogout, user, ...rest }) => {
               >
                 Settings
               </MenuItem>
+
               <MenuDivider />
+              {user.is_artist && (
+                <>
+                  <MenuItem>
+                    <ChakraLink
+                      as={Link}
+                      to="/artist-dashboard"
+                      target="_blank"
+                      color="black"
+                      // display="inline-block"
+                      // p="3"
+                    >
+                      Artist Dashboard
+                      <Icon
+                        as={MdOpenInNew}
+                        ml="1"
+                        _groupHover={{
+                          color: 'black',
+                        }}
+                        w="1em"
+                        h="1em"
+                      />
+                    </ChakraLink>
+                  </MenuItem>
+                  <MenuDivider />
+                </>
+              )}
               <MenuItem
                 onClick={() => {
                   stopAudio();
@@ -281,7 +322,7 @@ const UserDashboard = () => {
     await logout();
     navigate('/login');
   };
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  // const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <AudioPlayerProvider>
@@ -289,10 +330,10 @@ const UserDashboard = () => {
         <Box>
           <Box maxH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
             <SidebarContent
-              onClose={() => onClose}
+              // onClose={() => onClose}
               display={{ base: 'none', md: 'block' }}
             />
-            <Drawer
+            {/* <Drawer
               isOpen={isOpen}
               placement="left"
               onClose={onClose}
@@ -305,18 +346,15 @@ const UserDashboard = () => {
               <DrawerContent>
                 <SidebarContent onClose={onClose} />
               </DrawerContent>
-            </Drawer>
+            </Drawer> */}
             {/* mobilenav */}
-            <NavBar
-              onOpen={onOpen}
-              handleLogout={handleLogout}
-              user={currentUser}
-            />
+            <NavBar handleLogout={handleLogout} user={currentUser} />
             <Box ml={{ base: 0, md: 60 }} h="100vh" p="1">
               <Content />
             </Box>
           </Box>
-          <Footer />
+          <MusicPlayer />
+          <FootContent />
         </Box>
       </UserContentProvider>
     </AudioPlayerProvider>

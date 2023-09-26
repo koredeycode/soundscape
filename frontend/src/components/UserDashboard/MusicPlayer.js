@@ -17,6 +17,9 @@ import {
   DrawerBody,
   List,
   ListItem,
+  Box,
+  Stack,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import {
   MdQueueMusic,
@@ -62,9 +65,25 @@ function MusicPlayer() {
     handleSliderChange,
   } = useAudioPlayerContext();
   return (
-    queue.length > 0 && (
-      <HStack justifyContent="space-between" gap="3rem">
-        <HStack flexGrow="1" gap="1rem">
+    <Box
+      bg={useColorModeValue('gray.50', 'gray.900')}
+      color={useColorModeValue('gray.700', 'gray.200')}
+      pos="fixed"
+      bottom={{ base: '65px', md: '0px' }}
+      p="5"
+      w="100%"
+    >
+      <Stack
+        direction={{ base: 'column', md: 'row' }}
+        justifyContent="space-between"
+        gap={{ base: '0.5rem', md: '3rem' }}
+      >
+        <Stack
+          direction="row"
+          flexGrow="1"
+          gap="1rem"
+          display={{ base: 'none', md: 'flex' }}
+        >
           <Square>
             <img
               src={queue[currentIndex].cover_image}
@@ -83,8 +102,24 @@ function MusicPlayer() {
               Ft other artists name
             </Text>
           </VStack>
-        </HStack>
+        </Stack>
         <VStack flexGrow="7">
+          <HStack w="100%">
+            <Text>{formatTime(audioRef.current.currentTime)}</Text>
+            <Slider
+              aria-label="slider-ex-1"
+              value={audioProgress ? audioProgress : 0}
+              colorScheme="gray"
+              onChange={handleSliderChange}
+              focusThumbOnChange={false}
+            >
+              <SliderTrack>
+                <SliderFilledTrack />
+              </SliderTrack>
+              <SliderThumb />
+            </Slider>
+            <Text>{formatTime(audioRef.current.duration)}</Text>
+          </HStack>
           <HStack>
             <Icon
               as={playModeIcons[playMode]}
@@ -125,24 +160,8 @@ function MusicPlayer() {
               h="1.5em"
             />
           </HStack>
-          <HStack w="100%">
-            <Text>{formatTime(audioRef.current.currentTime)}</Text>
-            <Slider
-              aria-label="slider-ex-1"
-              value={audioProgress ? audioProgress : 0}
-              colorScheme="gray"
-              onChange={handleSliderChange}
-              focusThumbOnChange={false}
-            >
-              <SliderTrack>
-                <SliderFilledTrack />
-              </SliderTrack>
-              <SliderThumb />
-            </Slider>
-            <Text>{formatTime(audioRef.current.duration)}</Text>
-          </HStack>
         </VStack>
-        <HStack flexGrow="2">
+        <HStack flexGrow="2" display={{ base: 'none', md: 'flex' }}>
           {/* Volume Icons */}
 
           <Icon
@@ -183,27 +202,27 @@ function MusicPlayer() {
             </SliderTrack>
             <SliderThumb />
           </Slider>
-          <Drawer
-            placement="right"
-            isOpen={showQueue}
-            onClose={() => setShowQueue(false)}
-          >
-            <DrawerOverlay />
-            <DrawerContent>
-              <DrawerCloseButton />
-              <DrawerHeader>Queue</DrawerHeader>
-              <DrawerBody>
-                <List>
-                  {queue.map((track, index) => (
-                    <ListItem key={index}>{track.title}</ListItem>
-                  ))}
-                </List>
-              </DrawerBody>
-            </DrawerContent>
-          </Drawer>
         </HStack>
-      </HStack>
-    )
+      </Stack>
+      <Drawer
+        placement="right"
+        isOpen={showQueue}
+        onClose={() => setShowQueue(false)}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Queue</DrawerHeader>
+          <DrawerBody>
+            <List>
+              {queue.map((track, index) => (
+                <ListItem key={index}>{track.title}</ListItem>
+              ))}
+            </List>
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+    </Box>
   );
 }
 

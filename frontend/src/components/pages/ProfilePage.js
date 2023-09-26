@@ -12,14 +12,15 @@ import {
   AlertIcon,
   CloseButton,
 } from '@chakra-ui/react';
+import { useAuth } from '../../hooks/AuthContext';
 
 function ProfilePage() {
+  const { currentUser } = useAuth();
   // Mock user profile data (replace with actual user data from your API)
   const initialProfile = {
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'johndoe@example.com',
-    bio: 'This is my bio.',
+    firstName: currentUser?.first_name,
+    lastName: currentUser?.last_name,
+    username: currentUser?.username,
   };
 
   const [profile, setProfile] = useState(initialProfile);
@@ -92,16 +93,16 @@ function ProfilePage() {
           />
         </FormControl>
         <FormControl>
-          <FormLabel>Email</FormLabel>
+          <FormLabel>Username</FormLabel>
           <Input
-            type="email"
-            name="email"
-            value={profile.email}
+            type="text"
+            name="username"
+            value={profile.username}
             onChange={handleChange}
             isReadOnly={!isEditing}
           />
         </FormControl>
-        <FormControl>
+        {/* <FormControl>
           <FormLabel>Bio</FormLabel>
           <Textarea
             name="bio"
@@ -109,7 +110,7 @@ function ProfilePage() {
             onChange={handleChange}
             isReadOnly={!isEditing}
           />
-        </FormControl>
+        </FormControl> */}
         {isEditing ? (
           <Button colorScheme="teal" onClick={handleSaveClick}>
             Save
