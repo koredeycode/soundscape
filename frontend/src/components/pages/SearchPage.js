@@ -70,7 +70,7 @@ function SearchPage() {
         <Text fontSize="lg" fontWeight="bold">
           Search Results:
         </Text>
-        <Tabs>
+        <Tabs align="center">
           <TabList>
             <Tab>Tracks</Tab>
             <Tab>Artists</Tab>

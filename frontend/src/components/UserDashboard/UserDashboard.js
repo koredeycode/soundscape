@@ -26,9 +26,12 @@ import {
 import { FiMenu, FiBell, FiChevronDown } from 'react-icons/fi';
 import {
   MdAdd,
+  MdOutlineLibraryMusic,
   MdLibraryMusic,
   MdSearch,
+  MdOutlineSearch,
   MdHome,
+  MdOutlineHome,
   MdOpenInNew,
 } from 'react-icons/md';
 import { useAuth } from '../../hooks/AuthContext';
@@ -51,9 +54,21 @@ import {
 import MusicPlayer from './MusicPlayer';
 
 const LinkItems = [
-  { name: 'Home', icon: MdHome, page: <Home /> },
-  { name: 'Search', icon: MdSearch, page: <SearchPage /> },
-  { name: 'Playlists', icon: MdLibraryMusic, page: <PlaylistsPage /> },
+  {
+    name: 'Home',
+    icon: { inactive: MdOutlineHome, active: MdHome },
+    page: <Home />,
+  },
+  {
+    name: 'Search',
+    icon: { inactive: MdOutlineSearch, active: MdSearch },
+    page: <SearchPage />,
+  },
+  {
+    name: 'Playlists',
+    icon: { inactive: MdOutlineLibraryMusic, active: MdLibraryMusic },
+    page: <PlaylistsPage />,
+  },
 ];
 // { name: 'Create Playlist', icon: MdAdd },
 
@@ -69,7 +84,7 @@ export const FootContent = () => {
       py={{ base: 2, md: 4 }}
       alignItems="center"
       bg={useColorModeValue('white', 'gray.900')}
-      pos="sticky"
+      pos="fixed"
       bottom="0"
     >
       {LinkItems.map((link, idx) => {
@@ -80,14 +95,14 @@ export const FootContent = () => {
               setActiveItem(idx);
             }}
             p="2"
-            bg={activeItem == idx ? 'gray.100' : 'transparent'}
+            // bg={activeItem == idx ? 'gray.100' : 'transparent'}
           >
             <Tooltip label={link.name} placement="top">
               <Icon
                 _groupHover={{
                   color: 'black',
                 }}
-                as={link.icon}
+                as={activeItem == idx ? link.icon.active : link.icon.inactive}
                 w="2em"
                 h="2em"
               />
@@ -102,7 +117,6 @@ export const FootContent = () => {
 const SidebarContent = ({ ...rest }) => {
   const [activeItem, setActiveItem] = useState(0);
   const { setUserContent } = useUserContent();
-  const { currentUser } = useAuth();
   return (
     <Box
       transition="3s ease"
@@ -123,7 +137,7 @@ const SidebarContent = ({ ...rest }) => {
       {LinkItems.map((link, idx) => (
         <NavItem
           key={link.name}
-          icon={link.icon}
+          icon={activeItem === idx ? link.icon.active : link.icon.inactive}
           onClick={() => {
             setUserContent(link.page);
             setActiveItem(idx);
@@ -193,15 +207,8 @@ const NavBar = ({ handleLogout, user, ...rest }) => {
       {...rest}
       pos="sticky"
       top="0"
+      zIndex="2"
     >
-      {/* <IconButton
-        display={{ base: 'flex', md: 'none' }}
-        onClick={onOpen}
-        variant="outline"
-        aria-label="open menu"
-        icon={<FiMenu />}
-      /> */}
-
       <Text
         display={{ base: 'flex', md: 'none' }}
         fontSize="2xl"
@@ -328,7 +335,7 @@ const UserDashboard = () => {
     <AudioPlayerProvider>
       <UserContentProvider>
         <Box>
-          <Box maxH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
+          <Box bg={useColorModeValue('white', 'gray.900')}>
             <SidebarContent
               // onClose={() => onClose}
               display={{ base: 'none', md: 'block' }}

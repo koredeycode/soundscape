@@ -13,8 +13,9 @@ import {
 import { FaPlay, FaEllipsisV } from 'react-icons/fa';
 import { useAudioPlayerContext } from '../../hooks/AudioPlayerContext';
 import AddToTrackPlaylist from '../modals/AddTrackToPlaylist';
+import RemoveTrackFromPlaylist from '../modals/RemoveTrackFromPlaylist';
 
-export default function TrackList({ tracks }) {
+export default function TrackList({ tracks, playlist_id }) {
   const [playlistItemId, setPlaylistItemId] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -29,19 +30,36 @@ export default function TrackList({ tracks }) {
             tracks={tracks}
             onOpen={onOpen}
             setPlaylistItemId={setPlaylistItemId}
+            playlist_id={playlist_id}
           />
         ))}
       </VStack>
-      <AddToTrackPlaylist
-        isOpen={isOpen}
-        onClose={onClose}
-        track_id={playlistItemId}
-      />
+      {playlist_id ? (
+        <RemoveTrackFromPlaylist
+          isOpen={isOpen}
+          onClose={onClose}
+          track_id={playlistItemId}
+          playlist_id={playlist_id}
+        />
+      ) : (
+        <AddToTrackPlaylist
+          isOpen={isOpen}
+          onClose={onClose}
+          track_id={playlistItemId}
+        />
+      )}
     </>
   );
 }
 
-function TrackItem({ track, index, tracks, onOpen, setPlaylistItemId }) {
+function TrackItem({
+  track,
+  index,
+  tracks,
+  onOpen,
+  setPlaylistItemId,
+  playlist_id,
+}) {
   const { handleAddingNextTrack, handlePlayingATrack } =
     useAudioPlayerContext();
   return (
@@ -71,16 +89,28 @@ function TrackItem({ track, index, tracks, onOpen, setPlaylistItemId }) {
                 handleAddingNextTrack(track);
               }}
             >
-              PlayNext
+              Play Next
             </MenuItem>
-            <MenuItem
-              onClick={() => {
-                setPlaylistItemId(track.id);
-                onOpen();
-              }}
-            >
-              Add To A Playlist
-            </MenuItem>
+            {playlist_id ? (
+              <MenuItem
+                onClick={() => {
+                  setPlaylistItemId(track.id);
+                  onOpen();
+                }}
+              >
+                Remove Track From Playlist
+              </MenuItem>
+            ) : (
+              <MenuItem
+                onClick={() => {
+                  setPlaylistItemId(track.id);
+                  onOpen();
+                }}
+              >
+                Add To A Playlist
+              </MenuItem>
+            )}
+
             {/* Add more menu items as needed */}
           </MenuList>
         </Menu>

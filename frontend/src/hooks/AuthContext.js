@@ -57,7 +57,7 @@ export function AuthProvider({ children }) {
 
   const register = async userData => {
     try {
-      await axios.post(`${url}/register/`, userData);
+      await axios.post(`${url}/profile/`, userData);
       showToast('Success', 'Registered successfully', 'success');
       return '/login';
     } catch (error) {

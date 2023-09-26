@@ -24,7 +24,7 @@ function PlaylistPage({ playlist_id }) {
           {playlistData.title}
         </Heading>
         <Image src={playlistData.cover_image} alt="Album Cover" mb={4} />
-        <TrackList tracks={playlistData.tracks} />
+        <TrackList tracks={playlistData.tracks} playlist_id={playlist_id} />
       </Box>
     )
   );

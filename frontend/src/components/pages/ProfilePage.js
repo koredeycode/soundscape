@@ -15,11 +15,11 @@ import {
 import { useAuth } from '../../hooks/AuthContext';
 
 function ProfilePage() {
-  const { currentUser } = useAuth();
+  const { currentUser, sendAuthorizedRequest } = useAuth();
   // Mock user profile data (replace with actual user data from your API)
   const initialProfile = {
-    firstName: currentUser?.first_name,
-    lastName: currentUser?.last_name,
+    first_name: currentUser?.first_name,
+    last_name: currentUser?.last_name,
     username: currentUser?.username,
   };
 
@@ -37,11 +37,8 @@ function ProfilePage() {
     setProfile(initialProfile);
   };
 
-  const handleSaveClick = () => {
-    // Perform an API request to update the user's profile with the new data (not implemented in this example)
-    // After a successful update, you can set `updateSuccess` to true
-    // and optionally fetch and update the user's profile data from the API
-    // For this example, we'll just set `updateSuccess` to true immediately.
+  const handleSaveClick = async () => {
+    await sendAuthorizedRequest('/profile', 'put', profile);
     setUpdateSuccess(true);
     setIsEditing(false);
   };
@@ -76,8 +73,8 @@ function ProfilePage() {
           <FormLabel>First Name</FormLabel>
           <Input
             type="text"
-            name="firstName"
-            value={profile.firstName}
+            name="first_name"
+            value={profile.first_name}
             onChange={handleChange}
             isReadOnly={!isEditing}
           />
@@ -86,8 +83,8 @@ function ProfilePage() {
           <FormLabel>Last Name</FormLabel>
           <Input
             type="text"
-            name="lastName"
-            value={profile.lastName}
+            name="last_name"
+            value={profile.last_name}
             onChange={handleChange}
             isReadOnly={!isEditing}
           />

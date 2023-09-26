@@ -35,7 +35,7 @@ class LogoutView(View):
         return JsonResponse({'message': 'Logout successful'})
 
 
-class RegisterView(View):
+class ProfileView(View):
     def post(self, request):
         try:
             data = json.loads(request.body.decode('utf-8'))
@@ -55,6 +55,21 @@ class RegisterView(View):
             return JsonResponse(UserSerializer(user).data)
         except json.JSONDecodeError:
             return JsonResponse({"error": "invalid data"}, status=400)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+
+    @method_decorator(user_required)
+    def put(self, request):
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            # update the request.user
+            serializer = UserSerializer(instance=request.user, data=data)
+            serializer.save()
+            if serializer.errors:
+                return JsonResponse(serializer.errors, status=400)
+            return JsonResponse(serializer.data, status=200)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': "invalid data"}, status=400)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)
 

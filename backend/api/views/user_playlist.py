@@ -73,10 +73,22 @@ class UserPlaylistView(View):
         """
         /userplaylists/id
         """
-        playlist = self.get_playlist(id=id, user=request.user)
-        if playlist:
-            playlist.delete()
-            return JsonResponse({}, status=204)
+        data = self.parse_request_data(request)
+
+        # data['user_id'] = request.user.id
+
+        user_playlist = self.get_playlist(id=id, user=request.user)
+        if user_playlist:
+            track_id = data.get('track_id')
+            if not track_id:
+                user_playlist.delete()
+                return JsonResponse({}, status=204)
+            track = Track.objects.get(id=track_id)
+            if not track:
+                return JsonResponse({"error": "Track not found"}, status=404)
+            user_playlist.tracks.remove(track)
+            return JsonResponse(UserPlaylistSerializer(user_playlist).data)
+
         return JsonResponse({"error": "Playlist not found"}, status=404)
 
     def parse_request_data(self, request):
