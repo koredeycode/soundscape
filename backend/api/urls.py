@@ -18,7 +18,7 @@ from api.auth import LoginView, LogoutView, ProfileView, GetUserView
 # from api.auth import GetArtistView, LoginView, LogoutView, ProfileView, GetUserView
 from api.views import (GenreView, SitePlaylistView, UserPlaylistView, TrackView,
                        AlbumView, ArtistView, TrackMediaView, TrackCoverMediaView,
-                       AlbumCoverMediaView, ArtistProfileMediaView, SearchView)
+                       AlbumCoverMediaView, ArtistProfileMediaView, SearchView, StatusView)
 
 authpatterns = [
     path('login/', LoginView.as_view(), name='login'),
@@ -49,7 +49,8 @@ api_patterns = [
          name='album-cover-media'),
     path('media/images/artists/<uuid:id>',
          ArtistProfileMediaView.as_view(), name='artist-profile-media'),
-    path('search/', SearchView.as_view(), name='search')
+    path('search/', SearchView.as_view(), name='search'),
+    path('status/', StatusView.as_view(), name="status")
 ]
 
 urlpatterns = []
