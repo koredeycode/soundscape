@@ -17,8 +17,6 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { useAuth } from '../../hooks/AuthContext';
-import { useUserContent } from '../../hooks/UserContentContext';
-import PlaylistsPage from '../pages/PlaylistsPage';
 
 function UpdatePlaylist({ isOpen, onClose, playlist }) {
   const title = playlist?.title || '';
@@ -27,7 +25,6 @@ function UpdatePlaylist({ isOpen, onClose, playlist }) {
     title: '',
   });
   const { sendAuthorizedRequest } = useAuth();
-  const { setUserContent } = useUserContent();
   const toast = useToast();
 
   useEffect(() => {
@@ -53,7 +50,6 @@ function UpdatePlaylist({ isOpen, onClose, playlist }) {
       formData
     );
     onClose();
-    setUserContent(<PlaylistsPage />);
   };
 
   return (

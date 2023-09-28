@@ -6,14 +6,40 @@ import reportWebVitals from './reportWebVitals';
 import * as serviceWorker from './serviceWorker';
 import { AuthProvider } from './hooks/AuthContext';
 
+import { BrowserRouter } from 'react-router-dom';
+import { ChakraProvider, CSSReset, extendTheme } from '@chakra-ui/react';
+
+const theme = extendTheme({
+  // Add your custom theme configurations here
+  // components: {
+  //   Button: {
+  //     baseStyle: {
+  //       fontSize: '1rem',
+  //       padding: '0.25rem 0.5rem',
+  //     },
+  //     sizes: {
+  //       md: {
+  //         fontSize: '24px',
+  //         padding: '0.5rem 1rem',
+  //       },
+  //     },
+  //   },
+  // },
+});
+
 const container = document.getElementById('root');
 const root = ReactDOM.createRoot(container);
 
 root.render(
   // <StrictMode>
-  <AuthProvider>
-    <App />
-  </AuthProvider>
+  <BrowserRouter>
+    <AuthProvider>
+      <ChakraProvider theme={theme}>
+        <CSSReset />
+        <App />
+      </ChakraProvider>
+    </AuthProvider>
+  </BrowserRouter>
   // </StrictMode>
 );
 

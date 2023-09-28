@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import PlaylistPage from '../pages/PlaylistPage';
-import { useUserContent } from '../../hooks/UserContentContext';
+import { Link } from 'react-router-dom';
 import {
   Box,
   Stack,
@@ -8,13 +7,12 @@ import {
   Text,
   Button,
   useDisclosure,
+  Link as ChakraLink,
 } from '@chakra-ui/react';
 import DeletePlaylist from '../modals/DeletePlaylist';
 import UpdatePlaylist from '../modals/UpdatePlaylist';
 
 export default function PlaylistList({ playlists }) {
-  const { setUserContent } = useUserContent();
-  // const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isDeleteModalOpen,
     onOpen: onOpenDeleteModal,
@@ -40,12 +38,16 @@ export default function PlaylistList({ playlists }) {
           justifyContent="space-between"
           alignItems="center"
         >
-          <HStack
-            onClick={() =>
-              setUserContent(<PlaylistPage playlist_id={playlist.id} />)
-            }
-          >
-            <Text>{playlist.title}</Text>
+          <HStack>
+            <ChakraLink
+              as={Link}
+              to={`/playlists/${playlist.id}`}
+              color="black"
+              // display="inline-block"
+              // p="3"
+            >
+              {playlist.title}
+            </ChakraLink>
           </HStack>
           <HStack>
             <Button

@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import { useToast } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
@@ -9,6 +10,7 @@ export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
   const url = true
     ? 'http://127.0.0.1:8000'
     : 'http://soundscape-api.koredeycode.tech';
@@ -77,7 +79,7 @@ export function AuthProvider({ children }) {
     } catch (error) {
       // showToast('Error', error.response.data?.error, 'error');
     }
-    // navigate('/login');
+    navigate('/login');
   };
   const sendAuthorizedRequest = async (endpoint, method, data) => {
     const axiosInstance = axios.create(); // Create a new Axios instance
@@ -110,6 +112,7 @@ export function AuthProvider({ children }) {
         isAuthenticated,
         currentUser,
         isLoading,
+        showToast,
       }}
     >
       {children}

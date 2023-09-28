@@ -61,6 +61,9 @@ export const AudioPlayerProvider = ({ children }) => {
         setCurrentIndex(0);
       }
     };
+    if (isPlaying) {
+      audio.play();
+    }
     audio.addEventListener('ended', handleAudioEnd);
     return () => {
       audio.removeEventListener('ended', handleAudioEnd);
@@ -161,6 +164,7 @@ export const AudioPlayerProvider = ({ children }) => {
   const stopAudio = () => {
     audioRef.current.pause();
     audioRef.current.currentTime = 0;
+    setAudioProgress(0);
   };
 
   const togglePlayMode = () => {
@@ -224,6 +228,7 @@ export const AudioPlayerProvider = ({ children }) => {
   const handlePlayingATrack = (tracks, index) => {
     setQueue(tracks);
     setCurrentIndex(index);
+    setIsPlaying(true);
   };
 
   const contextValue = {

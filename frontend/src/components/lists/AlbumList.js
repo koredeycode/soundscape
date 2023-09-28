@@ -1,9 +1,7 @@
-import AlbumPage from '../pages/AlbumPage';
-import { useUserContent } from '../../hooks/UserContentContext';
-import { Box, Stack, Text } from '@chakra-ui/react';
-export default function AlbumList({ albums }) {
-  const { setUserContent } = useUserContent();
+import { Link } from 'react-router-dom';
+import { Box, Stack, Text, Link as ChakraLink } from '@chakra-ui/react';
 
+export default function AlbumList({ albums }) {
   return (
     <Stack spacing={4}>
       {albums.map(album => (
@@ -16,9 +14,16 @@ export default function AlbumList({ albums }) {
           display="flex"
           justifyContent="space-between"
           alignItems="center"
-          onClick={() => setUserContent(<AlbumPage album_id={album.id} />)}
         >
-          <Text>{album.title}</Text>
+          <ChakraLink
+            as={Link}
+            to={`/albums/${album.id}`}
+            color="black"
+            // display="inline-block"
+            // p="3"
+          >
+            {album.title}
+          </ChakraLink>
         </Box>
       ))}
     </Stack>

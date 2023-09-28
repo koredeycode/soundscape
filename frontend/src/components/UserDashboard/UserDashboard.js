@@ -3,17 +3,12 @@ import {
   IconButton,
   Avatar,
   Box,
-  CloseButton,
   Flex,
   HStack,
   VStack,
   Icon,
   useColorModeValue,
   Text,
-  Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  useDisclosure,
   Menu,
   MenuButton,
   MenuDivider,
@@ -23,9 +18,8 @@ import {
   Link as ChakraLink,
   Tooltip,
 } from '@chakra-ui/react';
-import { FiMenu, FiBell, FiChevronDown } from 'react-icons/fi';
+import { FiBell, FiChevronDown } from 'react-icons/fi';
 import {
-  MdAdd,
   MdOutlineLibraryMusic,
   MdLibraryMusic,
   MdSearch,
@@ -33,48 +27,45 @@ import {
   MdHome,
   MdOutlineHome,
   MdOpenInNew,
+  MdPerson,
+  MdPersonOutline,
+  MdMusicNote,
+  MdOutlineMusicNote,
 } from 'react-icons/md';
 import { useAuth } from '../../hooks/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import Footer from './Footer';
-import Home from '../pages/Home';
-import SearchPage from '../pages/SearchPage';
-import PlaylistsPage from '../pages/PlaylistsPage';
-import Setting from '../pages/Setting';
-import ProfilePage from '../pages/ProfilePage';
 import { useState } from 'react';
-import {
-  useAudioPlayerContext,
-  AudioPlayerProvider,
-} from '../../hooks/AudioPlayerContext';
-import {
-  useUserContent,
-  UserContentProvider,
-} from '../../hooks/UserContentContext';
-import MusicPlayer from './MusicPlayer';
+import { useAudioPlayerContext } from '../../hooks/AudioPlayerContext';
 
-const LinkItems = [
+const UserLinkItems = [
   {
     name: 'Home',
     icon: { inactive: MdOutlineHome, active: MdHome },
-    page: <Home />,
+    url: '/dashboard',
   },
   {
     name: 'Search',
     icon: { inactive: MdOutlineSearch, active: MdSearch },
-    page: <SearchPage />,
+    url: '/search',
   },
   {
     name: 'Playlists',
     icon: { inactive: MdOutlineLibraryMusic, active: MdLibraryMusic },
-    page: <PlaylistsPage />,
+    url: '/playlists',
   },
 ];
-// { name: 'Create Playlist', icon: MdAdd },
+
+const ArtistLinkItems = [
+  {
+    name: 'Artist Profile',
+    icon: { inactive: MdPersonOutline, active: MdPerson },
+    url: '/artist-profile',
+  },
+];
 
 export const FootContent = () => {
-  const { setUserContent } = useUserContent();
   const [activeItem, setActiveItem] = useState(0);
+  const { currentUser } = useAuth();
+
   return (
     <Stack
       direction="row"
@@ -87,36 +78,81 @@ export const FootContent = () => {
       pos="fixed"
       bottom="0"
     >
-      {LinkItems.map((link, idx) => {
+      {UserLinkItems.map((link, idx) => {
         return (
           <Box
             onClick={() => {
-              setUserContent(link.page);
               setActiveItem(idx);
             }}
             p="2"
+            key={idx}
             // bg={activeItem == idx ? 'gray.100' : 'transparent'}
           >
             <Tooltip label={link.name} placement="top">
-              <Icon
-                _groupHover={{
-                  color: 'black',
-                }}
-                as={activeItem == idx ? link.icon.active : link.icon.inactive}
-                w="2em"
-                h="2em"
-              />
+              <ChakraLink
+                as={Link}
+                to={link.url}
+                color="black"
+                // display="inline-block"
+                // p="3"
+              >
+                <Icon
+                  _groupHover={{
+                    color: 'black',
+                  }}
+                  as={activeItem == idx ? link.icon.active : link.icon.inactive}
+                  w="2em"
+                  h="2em"
+                />
+              </ChakraLink>
             </Tooltip>
           </Box>
         );
       })}
+      {currentUser.is_artist
+        ? ArtistLinkItems.map((link, idx) => {
+            return (
+              <Box
+                onClick={() => {
+                  setActiveItem(idx + UserLinkItems.length);
+                }}
+                p="2"
+                key={idx}
+                // bg={activeItem == idx + UserLinkItems.length ? 'gray.100' : 'transparent'}
+              >
+                <Tooltip label={link.name} placement="top">
+                  <ChakraLink
+                    as={Link}
+                    to={link.url}
+                    color="black"
+                    // display="inline-block"
+                    // p="3"
+                  >
+                    <Icon
+                      _groupHover={{
+                        color: 'black',
+                      }}
+                      as={
+                        activeItem == idx + UserLinkItems.length
+                          ? link.icon.active
+                          : link.icon.inactive
+                      }
+                      w="2em"
+                      h="2em"
+                    />
+                  </ChakraLink>
+                </Tooltip>
+              </Box>
+            );
+          })
+        : null}
     </Stack>
   );
 };
 
-const SidebarContent = ({ ...rest }) => {
+export const SidebarContent = ({ ...rest }) => {
   const [activeItem, setActiveItem] = useState(0);
-  const { setUserContent } = useUserContent();
+  const { currentUser } = useAuth();
   return (
     <Box
       transition="3s ease"
@@ -132,26 +168,58 @@ const SidebarContent = ({ ...rest }) => {
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
           Soundscape
         </Text>
-        {/* <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} /> */}
       </Flex>
-      {LinkItems.map((link, idx) => (
+      {UserLinkItems.map((link, idx) => (
         <NavItem
           key={link.name}
           icon={activeItem === idx ? link.icon.active : link.icon.inactive}
           onClick={() => {
-            setUserContent(link.page);
             setActiveItem(idx);
           }}
           isActive={activeItem === idx}
         >
-          {link.name}
+          <ChakraLink
+            as={Link}
+            to={link.url}
+            color="black"
+            // display="inline-block"
+            // p="3"
+          >
+            {link.name}
+          </ChakraLink>
         </NavItem>
       ))}
+      {currentUser.is_artist
+        ? ArtistLinkItems.map((link, idx) => (
+            <NavItem
+              key={link.name}
+              icon={
+                activeItem === idx + UserLinkItems.length
+                  ? link.icon.active
+                  : link.icon.inactive
+              }
+              onClick={() => {
+                setActiveItem(idx + UserLinkItems.length);
+              }}
+              isActive={activeItem === idx + UserLinkItems.length}
+            >
+              <ChakraLink
+                as={Link}
+                to={link.url}
+                color="black"
+                // display="inline-block"
+                // p="3"
+              >
+                {link.name}
+              </ChakraLink>
+            </NavItem>
+          ))
+        : null}
     </Box>
   );
 };
 
-const NavItem = ({ icon, children, isActive, ...rest }) => {
+export const NavItem = ({ icon, children, isActive, ...rest }) => {
   return (
     <Box
       as="a"
@@ -191,9 +259,13 @@ const NavItem = ({ icon, children, isActive, ...rest }) => {
   );
 };
 
-const NavBar = ({ handleLogout, user, ...rest }) => {
+export const NavBar = ({ ...rest }) => {
   const { stopAudio } = useAudioPlayerContext();
-  const { setUserContent } = useUserContent();
+  const { logout, currentUser: user } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+  };
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -257,24 +329,32 @@ const NavBar = ({ handleLogout, user, ...rest }) => {
               borderColor={useColorModeValue('gray.200', 'gray.700')}
               borderRadius={'0'}
             >
-              <MenuItem
-                onClick={() => {
-                  setUserContent(<ProfilePage />);
-                }}
-              >
-                Profile
+              <MenuItem>
+                <ChakraLink
+                  as={Link}
+                  to="/profile"
+                  color="black"
+                  // display="inline-block"
+                  // p="3"
+                >
+                  Profile
+                </ChakraLink>
               </MenuItem>
 
-              <MenuItem
-                onClick={() => {
-                  setUserContent(<Setting />);
-                }}
-              >
-                Settings
+              <MenuItem>
+                <ChakraLink
+                  as={Link}
+                  to="/settings"
+                  color="black"
+                  // display="inline-block"
+                  // p="3"
+                >
+                  Settings
+                </ChakraLink>
               </MenuItem>
 
               <MenuDivider />
-              {user.is_artist && (
+              {/* {user.is_artist && (
                 <>
                   <MenuItem>
                     <ChakraLink
@@ -299,7 +379,7 @@ const NavBar = ({ handleLogout, user, ...rest }) => {
                   </MenuItem>
                   <MenuDivider />
                 </>
-              )}
+              )} */}
               <MenuItem
                 onClick={() => {
                   stopAudio();
@@ -315,57 +395,3 @@ const NavBar = ({ handleLogout, user, ...rest }) => {
     </Flex>
   );
 };
-
-const Content = () => {
-  const { userContent } = useUserContent();
-  return userContent;
-};
-
-const UserDashboard = () => {
-  const { logout, currentUser } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    await logout();
-    navigate('/login');
-  };
-  // const { isOpen, onOpen, onClose } = useDisclosure();
-
-  return (
-    <AudioPlayerProvider>
-      <UserContentProvider>
-        <Box>
-          <Box bg={useColorModeValue('white', 'gray.900')}>
-            <SidebarContent
-              // onClose={() => onClose}
-              display={{ base: 'none', md: 'block' }}
-            />
-            {/* <Drawer
-              isOpen={isOpen}
-              placement="left"
-              onClose={onClose}
-              returnFocusOnClose={false}
-              onOverlayClick={onClose}
-              initialFocusRef={null}
-              size="xs"
-            >
-              <DrawerOverlay />
-              <DrawerContent>
-                <SidebarContent onClose={onClose} />
-              </DrawerContent>
-            </Drawer> */}
-            {/* mobilenav */}
-            <NavBar handleLogout={handleLogout} user={currentUser} />
-            <Box ml={{ base: 0, md: 60 }} h="100vh" p="1">
-              <Content />
-            </Box>
-          </Box>
-          <MusicPlayer />
-          <FootContent />
-        </Box>
-      </UserContentProvider>
-    </AudioPlayerProvider>
-  );
-};
-
-export default UserDashboard;

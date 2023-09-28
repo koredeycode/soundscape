@@ -43,4 +43,11 @@ function Card() {
   );
 }
 
-export default Card;
+function Home() {
+  return (
+    <div>
+      <Card />
+    </div>
+  );
+}
+export default Home;

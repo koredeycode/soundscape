@@ -17,8 +17,6 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { useAuth } from '../../hooks/AuthContext';
-import { useUserContent } from '../../hooks/UserContentContext';
-import PlaylistsPage from '../pages/PlaylistsPage';
 
 function CreatePlaylist({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
@@ -26,7 +24,6 @@ function CreatePlaylist({ isOpen, onClose }) {
   });
   const { sendAuthorizedRequest } = useAuth();
   const toast = useToast();
-  const { setUserContent } = useUserContent();
 
   const handleInputChange = e => {
     const { name, value } = e.target;
@@ -40,7 +37,6 @@ function CreatePlaylist({ isOpen, onClose }) {
     // Send a POST request to the selected playlist endpoint with the track_id
     await sendAuthorizedRequest('/user_playlists', 'post', formData);
     onClose();
-    setUserContent(<PlaylistsPage />);
     console.log('Setted user content to playlists page');
   };
 

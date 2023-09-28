@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Box, Heading, Image } from '@chakra-ui/react';
 import { useAuth } from '../../hooks/AuthContext';
 import TrackList from '../lists/TrackList';
+import { useParams } from 'react-router-dom';
 
-function PlaylistPage({ playlist_id }) {
+
+function PlaylistPage() {
   const { sendAuthorizedRequest } = useAuth();
   const [playlistData, setPlayListData] = useState(null);
+  const { playlist_id } = useParams();
   useEffect(() => {
     (async () => {
       const data = await sendAuthorizedRequest(

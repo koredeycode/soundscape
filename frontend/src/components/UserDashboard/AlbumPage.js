@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Box, Heading, Image } from '@chakra-ui/react';
 import { useAuth } from '../../hooks/AuthContext';
 import TrackList from '../lists/TrackList';
+import { useParams } from 'react-router-dom';
 
-function AlbumPage({ album_id }) {
+function AlbumPage() {
   const { sendAuthorizedRequest } = useAuth();
   const [albumData, setAlbumData] = useState(null);
+  const { album_id } = useParams();
+
   useEffect(() => {
     (async () => {
       const data = await sendAuthorizedRequest(

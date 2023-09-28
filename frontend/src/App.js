@@ -11,37 +11,39 @@ import {
   Box,
   extendTheme,
   Spinner,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import HomePage from './components/HomePage';
 import Login from './components/Login';
-import Register from './components/Register'; // Updated import
+import Register from './components/Register';
 import NotFound from './components/NotFound';
 import { useAuth } from './hooks/AuthContext';
-import UserDashboard from './components/UserDashboard/UserDashboard';
-import ArtistDashboard from './components/ArtistDashboard/ArtistDashboard';
+import { AudioPlayerProvider } from './hooks/AudioPlayerContext';
+import Home from './components/UserDashboard/Home';
+import SearchPage from './components/UserDashboard/SearchPage';
+import PlaylistsPage from './components/UserDashboard/PlaylistsPage';
+import PlaylistPage from './components/UserDashboard/PlaylistPage';
+import Setting from './components/UserDashboard/Setting';
+import ProfilePage from './components/UserDashboard/ProfilePage';
+import ArtistPage from './components/UserDashboard/ArtistPage';
+import AlbumPage from './components/UserDashboard/AlbumPage';
+import {
+  FootContent,
+  SidebarContent,
+  NavBar,
+} from './components/UserDashboard/UserDashboard';
+import MusicPlayer from './components/UserDashboard/MusicPlayer';
 import { Logo } from './Logo';
-// Define a custom Chakra UI theme if needed
-const theme = extendTheme({
-  // Add your custom theme configurations here
-  // components: {
-  //   Button: {
-  //     baseStyle: {
-  //       fontSize: '1rem',
-  //       padding: '0.25rem 0.5rem',
-  //     },
-  //     sizes: {
-  //       md: {
-  //         fontSize: '24px',
-  //         padding: '0.5rem 1rem',
-  //       },
-  //     },
-  //   },
-  // },
-});
+import ArtistDashboard from './components/ArtistDashboard/ArtistDashboard';
+import ArtistProfilePage from './components/ArtistDashboard/ArtistProfilePage';
+import ArtistAlbums from './components/ArtistDashboard/ArtistAlbums';
+import ArtistAlbum from './components/ArtistDashboard/ArtistAlbum';
+import ArtistTrack from './components/ArtistDashboard/ArtistTrack';
 
 function App() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, currentUser } = useAuth();
   console.log(isAuthenticated);
+  const bg = useColorModeValue('white', 'gray.900');
 
   if (isLoading) {
     return (
@@ -59,42 +61,146 @@ function App() {
     // return <Logo />;
   }
 
-  return (
-    <ChakraProvider theme={theme}>
-      <CSSReset />
-      <Router>
-        <Box>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route
-              path="/dashboard"
-              element={
-                isAuthenticated ? <UserDashboard /> : <Navigate to="/login" />
-              }
-            />
-            <Route
-              path="/login"
-              element={
-                isAuthenticated ? <Navigate to="/dashboard" /> : <Login />
-              }
-            />
-            <Route
-              path="/register"
-              element={
-                isAuthenticated ? <Navigate to="/dashboard" /> : <Register />
-              }
-            />
-            <Route
-              path="/artist-dashboard"
-              element={
-                isAuthenticated ? <ArtistDashboard /> : <Navigate to="/login" />
-              }
-            />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+  const userRoutes = [
+    {
+      name: 'Dashboard',
+      key: 'dashboard',
+      route: '/dashboard',
+      component: <Home />,
+    },
+    {
+      name: 'Search',
+      key: 'search',
+      route: '/search',
+      component: <SearchPage />,
+    },
+    {
+      name: 'Profile',
+      key: 'profile',
+      route: '/profile',
+      component: <ProfilePage />,
+    },
+    {
+      name: 'Playlists',
+      key: 'playlists',
+      route: '/playlists',
+      component: <PlaylistsPage />,
+    },
+    {
+      name: 'Playlist',
+      key: 'playlist',
+      route: '/playlists/:playlist_id',
+      component: <PlaylistPage />,
+    },
+    {
+      name: 'Artist',
+      key: 'artist',
+      route: '/artists/:artist_id',
+      component: <ArtistPage />,
+    },
+    {
+      name: 'Album',
+      key: 'album',
+      route: '/albums/:album_id',
+      component: <AlbumPage />,
+    },
+    {
+      name: 'Settings',
+      key: 'settings',
+      route: '/settings',
+      component: <Setting />,
+    },
+    {
+      name: 'Track',
+      key: 'track',
+      route: '/tracks/:track_id',
+      component: <div>Track page</div>,
+    },
+  ];
+
+  const artistRoutes = [
+    // {
+    //   name: 'ArtistDashboard',
+    //   key: 'artist-dashboard',
+    //   route: '/artist-dashboard',
+    //   component: <ArtistDashboard />,
+    // },
+    {
+      name: 'ArtistProfile',
+      key: 'artist-profile',
+      route: '/artist-profile',
+      component: <ArtistProfilePage />,
+    },
+    // {
+    //   name: 'ArtistAlbums',
+    //   key: 'artist-albums',
+    //   route: '/artist-albums',
+    //   component: <ArtistAlbums />,
+    // },
+    {
+      name: 'ArtistAlbum',
+      key: 'artist-album',
+      route: '/artist-albums/:album_id',
+      component: <ArtistAlbum />,
+    },
+    {
+      name: 'ArtistTrack',
+      key: 'artist-track',
+      route: '/artist-tracks/:track_id',
+      component: <ArtistTrack />,
+    },
+  ];
+
+  const getUserRoutes = () =>
+    userRoutes.map(route => {
+      return (
+        <Route
+          exact
+          path={route.route}
+          element={route.component}
+          key={route.key}
+        />
+      );
+    });
+
+  const getArtistRoutes = () =>
+    artistRoutes.map(route => {
+      return (
+        <Route
+          exact
+          path={route.route}
+          element={route.component}
+          key={route.key}
+        />
+      );
+    });
+
+  return isAuthenticated ? (
+    <AudioPlayerProvider>
+      <Box>
+        <Box bg={bg}>
+          <SidebarContent display={{ base: 'none', md: 'block' }} />
+          {/* mobilenav */}
+          <NavBar />
+          <Box ml={{ base: 0, md: 60 }} h="100vh" p="1">
+            <Routes>
+              {getUserRoutes()}
+              {currentUser.is_artist ? getArtistRoutes() : null}
+              <Route path="*" element={<Navigate to="/dashboard" />} />
+            </Routes>
+          </Box>
         </Box>
-      </Router>
-    </ChakraProvider>
+        <MusicPlayer />
+        <FootContent />
+      </Box>
+    </AudioPlayerProvider>
+  ) : (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
   );
 }
 

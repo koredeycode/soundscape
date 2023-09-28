@@ -17,20 +17,16 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { useAuth } from '../../hooks/AuthContext';
-import { useUserContent } from '../../hooks/UserContentContext';
-import PlaylistsPage from '../pages/PlaylistsPage';
 
 function DeletePlaylist({ isOpen, onClose, playlist }) {
   console.log(playlist);
   const { sendAuthorizedRequest } = useAuth();
-  const { setUserContent } = useUserContent();
   const toast = useToast();
 
   const handleDelete = async () => {
     // Send a POST request to the selected playlist endpoint with the track_id
     await sendAuthorizedRequest(`/user_playlists/${playlist.id}`, 'delete', {});
     onClose();
-    setUserContent(<PlaylistsPage />);
   };
 
   return (

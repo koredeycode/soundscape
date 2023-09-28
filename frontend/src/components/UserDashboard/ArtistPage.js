@@ -22,16 +22,12 @@ import {
   Badge,
   useColorModeValue,
 } from '@chakra-ui/react';
+import { useParams } from 'react-router-dom';
 
-// function SocialProfileSimple() {
-//   return (
-
-//   );
-// }
-
-function ArtistPage({ artist_id }) {
+function ArtistPage() {
   const { sendAuthorizedRequest } = useAuth();
   const [artistData, setArtistData] = useState({});
+  const { artist_id } = useParams();
 
   useEffect(() => {
     (async () => {

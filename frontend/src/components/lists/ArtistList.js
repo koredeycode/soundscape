@@ -1,10 +1,7 @@
-import ArtistPage from '../pages/ArtistPage';
-import { useUserContent } from '../../hooks/UserContentContext';
-import { Box, Stack, Text } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
+import { Box, Stack, Text, Link as ChakraLink } from '@chakra-ui/react';
 
 export default function ArtistList({ artists }) {
-  const { setUserContent } = useUserContent();
-
   return (
     <Stack spacing={4}>
       {artists.map(artist => (
@@ -17,9 +14,16 @@ export default function ArtistList({ artists }) {
           display="flex"
           justifyContent="space-between"
           alignItems="center"
-          onClick={() => setUserContent(<ArtistPage artist_id={artist.id} />)}
         >
-          <Text>{artist.name}</Text>
+          <ChakraLink
+            as={Link}
+            to={`/artists/${artist.id}`}
+            color="black"
+            // display="inline-block"
+            // p="3"
+          >
+            {artist.name}
+          </ChakraLink>
         </Box>
       ))}
     </Stack>
