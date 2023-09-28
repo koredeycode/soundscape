@@ -14,18 +14,15 @@ import {
   Input,
   VStack,
   Text,
-  useToast,
 } from '@chakra-ui/react';
 import { useAuth } from '../../hooks/AuthContext';
 
 function UpdatePlaylist({ isOpen, onClose, playlist }) {
   const title = playlist?.title || '';
-  console.log('update', title);
   const [formData, setFormData] = useState({
     title: '',
   });
   const { sendAuthorizedRequest } = useAuth();
-  const toast = useToast();
 
   useEffect(() => {
     setFormData({

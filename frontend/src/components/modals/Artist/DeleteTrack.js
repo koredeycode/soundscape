@@ -17,12 +17,12 @@ import {
 } from '@chakra-ui/react';
 import { useAuth } from '../../hooks/AuthContext';
 
-function DeletePlaylist({ isOpen, onClose, playlist }) {
+function DeleteTrack({ isOpen, onClose, track }) {
   const { sendAuthorizedRequest } = useAuth();
 
   const handleDelete = async () => {
-    // Send a POST request to the selected playlist endpoint with the track_id
-    await sendAuthorizedRequest(`/user_playlists/${playlist.id}`, 'delete', {});
+    // Send a POST request to the selected track endpoint with the track_id
+    await sendAuthorizedRequest(`/tracks/${track.id}`, 'delete', {});
     onClose();
   };
 
@@ -30,12 +30,11 @@ function DeletePlaylist({ isOpen, onClose, playlist }) {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Delete Playlist</ModalHeader>
+        <ModalHeader>Delete Track</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Text>
-            Are you sure you want to delete this playlist:{' '}
-            <b>{playlist?.title}</b>
+            Are you sure you want to delete this track: <b>{track?.title}</b>
           </Text>
           <Text>This action cannot be undone</Text>
         </ModalBody>
@@ -52,4 +51,4 @@ function DeletePlaylist({ isOpen, onClose, playlist }) {
   );
 }
 
-export default DeletePlaylist;
+export default DeleteTrack;

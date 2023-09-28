@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   Modal,
@@ -37,7 +37,6 @@ function CreatePlaylist({ isOpen, onClose }) {
     // Send a POST request to the selected playlist endpoint with the track_id
     await sendAuthorizedRequest('/user_playlists', 'post', formData);
     onClose();
-    console.log('Setted user content to playlists page');
   };
 
   return (
