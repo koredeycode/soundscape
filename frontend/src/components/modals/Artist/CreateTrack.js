@@ -13,116 +13,135 @@ import {
   FormLabel,
   Input,
   VStack,
-  Text,
-  useToast,
   Textarea,
 } from '@chakra-ui/react';
-import { useAuth } from '../../hooks/AuthContext';
+import { useAuth } from '../../../hooks/AuthContext';
 
-function CreateTrack({ isOpen, onClose }) {
+function CreateTrack({ isOpen, onClose, genres }) {
   const [formData, setFormData] = useState({
     title: '',
-    genre: '',
-    audio_file: null,
+    genre_id: '',
+    // audio_file: '',
     description: '',
-    cover_image: null,
+    // cover_image: '',
   });
   const { sendAuthorizedRequest } = useAuth();
-  const genres = [];
-
-  useEffect(() => {
-    (async () => {
-      const data = await sendAuthorizedRequest('/genres', 'get', {});
-      genres = data;
-    })();
-  }, []);
 
   const handleInputChange = e => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    const { name, value, type } = e.target;
+    // Handle file inputs separately
+    if (type === 'file') {
+      setFormData({
+        ...formData,
+        [name]: e.target.files[0],
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
-  const handleCreate = async () => {
+  const handleCreate = async e => {
+    e.preventDefault(); // Prevent the default form submission behavior
     // Send a POST request to the selected playlist endpoint with the track_id
-    await sendAuthorizedRequest('/tracks', 'post', formData);
+    const subformData = new FormData();
+
+    // Append form fields to the FormData object
+    subformData.append('title', formData.title);
+    subformData.append('genre_id', formData.genre_id);
+    subformData.append('description', formData.description);
+
+    // Append files to the FormData object
+    if (formData.audio_file) {
+      subformData.append('audio_file', formData.audio_file);
+    }
+    if (formData.cover_image) {
+      subformData.append('cover_image', formData.cover_image);
+    }
+    console.log(formData);
+    await sendAuthorizedRequest('/tracks', 'post', subformData, {
+      'Content-Type': 'multipart/form-data',
+    });
     onClose();
+    // window.location.reload();
   };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Create Track</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <VStack spacing={4}>
-            <FormControl id="title" isRequired>
-              <FormLabel>Track Title</FormLabel>
-              <Input
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-                type="text"
-                required
-              />
-            </FormControl>
-            <FormControl id="genre" isRequired>
-              <FormLabel>Select a Genre</FormLabel>
-              <Select
-                placeholder="Select a genre"
-                name="genre"
-                value={formData.genre}
-                onChange={handleInputChange}
-              >
-                {genres.map(genre => (
-                  <option key={genre.id} value={genre.id}>
-                    {genre.title}
-                  </option>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl id="audio_file" isRequired>
-              <FormLabel>Upload Track</FormLabel>
-              <Input
-                name="audio_file"
-                value={formData.audio_file}
-                onChange={handleInputChange}
-                type="file"
-                required
-              />
-            </FormControl>
-            <FormControl id="cover_image" isRequired>
-              <FormLabel>Track Cover Image</FormLabel>
-              <Input
-                name="cover_image"
-                value={formData.cover_image}
-                onChange={handleInputChange}
-                type="file"
-                required
-              />
-            </FormControl>
-            <FormControl id="description" isRequired>
-              <FormLabel>Track Description</FormLabel>
-              <Textarea
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                type="file"
-                required
-              ></Textarea>
-            </FormControl>
-          </VStack>
-        </ModalBody>
-        <ModalFooter>
-          <Button colorScheme="teal" onClick={handleCreate}>
-            Create
-          </Button>
-          <Button variant="ghost" onClick={onClose}>
-            Cancel
-          </Button>
-        </ModalFooter>
+        <form onSubmit={handleCreate}>
+          <ModalHeader>Create Track</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <VStack spacing={4}>
+              <FormControl id="title" isRequired>
+                <FormLabel>Track Title</FormLabel>
+                <Input
+                  name="title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  type="text"
+                  required
+                />
+              </FormControl>
+              <FormControl id="genre_id" isRequired>
+                <FormLabel>Select a Genre</FormLabel>
+                <Select
+                  placeholder="Select a genre"
+                  name="genre_id"
+                  value={formData.genre_id}
+                  onChange={handleInputChange}
+                >
+                  {genres.map(genre => (
+                    <option key={genre.id} value={genre.id}>
+                      {genre.name}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl id="audio_file" isRequired>
+                <FormLabel>Upload Track</FormLabel>
+                <Input
+                  name="audio_file"
+                  // value={formData.audio_file}
+                  onChange={handleInputChange}
+                  type="file"
+                  accept=".mp3"
+                  required
+                />
+              </FormControl>
+              <FormControl id="cover_image">
+                <FormLabel>Track Cover Image</FormLabel>
+                <Input
+                  name="cover_image"
+                  // value={formData.cover_image}
+                  onChange={handleInputChange}
+                  type="file"
+                  accept=".png, .jpg, .jpeg"
+                />
+              </FormControl>
+              <FormControl id="description">
+                <FormLabel>Track Description</FormLabel>
+                <Textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                ></Textarea>
+              </FormControl>
+            </VStack>
+          </ModalBody>
+          <ModalFooter>
+            <Button type="submit" colorScheme="teal">
+              Create
+            </Button>
+            <Button variant="ghost" onClick={onClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </form>
       </ModalContent>
     </Modal>
   );

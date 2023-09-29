@@ -15,7 +15,7 @@ import {
   VStack,
   Text,
 } from '@chakra-ui/react';
-import { useAuth } from '../../hooks/AuthContext';
+import { useAuth } from '../../../hooks/AuthContext';
 
 function DeleteTrack({ isOpen, onClose, track }) {
   const { sendAuthorizedRequest } = useAuth();

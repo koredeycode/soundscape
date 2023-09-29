@@ -1,6 +1,7 @@
 from .base import Base, TitleSlugDescriptionModel
 from django.db import models
 from .storage import UUIDStorage
+from datetime import datetime
 
 
 class Track(Base, TitleSlugDescriptionModel):
@@ -20,8 +21,8 @@ class Track(Base, TitleSlugDescriptionModel):
     artist = models.ForeignKey('Artist', on_delete=models.CASCADE)
     featured_artists = models.ManyToManyField(
         'Artist', related_name='track_featured_artist', blank=True)
-    release_date = models.DateField()
-    duration = models.PositiveIntegerField()  # Duration in seconds
+    release_date = models.DateField(default=datetime.now)
+    # duration = models.PositiveIntegerField()  # Duration in seconds
     streams = models.PositiveIntegerField(default=0)
     genre = models.ForeignKey('Genre', on_delete=models.CASCADE)
     audio_file = models.FileField(

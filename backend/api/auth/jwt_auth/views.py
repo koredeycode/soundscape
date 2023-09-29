@@ -1,5 +1,5 @@
 from api.serializers import ArtistSerializer, UserSerializer
-from .decorators import user_required
+from .decorators import user_required, artist_required
 from django.http import JsonResponse
 from django.views import View
 from django.utils.decorators import method_decorator
@@ -81,7 +81,7 @@ class GetUserView(View):
         return JsonResponse(UserSerializer(request.user).data)
 
 
-# class GetArtistView(View):
-#     @method_decorator(artist_required)
-#     def get(self, request):
-#         return JsonResponse(ArtistSerializer(request.user.artist).data)
+class GetArtistView(View):
+    @method_decorator(artist_required)
+    def get(self, request):
+        return JsonResponse(ArtistSerializer(request.user.artist).data)

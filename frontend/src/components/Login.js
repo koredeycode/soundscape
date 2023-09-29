@@ -38,10 +38,7 @@ function LoginForm() {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    console.log(formData);
-    const to = await login(formData);
-    console.log(to);
-    navigate(to);
+    await login(formData);
   };
 
   return (

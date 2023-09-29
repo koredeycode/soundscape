@@ -11,43 +11,69 @@ import {
   Square,
   Text,
   VStack,
+  HStack,
+  Heading,
 } from '@chakra-ui/react';
 
 const data = {
   name: 'The Beatles',
   imageURL:
-    'http://localhost:8000/media/images/tracks/52184598-2f6f-4b52-b7f1-fbfb95a585bd',
+    'http://localhost:8000/media/images/tracks/cd192cd9-078e-4916-b7df-59a950a41d09',
   isNew: true,
 };
 
 function Card() {
   return (
-    <VStack bg={useColorModeValue('white', 'gray.800')} p="2">
-      <Square>
-        <Image
-          src={data.imageURL}
-          alt={`Picture of ${data.name}`}
-          w="150"
-          h="150"
-        />
-      </Square>
-      <Box>
-        <Text fontSize="sm" fontWeight="bold">
-          Welcome to SoundScape
-        </Text>
-        <Text fontSize="sm" fontWeight="thin">
-          Welcome to SoundScape
-        </Text>
-      </Box>
+    <VStack
+      bg={useColorModeValue('gray.100', 'gray.800')}
+      p="3"
+      minW="0"
+      wordWrap="break-word"
+      w="170px"
+      alignItems="flex-start"
+    >
+      <Image
+        src={data.imageURL}
+        alt={`Picture of ${data.name}`}
+        w="150px"
+        h="150px"
+        objectFit="cover"
+      />
+      <Heading as="h3" fontSize="sm">
+        Recently Played
+      </Heading>
+      <Text fontSize="sm">These are your recently played tracks</Text>
     </VStack>
   );
 }
 
 function Home() {
   return (
-    <div>
-      <Card />
-    </div>
+    <VStack alignItems="flex-start" gap="4">
+      <Box>
+        <Heading fontSize="xl" pb="2">
+          Recently Played
+        </Heading>
+        <HStack>
+          <Card />
+        </HStack>
+      </Box>
+      <Box>
+        <Heading fontSize="xl" pb="2">
+          Explore Playlists
+        </Heading>
+        <Text>Unwind with these selected playlists</Text>
+        <HStack flexWrap="wrap" pb="2" gap="4">
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+        </HStack>
+      </Box>
+    </VStack>
   );
 }
 export default Home;

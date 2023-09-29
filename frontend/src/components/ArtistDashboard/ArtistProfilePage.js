@@ -1,5 +1,103 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useAuth } from '../../hooks/AuthContext';
+import {
+  Box,
+  Stack,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+} from '@chakra-ui/react';
+import TrackList from '../artist_lists/TrackList';
+import AlbumList from '../lists/AlbumList';
 
-export default function ArtistProfilePage() {
-  return <div>ArtistProfilePage</div>;
+import {
+  Heading,
+  Avatar,
+  Center,
+  Text,
+  Button,
+  Link,
+  Badge,
+  useColorModeValue,
+} from '@chakra-ui/react';
+import { useParams } from 'react-router-dom';
+
+function ArtistProfilePage() {
+  const { sendAuthorizedRequest } = useAuth();
+  const [artistData, setArtistData] = useState({});
+
+  useEffect(() => {
+    (async () => {
+      const data = await sendAuthorizedRequest('/isartist', 'get', {});
+      console.log(data.id);
+      const retdata = await sendAuthorizedRequest(
+        `/artists/${data.id}`,
+        'get',
+        {}
+      );
+      setArtistData(retdata);
+    })();
+  }, []);
+  return (
+    <Center py={6}>
+      <Box
+        w={'full'}
+        bg={useColorModeValue('white', 'gray.900')}
+        p={6}
+        textAlign={'center'}
+      >
+        <Avatar
+          size={'xl'}
+          src={artistData.artist?.profile_image}
+          mb={4}
+          pos={'relative'}
+        />
+        <Heading fontSize={'2xl'} fontFamily={'body'}>
+          {artistData.artist?.name || ''}
+        </Heading>
+        <Text
+          textAlign={'center'}
+          color={useColorModeValue('gray.700', 'gray.400')}
+          px={3}
+        >
+          {artistData.artist?.bio || ''}
+        </Text>
+
+        <Tabs align="center">
+          <TabList>
+            <Tab>Tracks</Tab>
+            <Tab>Albums</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              {artistData.tracks?.length > 0 ? (
+                <Box>
+                  <Stack spacing={2}>
+                    <TrackList tracks={artistData.tracks} />
+                  </Stack>
+                </Box>
+              ) : (
+                <Box>No tracks found</Box>
+              )}
+            </TabPanel>
+            <TabPanel>
+              {artistData.albums?.length > 0 ? (
+                <Box>
+                  <Stack spacing={2}>
+                    <AlbumList albums={artistData.albums} />
+                  </Stack>
+                </Box>
+              ) : (
+                <Box>No albums found</Box>
+              )}
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </Box>
+    </Center>
+  );
 }
+
+export default ArtistProfilePage;

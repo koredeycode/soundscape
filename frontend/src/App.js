@@ -182,10 +182,10 @@ function App() {
           <SidebarContent display={{ base: 'none', md: 'block' }} />
           {/* mobilenav */}
           <NavBar />
-          <Box ml={{ base: 0, md: 60 }} h="100vh" p="1">
+          <Box ml={{ base: 0, md: 60 }} p="8">
             <Routes>
               {getUserRoutes()}
-              {currentUser.is_artist ? getArtistRoutes() : null}
+              {currentUser?.is_artist ? getArtistRoutes() : null}
               <Route path="*" element={<Navigate to="/dashboard" />} />
             </Routes>
           </Box>
@@ -197,8 +197,8 @@ function App() {
   ) : (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<Login />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );

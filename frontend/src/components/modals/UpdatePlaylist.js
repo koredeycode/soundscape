@@ -18,18 +18,18 @@ import {
 import { useAuth } from '../../hooks/AuthContext';
 
 function UpdatePlaylist({ isOpen, onClose, playlist }) {
-  const title = playlist?.title || '';
   const [formData, setFormData] = useState({
     title: '',
   });
   const { sendAuthorizedRequest } = useAuth();
 
   useEffect(() => {
+    console.log('rec', playlist);
     setFormData({
       ...formData,
-      title: title,
+      title: playlist?.title,
     });
-  }, []);
+  }, [playlist]);
 
   const handleInputChange = e => {
     const { name, value } = e.target;

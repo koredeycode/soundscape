@@ -23,15 +23,17 @@ class TrackView(View):
         """
         tracks/
         """
-        # print(request.POST.get('title'))
-        print(request.FILES)
-        audio = request.FILES.get('audio_file')
-        image = request.FILES.get('cover_image')
-        data = request.POST.dict()
         print(request.POST)
+        data = request.POST.dict()
+        audio = request.FILES.get('audio_file')
+        if not audio:
+            return JsonResponse({"error": "Missing audio_file"}, status=400)
+        else:
+            data['audio_file'] = audio
+        image = request.FILES.get('cover_image')
+        if image:
+            data['cover_image'] = image
         data['artist_id'] = request.user.artist.id
-        data['audio_file'] = audio
-        data['cover_image'] = image
         print(data)
         serializer = SingleTrackSerializer(data=data)
         if serializer.is_valid():
@@ -51,15 +53,20 @@ class TrackView(View):
         if track:
             if track.artist.id != request.user.artist.id:
                 return JsonResponse({"error": "You don't have permission to edit this track"}, status=403)
-            data = self.parse_request_data(request)
+            data = request.POST.dict()
+            audio = request.FILES.get('audio_file')
+            if audio:
+                data['audio_file'] = audio
+            image = request.FILES.get('cover_image')
+            if image:
+                data['cover_image'] = image
+            data['artist_id'] = request.user.artist.id
+            print(data)
             serializer = SingleTrackSerializer(instance=track, data=data)
-            if serializer.is_valid():
-                serializer.save()
-                if serializer.errors:
-                    return JsonResponse(serializer.errors, status=400)
-                return JsonResponse(serializer.data, status=200)
-            else:
+            serializer.save()
+            if serializer.errors:
                 return JsonResponse(serializer.errors, status=400)
+            return JsonResponse(serializer.data, status=200)
         return JsonResponse({"error": "Track not found"}, status=404)
 
     @method_decorator(artist_required)

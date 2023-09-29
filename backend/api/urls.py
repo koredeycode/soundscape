@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from api.auth import LoginView, LogoutView, ProfileView, GetUserView
+from api.auth import LoginView, LogoutView, ProfileView, GetUserView, GetArtistView
 # from api.auth import GetArtistView, LoginView, LogoutView, ProfileView, GetUserView
 from api.views import (GenreView, SitePlaylistView, UserPlaylistView, TrackView,
                        AlbumView, ArtistView, TrackMediaView, TrackCoverMediaView,
@@ -25,7 +25,7 @@ authpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('profile/', ProfileView.as_view(), name='profile'),
     path('isuser/', GetUserView.as_view(), name='get-user'),
-    # path('isartist/', GetArtistView.as_view(), name='get-artist')
+    path('isartist/', GetArtistView.as_view(), name='get-artist')
 ]
 
 api_patterns = [

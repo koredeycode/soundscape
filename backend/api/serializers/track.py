@@ -14,7 +14,7 @@ class TrackSerializer:
         self.validated_data = data
         self.errors = {}
         self.required_fields = [
-            'title', 'artist_id', 'release_date', 'genre_id']
+            'title', 'artist_id', 'genre_id']
 
     def is_valid(self):
         if not self.validated_data:
@@ -57,10 +57,11 @@ class TrackSerializer:
             'id': str(self.instance.id),
             'title': str(self.instance.title),
             'slug': str(self.instance.slug),
-            'description': str(self.instance.description),
+            'description': str(self.instance.description or ''),
             'artist': ArtistSerializer(self.instance.artist).data,
-            'genre': GenreSerializer(self.instance.genre).data,
-            'duration': self.instance.duration,
+            # 'genre': GenreSerializer(self.instance.genre).data,
+            'genre_id': str(self.instance.genre.id),
+            # 'duration': self.instance.duration,
             'streams': self.instance.streams,
             'release_date': str(self.instance.release_date),
             'cover_image': f'{BASE_URL}/media/images/tracks/{str(self.instance.id)}',

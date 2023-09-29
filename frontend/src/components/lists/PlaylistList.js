@@ -13,6 +13,7 @@ import DeletePlaylist from '../modals/DeletePlaylist';
 import UpdatePlaylist from '../modals/UpdatePlaylist';
 
 export default function PlaylistList({ playlists }) {
+  console.log(playlists);
   const {
     isOpen: isDeleteModalOpen,
     onOpen: onOpenDeleteModal,
@@ -27,7 +28,7 @@ export default function PlaylistList({ playlists }) {
 
   return (
     <Stack spacing={4}>
-      {playlists.map(playlist => (
+      {playlists.map((playlist, index) => (
         <Box
           key={playlist.id}
           borderWidth="1px"
@@ -71,16 +72,18 @@ export default function PlaylistList({ playlists }) {
           </HStack>
         </Box>
       ))}
-      <UpdatePlaylist
-        isOpen={isUpdateModalOpen}
-        onClose={onCloseUpdateModal}
-        playlist={selectedPlaylist}
-      />
-      <DeletePlaylist
-        isOpen={isDeleteModalOpen}
-        onClose={onCloseDeleteModal}
-        playlist={selectedPlaylist}
-      />
+      <>
+        <UpdatePlaylist
+          isOpen={isUpdateModalOpen}
+          onClose={onCloseUpdateModal}
+          playlist={selectedPlaylist}
+        />
+        <DeletePlaylist
+          isOpen={isDeleteModalOpen}
+          onClose={onCloseDeleteModal}
+          playlist={selectedPlaylist}
+        />
+      </>
     </Stack>
   );
 }

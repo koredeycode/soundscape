@@ -247,6 +247,7 @@ export const AudioPlayerProvider = ({ children }) => {
     volume,
     setVolume,
     currentIndex,
+    setCurrentIndex,
     showQueue,
     formatTime,
     setIsMuted,

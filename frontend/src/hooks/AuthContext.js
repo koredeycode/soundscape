@@ -8,7 +8,7 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const url = true
@@ -41,7 +41,8 @@ export function AuthProvider({ children }) {
       setIsAuthenticated(true);
       setCurrentUser(data);
     } catch (error) {
-      // showToast('Error', error.response.data?.error, 'error');
+      showToast('Error', error.response.data?.error, 'error');
+      navigate('/');
     }
   };
   const login = async userData => {
@@ -50,10 +51,10 @@ export function AuthProvider({ children }) {
       Cookies.set('token', response.data.token);
       storeUser();
       showToast('Success', 'Logged in successfully', 'success');
-      return '/dashboard';
+      navigate('/dashboard');
     } catch (error) {
       showToast('Error', error.response.data?.error, 'error');
-      return '/login';
+      navigate('/login');
     }
   };
 
@@ -61,10 +62,10 @@ export function AuthProvider({ children }) {
     try {
       await axios.post(`${url}/profile/`, userData);
       showToast('Success', 'Registered successfully', 'success');
-      return '/login';
+      navigate('/login');
     } catch (error) {
       showToast('Error', error.response.data?.error, 'error');
-      return '/register';
+      navigate('/register');
     }
   };
 
@@ -77,11 +78,18 @@ export function AuthProvider({ children }) {
       localStorage.removeItem('user');
       showToast('Success', 'Logged out successfully', 'success');
     } catch (error) {
-      // showToast('Error', error.response.data?.error, 'error');
+      showToast('Error', error.response.data?.error, 'error');
+    } finally {
+      navigate('/login');
     }
-    navigate('/login');
   };
-  const sendAuthorizedRequest = async (endpoint, method, data) => {
+
+  const sendAuthorizedRequest = async (
+    endpoint,
+    method,
+    data,
+    headers = {}
+  ) => {
     const axiosInstance = axios.create(); // Create a new Axios instance
     const token = Cookies.get('token');
 
@@ -92,12 +100,13 @@ export function AuthProvider({ children }) {
         data: data,
         headers: {
           Authorization: `Token ${token}`,
+          ...headers,
         },
       });
       return response.data;
     } catch (error) {
       showToast('Error', error.response.data?.error, 'error');
-      throw error; // Rethrow the error to handle it in calling code
+      throw error;
     }
   };
 

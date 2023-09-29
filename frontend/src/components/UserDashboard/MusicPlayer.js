@@ -20,6 +20,7 @@ import {
   Box,
   Stack,
   useColorModeValue,
+  Image,
 } from '@chakra-ui/react';
 import {
   MdQueueMusic,
@@ -31,13 +32,13 @@ import {
   MdSkipNext,
   MdShuffle,
   MdRepeat,
-  MdReplay,
+  MdLoop,
 } from 'react-icons/md';
 import { useAudioPlayerContext } from '../../hooks/AudioPlayerContext';
 // Icons for play modes
 const playModeIcons = {
-  single: MdReplay,
-  loop: MdRepeat,
+  single: MdRepeat,
+  loop: MdLoop,
   shuffle: MdShuffle,
 };
 
@@ -51,6 +52,7 @@ function MusicPlayer() {
     togglePlayMode,
     handlePreviousClick,
     handlePlayPauseClick,
+    handlePlayingATrack,
     handleNextClick,
     setShowQueue,
     audioRef,
@@ -85,10 +87,11 @@ function MusicPlayer() {
           display={{ base: 'none', md: 'flex' }}
         >
           <Square>
-            <img
+            <Image
               src={queue[currentIndex].cover_image}
               alt="Music Cover"
               style={{ width: '50px', height: '50px' }}
+              objectFit="cover"
             />
           </Square>
           <VStack alignItems="flex-start" gap="0rem">
@@ -127,6 +130,7 @@ function MusicPlayer() {
               onClick={togglePlayMode}
               w="1.5em"
               h="1.5em"
+              cursor="pointer"
             />
             {/* Previous Button */}
             <Icon
@@ -135,6 +139,7 @@ function MusicPlayer() {
               onClick={handlePreviousClick}
               w="1.5em"
               h="1.5em"
+              cursor="pointer"
             />
             {/* Play and Pause Buttons */}
             <Icon
@@ -143,6 +148,7 @@ function MusicPlayer() {
               onClick={handlePlayPauseClick}
               w="2.5em"
               h="2.5em"
+              cursor="pointer"
             />
             {/* Next Button */}
             <Icon
@@ -151,6 +157,7 @@ function MusicPlayer() {
               onClick={handleNextClick}
               w="1.5em"
               h="1.5em"
+              cursor="pointer"
             />
             <Icon
               as={MdQueueMusic}
@@ -158,6 +165,7 @@ function MusicPlayer() {
               onClick={() => setShowQueue(!showQueue)}
               w="1.5em"
               h="1.5em"
+              cursor="pointer"
             />
           </HStack>
         </VStack>
@@ -178,6 +186,7 @@ function MusicPlayer() {
             }}
             w="1.5em"
             h="1.5em"
+            cursor="pointer"
           />
           <Slider
             aria-label="volume-slider"
@@ -215,8 +224,28 @@ function MusicPlayer() {
           <DrawerHeader>Queue</DrawerHeader>
           <DrawerBody>
             <List>
-              {queue.map((track, index) => (
-                <ListItem key={index}>{track.title}</ListItem>
+              {queue.map((track, index, tracks) => (
+                <ListItem
+                  key={index}
+                  bg={currentIndex === index ? 'gray.100' : 'white'}
+                  mb="2"
+                  p="2"
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Text>{track.title}</Text>
+                  <Icon
+                    as={MdPlayCircleFilled}
+                    aria-label={'Play'}
+                    w="1.5em"
+                    h="1.5em"
+                    cursor="pointer"
+                    onClick={() => {
+                      handlePlayingATrack(tracks, index);
+                    }}
+                  />
+                </ListItem>
               ))}
             </List>
           </DrawerBody>
