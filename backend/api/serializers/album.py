@@ -55,7 +55,7 @@ class AlbumSerializer:
             'id': str(self.instance.id),
             'title': str(self.instance.title),
             'slug': str(self.instance.slug),
-            'description': str(self.instance.description),
+            'description': str(self.instance.description or ''),
             'artist': ArtistSerializer(self.instance.artist).data,
             # 'total_duration': str(sum([track.duration for track in self.instance.albumtrack_set.all()])),
             'tracks': [TrackSerializer(track).data for track in self.instance.albumtrack_set.all()],

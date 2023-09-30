@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   Modal,
@@ -14,12 +14,11 @@ import {
   Input,
   VStack,
   Textarea,
-  Text,
 } from '@chakra-ui/react';
 import { useAuth } from '../../../hooks/AuthContext';
 
-function UpdateTrack({ isOpen, onClose, track, genres }) {
-  const [updateFormData, setUpdateFormData] = useState({
+function CreateAlbum({ isOpen, onClose, genres }) {
+  const [formData, setFormData] = useState({
     title: '',
     genre_id: '',
     // audio_file: '',
@@ -28,61 +27,39 @@ function UpdateTrack({ isOpen, onClose, track, genres }) {
   });
   const { sendAuthorizedRequest } = useAuth();
 
-  useEffect(() => {
-    const prevData = {
-      title: track?.title || '',
-      description: track?.description || '',
-      genre_id: track?.genre_id || '',
-    };
-    setUpdateFormData({
-      ...updateFormData,
-      ...prevData,
-    });
-  }, [track]);
-
   const handleInputChange = e => {
     const { name, value, type } = e.target;
     // Handle file inputs separately
     if (type === 'file') {
-      setUpdateFormData({
-        ...updateFormData,
+      setFormData({
+        ...formData,
         [name]: e.target.files[0],
       });
     } else {
-      setUpdateFormData({
-        ...updateFormData,
+      setFormData({
+        ...formData,
         [name]: value,
       });
     }
   };
-  const handleUpdate = async e => {
+
+  const handleCreate = async e => {
     e.preventDefault(); // Prevent the default form submission behavior
     // Send a POST request to the selected playlist endpoint with the track_id
     const subformData = new FormData();
 
-    console.log(updateFormData);
+    console.log(formData);
     // Append form fields to the FormData object
-    // console.log(Boolean(formData.title));
-    // if (formData.title) {
-    subformData.append('title', updateFormData.title);
-    console.log(subformData);
-    // }
-    // if (formData.genre_id) {
-    subformData.append('genre_id', updateFormData.genre_id);
-    // }
-    // if (formData.description) {
-    subformData.append('description', updateFormData.description);
-    // }
+    subformData.append('title', formData.title);
+    subformData.append('genre_id', formData.genre_id);
+    subformData.append('description', formData.description);
 
     // Append files to the FormData object
-    if (updateFormData.audio_file) {
-      subformData.append('audio_file', updateFormData.audio_file);
-    }
-    if (updateFormData.cover_image) {
-      subformData.append('cover_image', updateFormData.cover_image);
+    if (formData.cover_image) {
+      subformData.append('cover_image', formData.cover_image);
     }
     console.log(subformData);
-    await sendAuthorizedRequest(`/tracks/${track.id}`, 'post', subformData, {
+    await sendAuthorizedRequest('/albums', 'post', subformData, {
       'Content-Type': 'multipart/form-data',
     });
     onClose();
@@ -93,26 +70,27 @@ function UpdateTrack({ isOpen, onClose, track, genres }) {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <form id="updateform" onSubmit={handleUpdate}>
-          <ModalHeader>Update Track</ModalHeader>
+        <form id="createform" onSubmit={handleCreate}>
+          <ModalHeader>Create Album</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <VStack spacing={4}>
-              <FormControl id="update_title">
-                <FormLabel>Update Title</FormLabel>
+              <FormControl id="title" isRequired>
+                <FormLabel>Album Title</FormLabel>
                 <Input
                   name="title"
-                  value={updateFormData.title}
+                  value={formData.title}
                   onChange={handleInputChange}
                   type="text"
+                  required
                 />
               </FormControl>
-              <FormControl id="update_genre_id">
-                <FormLabel>Update the Genre</FormLabel>
+              <FormControl id="genre_id" isRequired>
+                <FormLabel>Select a Genre</FormLabel>
                 <Select
                   placeholder="Select a genre"
                   name="genre_id"
-                  value={updateFormData.genre_id}
+                  value={formData.genre_id}
                   onChange={handleInputChange}
                 >
                   {genres.map(genre => (
@@ -122,17 +100,8 @@ function UpdateTrack({ isOpen, onClose, track, genres }) {
                   ))}
                 </Select>
               </FormControl>
-              <FormControl id="update_audio_file">
-                <FormLabel>Update Track</FormLabel>
-                <Input
-                  name="audio_file"
-                  onChange={handleInputChange}
-                  type="file"
-                  accept=".mp3"
-                />
-              </FormControl>
-              <FormControl id="update_cover_image">
-                <FormLabel>Update Cover Image</FormLabel>
+              <FormControl id="cover_image">
+                <FormLabel>Album Cover Image</FormLabel>
                 <Input
                   name="cover_image"
                   onChange={handleInputChange}
@@ -140,11 +109,11 @@ function UpdateTrack({ isOpen, onClose, track, genres }) {
                   accept=".png, .jpg, .jpeg"
                 />
               </FormControl>
-              <FormControl id="update_description">
-                <FormLabel>Update Description</FormLabel>
+              <FormControl id="description">
+                <FormLabel>Album Description</FormLabel>
                 <Textarea
                   name="description"
-                  value={updateFormData.description}
+                  value={formData.description}
                   onChange={handleInputChange}
                 ></Textarea>
               </FormControl>
@@ -152,7 +121,7 @@ function UpdateTrack({ isOpen, onClose, track, genres }) {
           </ModalBody>
           <ModalFooter>
             <Button type="submit" colorScheme="teal">
-              Update
+              Create
             </Button>
             <Button variant="ghost" onClick={onClose}>
               Cancel
@@ -164,4 +133,4 @@ function UpdateTrack({ isOpen, onClose, track, genres }) {
   );
 }
 
-export default UpdateTrack;
+export default CreateAlbum;

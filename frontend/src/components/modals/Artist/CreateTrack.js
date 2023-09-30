@@ -48,6 +48,7 @@ function CreateTrack({ isOpen, onClose, genres }) {
     // Send a POST request to the selected playlist endpoint with the track_id
     const subformData = new FormData();
 
+    console.log(formData);
     // Append form fields to the FormData object
     subformData.append('title', formData.title);
     subformData.append('genre_id', formData.genre_id);
@@ -60,7 +61,7 @@ function CreateTrack({ isOpen, onClose, genres }) {
     if (formData.cover_image) {
       subformData.append('cover_image', formData.cover_image);
     }
-    console.log(formData);
+    console.log(subformData);
     await sendAuthorizedRequest('/tracks', 'post', subformData, {
       'Content-Type': 'multipart/form-data',
     });
@@ -72,7 +73,7 @@ function CreateTrack({ isOpen, onClose, genres }) {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <form onSubmit={handleCreate}>
+        <form id="createform" onSubmit={handleCreate}>
           <ModalHeader>Create Track</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -106,7 +107,6 @@ function CreateTrack({ isOpen, onClose, genres }) {
                 <FormLabel>Upload Track</FormLabel>
                 <Input
                   name="audio_file"
-                  // value={formData.audio_file}
                   onChange={handleInputChange}
                   type="file"
                   accept=".mp3"
@@ -117,7 +117,6 @@ function CreateTrack({ isOpen, onClose, genres }) {
                 <FormLabel>Track Cover Image</FormLabel>
                 <Input
                   name="cover_image"
-                  // value={formData.cover_image}
                   onChange={handleInputChange}
                   type="file"
                   accept=".png, .jpg, .jpeg"

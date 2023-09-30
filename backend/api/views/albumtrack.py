@@ -7,11 +7,11 @@ from django.utils.decorators import method_decorator
 from api.auth import user_required, artist_required
 
 
-class TrackView(View):
+class AlbumTrackView(View):
     @method_decorator(user_required)
     def get(self, request, id):
         """
-        tracks/id
+        albums/album_id/tracks/id
         """
         track = self.get_track(id=id)
         if track:
@@ -19,10 +19,10 @@ class TrackView(View):
         return JsonResponse({"error": "Track not found"}, status=404)
 
     @method_decorator(artist_required)
-    def post(self, request, id=None):
+    def post(self, request, album_id, id=None):
         """
-        tracks/
-        tracks/id
+        albums/album_id/tracks/
+        albums/album_id/tracks/id
         """
         data = request.POST.dict()
         audio = request.FILES.get('audio_file')
@@ -30,16 +30,14 @@ class TrackView(View):
             return JsonResponse({"error": "Missing audio_file"}, status=400)
         if audio:
             data['audio_file'] = audio
-        image = request.FILES.get('cover_image')
-        if image:
-            data['cover_image'] = image
         data['artist_id'] = request.user.artist.id
+        data['album_id'] = album_id
         if id:
             track = self.get_singletrack(id=id)
             if track:
                 if track.artist.id != request.user.artist.id:
                     return JsonResponse({"error": "You don't have permission to edit this track"}, status=403)
-                serializer = SingleTrackSerializer(instance=track, data=data)
+                serializer = TrackSerializer(instance=track, data=data)
                 serializer.save()
                 if serializer.errors:
                     return JsonResponse(serializer.errors, status=400)
@@ -47,7 +45,7 @@ class TrackView(View):
             else:
                 return JsonResponse({"error": "Track not found"}, status=404)
         else:
-            serializer = SingleTrackSerializer(data=data)
+            serializer = TrackSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
                 if serializer.errors:
@@ -56,39 +54,39 @@ class TrackView(View):
             else:
                 return JsonResponse(serializer.errors, status=400)
 
-    # # @method_decorator(artist_required)
-    # # def put(self, request, id):
-    #     """
-    #     tracks/id
-    #     """
-    #     print(request.body)
-    #     print(request.FILES)
-    #     data = self.parse_request_data(request)
-    #     print(data)
-    #     track = self.get_singletrack(id=id)
-    #     if track:
-    #         if track.artist.id != request.user.artist.id:
-    #             return JsonResponse({"error": "You don't have permission to edit this track"}, status=403)
-    #         data = request.POST.dict()
-    #         audio = request.FILES.get('audio_file')
-    #         if audio:
-    #             data['audio_file'] = audio
-    #         image = request.FILES.get('cover_image')
-    #         if image:
-    #             data['cover_image'] = image
-    #         data['artist_id'] = request.user.artist.id
-    #         print(data)
-    #         serializer = SingleTrackSerializer(instance=track, data=data)
-    #         serializer.save()
-    #         if serializer.errors:
-    #             return JsonResponse(serializer.errors, status=400)
-    #         return JsonResponse(serializer.data, status=200)
-    #     return JsonResponse({"error": "Track not found"}, status=404)
+    # @method_decorator(artist_required)
+    # def put(self, request, id):
+        # """
+        # tracks/id
+        # """
+        # print(request.body)
+        # print(request.FILES)
+        # data = self.parse_request_data(request)
+        # print(data)
+        # track = self.get_singletrack(id=id)
+        # if track:
+        #     if track.artist.id != request.user.artist.id:
+        #         return JsonResponse({"error": "You don't have permission to edit this track"}, status=403)
+        #     data = request.POST.dict()
+        #     audio = request.FILES.get('audio_file')
+        #     if audio:
+        #         data['audio_file'] = audio
+        #     image = request.FILES.get('cover_image')
+        #     if image:
+        #         data['cover_image'] = image
+        #     data['artist_id'] = request.user.artist.id
+        #     print(data)
+        #     serializer = SingleTrackSerializer(instance=track, data=data)
+        #     serializer.save()
+        #     if serializer.errors:
+        #         return JsonResponse(serializer.errors, status=400)
+        #     return JsonResponse(serializer.data, status=200)
+        # return JsonResponse({"error": "Track not found"}, status=404)
 
     @method_decorator(artist_required)
-    def delete(self, request, id):
+    def delete(self, request, album_id, id):
         """
-        tracks/id
+        albums/album_id/tracks/id
         """
         track = self.get_singletrack(id=id)
         if track:

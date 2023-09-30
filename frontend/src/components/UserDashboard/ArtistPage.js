@@ -8,6 +8,7 @@ import {
   TabPanels,
   Tab,
   TabPanel,
+  HStack,
 } from '@chakra-ui/react';
 import TrackList from '../lists/TrackList';
 import AlbumList from '../lists/AlbumList';
@@ -41,29 +42,33 @@ function ArtistPage() {
     })();
   }, []);
   return (
-    <Center py={6}>
+    <Center py={2}>
       <Box
         w={'full'}
         bg={useColorModeValue('white', 'gray.900')}
-        p={6}
+        p={2}
         textAlign={'center'}
       >
-        <Avatar
-          size={'xl'}
-          src={artistData.artist?.profile_image}
-          mb={4}
-          pos={'relative'}
-        />
-        <Heading fontSize={'2xl'} fontFamily={'body'}>
-          {artistData.artist?.name || ''}
-        </Heading>
-        <Text
-          textAlign={'center'}
-          color={useColorModeValue('gray.700', 'gray.400')}
-          px={3}
-        >
-          {artistData.artist?.bio || ''}
-        </Text>
+        <HStack>
+          <Avatar
+            size={'xl'}
+            src={artistData.artist?.profile_image}
+            mb={4}
+            pos={'relative'}
+          />
+          <Box>
+            <Heading fontSize={'2xl'} fontFamily={'body'}>
+              {artistData.artist?.name || ''}
+            </Heading>
+            <Text
+              textAlign={'center'}
+              color={useColorModeValue('gray.700', 'gray.400')}
+              px={3}
+            >
+              {artistData.artist?.bio || ''}
+            </Text>
+          </Box>
+        </HStack>
         <Tabs align="center">
           <TabList>
             <Tab>Tracks</Tab>

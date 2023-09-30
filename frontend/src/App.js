@@ -182,7 +182,7 @@ function App() {
           <SidebarContent display={{ base: 'none', md: 'block' }} />
           {/* mobilenav */}
           <NavBar />
-          <Box ml={{ base: 0, md: 60 }} p="8">
+          <Box ml={{ base: 0, md: 60 }} p="4">
             <Routes>
               {getUserRoutes()}
               {currentUser?.is_artist ? getArtistRoutes() : null}
