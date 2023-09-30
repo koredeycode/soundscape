@@ -105,6 +105,7 @@ export function AuthProvider({ children }) {
       });
       return response.data;
     } catch (error) {
+      console.log(error)
       showToast('Error', error.response.data?.error, 'error');
       throw error;
     }

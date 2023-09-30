@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Box,
@@ -5,9 +6,11 @@ import {
   Text,
   Link as ChakraLink,
   useDisclosure,
+  Button,
 } from '@chakra-ui/react';
 import { useAuth } from '../../hooks/AuthContext';
 import CreateAlbum from '../modals/Artist/CreateAlbum';
+import { MdOutlineLockOpen } from 'react-icons/md';
 
 export default function AlbumList({ albums }) {
   const { sendAuthorizedRequest } = useAuth();
@@ -23,8 +26,8 @@ export default function AlbumList({ albums }) {
   }, []);
 
   return (
-    <>
-      <Button colorScheme="teal" onClick={onClose}>
+    <Box>
+      <Button colorScheme="teal" onClick={onOpen}>
         Create New Album
       </Button>
       <Stack spacing={4}>
@@ -51,7 +54,7 @@ export default function AlbumList({ albums }) {
           </Box>
         ))}
       </Stack>
-      <CreateAlbum isOpen={isOpen} onClose={onClose} genres={genres} />
-    </>
+      <CreateAlbum isOpen={isOpen} onClose={onClose} />
+    </Box>
   );
 }

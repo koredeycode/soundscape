@@ -1,6 +1,7 @@
 from .storage import UUIDStorage
 from .base import Base, TitleSlugDescriptionModel
 from django.db import models
+from datetime import datetime
 
 
 class Album(Base, TitleSlugDescriptionModel):
@@ -17,7 +18,7 @@ class Album(Base, TitleSlugDescriptionModel):
     artist = models.ForeignKey('Artist', on_delete=models.CASCADE)
     featured_artists = models.ManyToManyField(
         'Artist', related_name='album_featured_artist', blank=True)
-    release_date = models.DateField()
+    release_date = models.DateField(default=datetime.now)
     cover_image = models.ImageField(
         upload_to='images/albums/', default='images/albums/default.jpg', storage=UUIDStorage())
 

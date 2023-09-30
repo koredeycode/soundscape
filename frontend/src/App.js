@@ -34,9 +34,7 @@ import {
 } from './components/UserDashboard/UserDashboard';
 import MusicPlayer from './components/UserDashboard/MusicPlayer';
 import { Logo } from './Logo';
-import ArtistDashboard from './components/ArtistDashboard/ArtistDashboard';
 import ArtistProfilePage from './components/ArtistDashboard/ArtistProfilePage';
-import ArtistAlbums from './components/ArtistDashboard/ArtistAlbums';
 import ArtistAlbum from './components/ArtistDashboard/ArtistAlbum';
 import ArtistTrack from './components/ArtistDashboard/ArtistTrack';
 
@@ -143,12 +141,12 @@ function App() {
       route: '/artist-albums/:album_id',
       component: <ArtistAlbum />,
     },
-    {
-      name: 'ArtistTrack',
-      key: 'artist-track',
-      route: '/artist-tracks/:track_id',
-      component: <ArtistTrack />,
-    },
+    // {
+    //   name: 'ArtistTrack',
+    //   key: 'artist-track',
+    //   route: '/artist-tracks/:track_id',
+    //   component: <ArtistTrack />,
+    // },
   ];
 
   const getUserRoutes = () =>

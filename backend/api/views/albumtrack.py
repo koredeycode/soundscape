@@ -1,22 +1,22 @@
 from django.views import View
 from django.http import JsonResponse
 # import json
-from api.models import Track, SingleTrack
-from api.serializers import TrackSerializer, SingleTrackSerializer
+from api.models import Track, SingleTrack, AlbumTrack
+from api.serializers import TrackSerializer, SingleTrackSerializer, AlbumTrackSerializer
 from django.utils.decorators import method_decorator
 from api.auth import user_required, artist_required
 
 
 class AlbumTrackView(View):
-    @method_decorator(user_required)
-    def get(self, request, id):
-        """
-        albums/album_id/tracks/id
-        """
-        track = self.get_track(id=id)
-        if track:
-            return JsonResponse(TrackSerializer(track).data)
-        return JsonResponse({"error": "Track not found"}, status=404)
+    # @method_decorator(user_required)
+    # def get(self, request, id):
+    #     """
+    #     albums/album_id/tracks/id
+    #     """
+    #     track = self.get_track(id=id)
+    #     if track:
+    #         return JsonResponse(TrackSerializer(track).data)
+    #     return JsonResponse({"error": "Track not found"}, status=404)
 
     @method_decorator(artist_required)
     def post(self, request, album_id, id=None):
@@ -33,11 +33,11 @@ class AlbumTrackView(View):
         data['artist_id'] = request.user.artist.id
         data['album_id'] = album_id
         if id:
-            track = self.get_singletrack(id=id)
+            track = self.get_albumtrack(id=id, album_id=album_id)
             if track:
                 if track.artist.id != request.user.artist.id:
                     return JsonResponse({"error": "You don't have permission to edit this track"}, status=403)
-                serializer = TrackSerializer(instance=track, data=data)
+                serializer = AlbumTrackSerializer(instance=track, data=data)
                 serializer.save()
                 if serializer.errors:
                     return JsonResponse(serializer.errors, status=400)
@@ -45,7 +45,7 @@ class AlbumTrackView(View):
             else:
                 return JsonResponse({"error": "Track not found"}, status=404)
         else:
-            serializer = TrackSerializer(data=data)
+            serializer = AlbumTrackSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
                 if serializer.errors:
@@ -88,7 +88,7 @@ class AlbumTrackView(View):
         """
         albums/album_id/tracks/id
         """
-        track = self.get_singletrack(id=id)
+        track = self.get_albumtrack(id=id, album_id=album_id)
         if track:
             if track.artist.id != request.user.artist.id:
                 return JsonResponse({"error": "You don't have permission to delete this track"}, status=403)
@@ -110,9 +110,9 @@ class AlbumTrackView(View):
         except Exception as e:
             return None
 
-    def get_singletrack(self, id):
+    def get_albumtrack(self, id, album_id):
         # Helper function to get an instance of Track by ID
         try:
-            return SingleTrack.objects.get(id=id)
+            return AlbumTrack.objects.get(id=id, album_id=album_id)
         except Exception as e:
             return None

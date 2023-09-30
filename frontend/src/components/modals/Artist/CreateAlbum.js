@@ -17,10 +17,9 @@ import {
 } from '@chakra-ui/react';
 import { useAuth } from '../../../hooks/AuthContext';
 
-function CreateAlbum({ isOpen, onClose, genres }) {
+function CreateAlbum({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
     title: '',
-    genre_id: '',
     // audio_file: '',
     description: '',
     // cover_image: '',
@@ -51,7 +50,6 @@ function CreateAlbum({ isOpen, onClose, genres }) {
     console.log(formData);
     // Append form fields to the FormData object
     subformData.append('title', formData.title);
-    subformData.append('genre_id', formData.genre_id);
     subformData.append('description', formData.description);
 
     // Append files to the FormData object
@@ -84,21 +82,6 @@ function CreateAlbum({ isOpen, onClose, genres }) {
                   type="text"
                   required
                 />
-              </FormControl>
-              <FormControl id="genre_id" isRequired>
-                <FormLabel>Select a Genre</FormLabel>
-                <Select
-                  placeholder="Select a genre"
-                  name="genre_id"
-                  value={formData.genre_id}
-                  onChange={handleInputChange}
-                >
-                  {genres.map(genre => (
-                    <option key={genre.id} value={genre.id}>
-                      {genre.name}
-                    </option>
-                  ))}
-                </Select>
               </FormControl>
               <FormControl id="cover_image">
                 <FormLabel>Album Cover Image</FormLabel>

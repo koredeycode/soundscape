@@ -26,7 +26,7 @@ class TrackCoverMediaView(View):
     # @method_decorator(user_required)
     def get(self, request, id=None):
         """
-        media/images/track/id
+        media/images/tracks/id
         """
         try:
             track = Track.objects.get(id=id)
@@ -39,7 +39,7 @@ class AlbumCoverMediaView(View):
     # @method_decorator(user_required)
     def get(self, request, id=None):
         """
-        media/images/album/id
+        media/images/albums/id
         """
         try:
             album = Album.objects.get(id=id)

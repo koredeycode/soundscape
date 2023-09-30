@@ -9,11 +9,13 @@ import {
   MenuList,
   MenuItem,
   useDisclosure,
+  Link as ChakraLink,
 } from '@chakra-ui/react';
 import { FaPlay, FaEllipsisV } from 'react-icons/fa';
 import { useAudioPlayerContext } from '../../hooks/AudioPlayerContext';
 import AddToTrackPlaylist from '../modals/AddTrackToPlaylist';
 import RemoveTrackFromPlaylist from '../modals/RemoveTrackFromPlaylist';
+import { Link } from 'react-router-dom';
 
 export default function TrackList({ tracks, playlist_id }) {
   const [playlistItemId, setPlaylistItemId] = useState('');
@@ -64,7 +66,16 @@ function TrackItem({
     useAudioPlayerContext();
   return (
     <HStack w="100%" justify="space-between">
-      <Text>{`${index + 1}. ${track.title}`}</Text>
+      <Text>{`${index + 1}.`}</Text>
+      <ChakraLink
+        as={Link}
+        to={`/tracks/${track.id}`}
+        color="black"
+        // display="inline-block"
+        // p="3"
+      >
+        {track.title}
+      </ChakraLink>
       <HStack spacing={2}>
         <IconButton
           icon={<FaPlay />}

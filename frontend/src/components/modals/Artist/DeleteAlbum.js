@@ -16,19 +16,13 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useAuth } from '../../../hooks/AuthContext';
-import { useParams } from 'react-router-dom';
 
-function DeleteAlbumTrack({ isOpen, onClose, track }) {
+function DeleteTrack({ isOpen, onClose, album }) {
   const { sendAuthorizedRequest } = useAuth();
-  const { album_id } = useParams();
 
   const handleDelete = async () => {
-    // Send a POST request to the selected track endpoint with the track_id
-    await sendAuthorizedRequest(
-      `/albums/${album_id}/tracks/${track.id}`,
-      'delete',
-      {}
-    );
+    // Send a POST request to the selected album endpoint with the album_id
+    await sendAuthorizedRequest(`/albums/${album.id}`, 'delete', {});
     onClose();
   };
 
@@ -40,7 +34,7 @@ function DeleteAlbumTrack({ isOpen, onClose, track }) {
         <ModalCloseButton />
         <ModalBody>
           <Text>
-            Are you sure you want to delete this track: <b>{track?.title}</b>
+            Are you sure you want to delete this album: <b>{album?.title}</b>
           </Text>
           <Text>This action cannot be undone</Text>
         </ModalBody>
@@ -57,4 +51,4 @@ function DeleteAlbumTrack({ isOpen, onClose, track }) {
   );
 }
 
-export default DeleteAlbumTrack;
+export default DeleteTrack;

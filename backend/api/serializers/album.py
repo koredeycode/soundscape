@@ -12,7 +12,7 @@ class AlbumSerializer:
         self.instance = instance
         self.validated_data = data
         self.errors = {}
-        self.required_fields = ['title', 'artist_id', 'release_date']
+        self.required_fields = ['title', 'artist_id']
 
     def is_valid(self):
         if not self.validated_data:
@@ -24,10 +24,6 @@ class AlbumSerializer:
         for field in self.required_fields:
             if field not in self.validated_data:
                 self.errors[field] = ['This field is required.']
-
-        if 'release_date' in self.validated_data and not isinstance(self.validated_data['release_date'], str):
-            self.errors['release_date'] = [
-                'Release date must be a valid date string.']
 
         # Custom validation checks can be added here
 
@@ -59,7 +55,7 @@ class AlbumSerializer:
             'artist': ArtistSerializer(self.instance.artist).data,
             # 'total_duration': str(sum([track.duration for track in self.instance.albumtrack_set.all()])),
             'tracks': [TrackSerializer(track).data for track in self.instance.albumtrack_set.all()],
-            'cover_image': f'{BASE_URL}/media/images/album/{str(self.instance.id)}',
+            'cover_image': f'{BASE_URL}/media/images/albums/{str(self.instance.id)}',
             'release_date': str(self.instance.release_date),
             'featured_artists': [ArtistSerializer(artist).data for artist in self.instance.featured_artists.all()]
         }
