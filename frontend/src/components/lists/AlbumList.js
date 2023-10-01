@@ -15,13 +15,7 @@ export default function AlbumList({ albums }) {
           justifyContent="space-between"
           alignItems="center"
         >
-          <ChakraLink
-            as={Link}
-            to={`/albums/${album.id}`}
-            color="black"
-            // display="inline-block"
-            // p="3"
-          >
+          <ChakraLink as={Link} to={`/albums/${album.id}`} color="black">
             {album.title}
           </ChakraLink>
         </Box>

@@ -8,7 +8,6 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Select,
   FormControl,
   FormLabel,
   Input,
@@ -16,6 +15,7 @@ import {
   Textarea,
 } from '@chakra-ui/react';
 import { useAuth } from '../../../hooks/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 function CreateAlbum({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
@@ -25,6 +25,7 @@ function CreateAlbum({ isOpen, onClose }) {
     // cover_image: '',
   });
   const { sendAuthorizedRequest } = useAuth();
+  const navigate = useNavigate();
 
   const handleInputChange = e => {
     const { name, value, type } = e.target;
@@ -57,11 +58,16 @@ function CreateAlbum({ isOpen, onClose }) {
       subformData.append('cover_image', formData.cover_image);
     }
     console.log(subformData);
-    await sendAuthorizedRequest('/albums', 'post', subformData, {
-      'Content-Type': 'multipart/form-data',
-    });
+    const response = await sendAuthorizedRequest(
+      '/albums',
+      'post',
+      subformData,
+      {
+        'Content-Type': 'multipart/form-data',
+      }
+    );
     onClose();
-    // window.location.reload();
+    navigate(`/artist-albums/${response.id}`);
   };
 
   return (

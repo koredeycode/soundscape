@@ -44,8 +44,6 @@ export default function PlaylistList({ playlists }) {
               as={Link}
               to={`/playlists/${playlist.id}`}
               color="black"
-              // display="inline-block"
-              // p="3"
             >
               {playlist.title}
             </ChakraLink>

@@ -1,22 +1,37 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Box, Heading, Link as ChakraLink } from '@chakra-ui/react';
+import {
+  Box,
+  Link as ChakraLink,
+  Stack,
+  Text,
+} from '@chakra-ui/react';
 
 function HomePage() {
   return (
-    <Box textAlign="center" p="4">
-      <Heading as="h1" size="xl" mb="4">
-        Welcome to My App
-      </Heading>
-      <Box mb="4">
-        <ChakraLink as={Link} to="/login" color="blue.500" fontSize="lg">
-          Login
-        </ChakraLink>
-      </Box>
-      <Box>
-        <ChakraLink as={Link} to="/register" color="blue.500" fontSize="lg">
-          Register
-        </ChakraLink>
+    <Box bg="white" w="100%" minH="100vh">
+      <Box mx={{ base: '0', md: '32' }}>
+        <Stack
+          flexDirection="row"
+          justifyContent="space-between"
+          bg="gray.200"
+          py="4"
+          px="4"
+        >
+          <Box>
+            <Text fontSize="18px" fontWeight="extrabold">
+              SoundScape
+            </Text>
+          </Box>
+          <Stack flexDirection="row">
+            <ChakraLink as={Link} to="/login" color="blue.500" fontSize="lg">
+              Login
+            </ChakraLink>
+            <ChakraLink as={Link} to="/register" color="blue.500" fontSize="lg">
+              Register
+            </ChakraLink>
+          </Stack>
+        </Stack>
       </Box>
     </Box>
   );

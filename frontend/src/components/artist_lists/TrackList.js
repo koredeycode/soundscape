@@ -4,19 +4,15 @@ import {
   HStack,
   Text,
   IconButton,
-  Button,
   useDisclosure,
   Icon,
 } from '@chakra-ui/react';
-import { FaPlay, FaEllipsisV, FaEdit, FaPowerOff } from 'react-icons/fa';
+import { FaPlay, FaEdit } from 'react-icons/fa';
 import { MdDelete, MdEdit, MdOutlineDelete } from 'react-icons/md';
 import { useAudioPlayerContext } from '../../hooks/AudioPlayerContext';
 import { useAuth } from '../../hooks/AuthContext';
-import AddToTrackPlaylist from '../modals/AddTrackToPlaylist';
-import RemoveTrackFromPlaylist from '../modals/RemoveTrackFromPlaylist';
 import DeleteTrack from '../modals/Artist/DeleteTrack';
 import UpdateTrack from '../modals/Artist/UpdateTrack';
-import CreateTrack from '../modals/Artist/CreateTrack';
 
 const deleteIcon = <Icon as={MdOutlineDelete} w="1.5em" h="1.5em" />;
 const editIcon = <Icon as={FaEdit} w="1.5em" h="1.5em" />;
@@ -34,11 +30,6 @@ export default function TrackList({ tracks }) {
     onOpen: onUpdateTrackOpen,
     onClose: onUpdateTrackClose,
   } = useDisclosure();
-  const {
-    isOpen: isCreateTrackOpen,
-    onOpen: onCreateTrackOpen,
-    onClose: onCreateTrackClose,
-  } = useDisclosure();
   const { sendAuthorizedRequest } = useAuth();
   const [genres, setGenres] = useState([]);
 
@@ -53,9 +44,6 @@ export default function TrackList({ tracks }) {
   return (
     <>
       <VStack align="start" spacing={4}>
-        <Button colorScheme="teal" onClick={onCreateTrackOpen}>
-          Create New Track
-        </Button>
         {tracks.map((track, idx) => (
           <>
             <TrackItem
@@ -70,11 +58,6 @@ export default function TrackList({ tracks }) {
           </>
         ))}
       </VStack>
-      <CreateTrack
-        isOpen={isCreateTrackOpen}
-        onClose={onCreateTrackClose}
-        genres={genres}
-      />
       <DeleteTrack
         isOpen={isDeleteTrackOpen}
         onClose={onDeleteTrackClose}

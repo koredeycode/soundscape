@@ -16,7 +16,6 @@ import {
   MenuList,
   Stack,
   Link as ChakraLink,
-  Tooltip,
 } from '@chakra-ui/react';
 import { FiBell, FiChevronDown } from 'react-icons/fi';
 import {
@@ -29,8 +28,6 @@ import {
   MdOpenInNew,
   MdPerson,
   MdPersonOutline,
-  MdMusicNote,
-  MdOutlineMusicNote,
 } from 'react-icons/md';
 import { useAuth } from '../../hooks/AuthContext';
 import { useState } from 'react';
@@ -80,69 +77,33 @@ export const FootContent = () => {
     >
       {UserLinkItems.map((link, idx) => {
         return (
-          <Box
+          <NavItem
+            key={link.name}
+            link={link}
+            isActive={activeItem === idx}
             onClick={() => {
               setActiveItem(idx);
             }}
-            p="2"
-            key={idx}
-            // bg={activeItem == idx ? 'gray.100' : 'transparent'}
-          >
-            <Tooltip label={link.name} placement="top">
-              <ChakraLink
-                as={Link}
-                to={link.url}
-                color="black"
-                // display="inline-block"
-                // p="3"
-              >
-                <Icon
-                  _groupHover={{
-                    color: 'black',
-                  }}
-                  as={activeItem == idx ? link.icon.active : link.icon.inactive}
-                  w="2em"
-                  h="2em"
-                />
-              </ChakraLink>
-            </Tooltip>
-          </Box>
+            icon={activeItem === idx ? link.icon.active : link.icon.inactive}
+          />
         );
       })}
       {currentUser.is_artist
         ? ArtistLinkItems.map((link, idx) => {
             return (
-              <Box
+              <NavItem
+                key={link.name}
+                link={link}
+                isActive={activeItem === idx + UserLinkItems.length}
                 onClick={() => {
                   setActiveItem(idx + UserLinkItems.length);
                 }}
-                p="2"
-                key={idx}
-                // bg={activeItem == idx + UserLinkItems.length ? 'gray.100' : 'transparent'}
-              >
-                <Tooltip label={link.name} placement="top">
-                  <ChakraLink
-                    as={Link}
-                    to={link.url}
-                    color="black"
-                    // display="inline-block"
-                    // p="3"
-                  >
-                    <Icon
-                      _groupHover={{
-                        color: 'black',
-                      }}
-                      as={
-                        activeItem == idx + UserLinkItems.length
-                          ? link.icon.active
-                          : link.icon.inactive
-                      }
-                      w="2em"
-                      h="2em"
-                    />
-                  </ChakraLink>
-                </Tooltip>
-              </Box>
+                icon={
+                  activeItem === idx + UserLinkItems.length
+                    ? link.icon.active
+                    : link.icon.inactive
+                }
+              />
             );
           })
         : null}
@@ -174,20 +135,12 @@ export const SidebarContent = ({ ...rest }) => {
           key={link.name}
           icon={activeItem === idx ? link.icon.active : link.icon.inactive}
           onClick={() => {
+            console.log(idx);
             setActiveItem(idx);
           }}
           isActive={activeItem === idx}
-        >
-          <ChakraLink
-            as={Link}
-            to={link.url}
-            color="black"
-            // display="inline-block"
-            // p="3"
-          >
-            {link.name}
-          </ChakraLink>
-        </NavItem>
+          link={link}
+        />
       ))}
       {currentUser.is_artist
         ? ArtistLinkItems.map((link, idx) => (
@@ -202,59 +155,47 @@ export const SidebarContent = ({ ...rest }) => {
                 setActiveItem(idx + UserLinkItems.length);
               }}
               isActive={activeItem === idx + UserLinkItems.length}
-            >
-              <ChakraLink
-                as={Link}
-                to={link.url}
-                color="black"
-                // display="inline-block"
-                // p="3"
-              >
-                {link.name}
-              </ChakraLink>
-            </NavItem>
+              link={link}
+            />
           ))
         : null}
     </Box>
   );
 };
 
-export const NavItem = ({ icon, children, isActive, ...rest }) => {
+export const NavItem = ({ link, icon, isActive, onClick }) => {
   return (
-    <Box
-      as="a"
-      href="#"
-      style={{ textDecoration: 'none' }}
-      _focus={{ boxShadow: 'none' }}
-    >
-      <Flex
-        align="center"
+    <Box onClick={onClick}>
+      <ChakraLink
+        as={Link}
+        to={link.url}
+        display="flex"
+        alignItems="center"
+        justifyContent="flex-start"
+        gap="1"
         p="2"
         mx="2"
-        role="group"
         cursor="pointer"
-        // _hover={{
-        //   bg: 'gray.100',
-        //   color: 'black',
-        // }}
-        bg={isActive ? 'gray.100' : 'transparent'} // Apply active background color
-        color="black" // Apply active text color
-        {...rest}
+        bg={{
+          base: 'transparent',
+          md: `${isActive ? 'gray.100' : 'transparent'}`,
+        }}
+        _hover={{
+          textDecoration: 'none',
+        }}
       >
-        {icon && (
-          <Icon
-            mr="4"
-            fontSize="16"
-            _groupHover={{
-              color: 'black',
-            }}
-            as={icon}
-            w="1.5em"
-            h="1.5em"
-          />
-        )}
-        {children}
-      </Flex>
+        <Icon
+          mr="4"
+          fontSize="16"
+          _groupHover={{
+            color: 'black',
+          }}
+          as={icon}
+          w={{ base: '2em', md: '1.5em' }}
+          h={{ base: '2em', md: '1.5em' }}
+        />
+        <Text display={{ base: 'none', md: 'inline-block' }}>{link.name}</Text>
+      </ChakraLink>
     </Box>
   );
 };
@@ -333,9 +274,15 @@ export const NavBar = ({ ...rest }) => {
                 <ChakraLink
                   as={Link}
                   to="/profile"
-                  color="black"
-                  // display="inline-block"
-                  // p="3"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  gap="1"
+                  cursor="pointer"
+                  _hover={{
+                    textDecoration: 'none',
+                  }}
+                  w="100%"
                 >
                   Profile
                 </ChakraLink>
@@ -346,40 +293,45 @@ export const NavBar = ({ ...rest }) => {
                   as={Link}
                   to="/settings"
                   color="black"
-                  // display="inline-block"
-                  // p="3"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  gap="1"
+                  cursor="pointer"
+                  _hover={{
+                    textDecoration: 'none',
+                  }}
+                  w="100%"
                 >
                   Settings
                 </ChakraLink>
               </MenuItem>
 
-              <MenuDivider />
-              {/* {user.is_artist && (
+              {!user.is_artist && (
                 <>
+                  <MenuDivider />
                   <MenuItem>
                     <ChakraLink
                       as={Link}
-                      to="/artist-dashboard"
-                      target="_blank"
+                      to="/become-artist"
                       color="black"
-                      // display="inline-block"
-                      // p="3"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="flex-start"
+                      gap="1"
+                      cursor="pointer"
+                      _hover={{
+                        textDecoration: 'none',
+                      }}
+                      w="100%"
                     >
-                      Artist Dashboard
-                      <Icon
-                        as={MdOpenInNew}
-                        ml="1"
-                        _groupHover={{
-                          color: 'black',
-                        }}
-                        w="1em"
-                        h="1em"
-                      />
+                      Become an Artist
                     </ChakraLink>
                   </MenuItem>
-                  <MenuDivider />
                 </>
-              )} */}
+              )}
+
+              <MenuDivider />
               <MenuItem
                 onClick={() => {
                   stopAudio();

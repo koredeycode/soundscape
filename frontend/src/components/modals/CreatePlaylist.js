@@ -8,22 +8,20 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Select,
   FormControl,
   FormLabel,
   Input,
   VStack,
-  Text,
-  useToast,
 } from '@chakra-ui/react';
 import { useAuth } from '../../hooks/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 function CreatePlaylist({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
     title: '',
   });
   const { sendAuthorizedRequest } = useAuth();
-  const toast = useToast();
+  const navigate = useNavigate();
 
   const handleInputChange = e => {
     const { name, value } = e.target;
@@ -35,8 +33,14 @@ function CreatePlaylist({ isOpen, onClose }) {
 
   const handleCreate = async () => {
     // Send a POST request to the selected playlist endpoint with the track_id
-    await sendAuthorizedRequest('/user_playlists', 'post', formData);
+    const response = await sendAuthorizedRequest(
+      '/user_playlists',
+      'post',
+      formData
+    );
+    console.log(response);
     onClose();
+    navigate(`/playlists/${response.id}`);
   };
 
   return (

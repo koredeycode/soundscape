@@ -26,7 +26,14 @@ function AlbumPage() {
         <Heading size="lg" mb={4}>
           {albumData.title}
         </Heading>
-        <Image src={albumData.cover_image} alt="Album Cover" mb={4} />
+        <Image
+          src={albumData.cover_image}
+          alt="Album Cover"
+          mb={4}
+          w="200px"
+          h="200px"
+          objectFit="cover"
+        />
         <TrackList tracks={albumData.tracks} />
       </Box>
     )

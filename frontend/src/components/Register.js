@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../hooks/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -29,7 +29,6 @@ function Register() {
     password: '',
   });
   const { register } = useAuth();
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleInputChange = e => {
@@ -164,57 +163,3 @@ function Register() {
 }
 
 export default Register;
-
-// <Box
-//   maxW="md"
-//   mx="auto"
-//   mt="8"
-//   p="4"
-//   borderWidth="1px"
-//   borderRadius="lg"
-//   boxShadow="md"
-// >
-//   <Heading as="h2" size="lg" mb="4">
-//     Register
-//   </Heading>
-//   <form onSubmit={handleSubmit}>
-//     <VStack spacing="4">
-//       <FormControl id="username">
-//         <FormLabel>Username</FormLabel>
-//         <Input
-//           type="text"
-//           name="username"
-//           placeholder="Username"
-//           value={formData.username}
-//           onChange={handleInputChange}
-//           required
-//         />
-//       </FormControl>
-//       <FormControl id="email">
-//         <FormLabel>Email</FormLabel>
-//         <Input
-//           type="email"
-//           name="email"
-//           placeholder="Email"
-//           value={formData.email}
-//           onChange={handleInputChange}
-//           required
-//         />
-//       </FormControl>
-//       <FormControl id="password">
-//         <FormLabel>Password</FormLabel>
-//         <Input
-//           type="password"
-//           name="password"
-//           placeholder="Password"
-//           value={formData.password}
-//           onChange={handleInputChange}
-//           required
-//         />
-//       </FormControl>
-//       <Button type="submit" colorScheme="blue">
-//         Sign Up
-//       </Button>
-//     </VStack>
-//   </form>
-// </Box>

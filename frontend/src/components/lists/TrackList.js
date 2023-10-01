@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   VStack,
   HStack,
@@ -71,8 +71,6 @@ function TrackItem({
         as={Link}
         to={`/tracks/${track.id}`}
         color="black"
-        // display="inline-block"
-        // p="3"
       >
         {track.title}
       </ChakraLink>

@@ -1,22 +1,9 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from 'react-router-dom';
-import {
-  ChakraProvider,
-  CSSReset,
-  Box,
-  extendTheme,
-  Spinner,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import { Box, Spinner, useColorModeValue } from '@chakra-ui/react';
 import HomePage from './components/HomePage';
 import Login from './components/Login';
 import Register from './components/Register';
-import NotFound from './components/NotFound';
 import { useAuth } from './hooks/AuthContext';
 import { AudioPlayerProvider } from './hooks/AudioPlayerContext';
 import Home from './components/UserDashboard/Home';
@@ -27,20 +14,19 @@ import Setting from './components/UserDashboard/Setting';
 import ProfilePage from './components/UserDashboard/ProfilePage';
 import ArtistPage from './components/UserDashboard/ArtistPage';
 import AlbumPage from './components/UserDashboard/AlbumPage';
+import TrackPage from './components/UserDashboard/TrackPage';
 import {
   FootContent,
   SidebarContent,
   NavBar,
 } from './components/UserDashboard/UserDashboard';
 import MusicPlayer from './components/UserDashboard/MusicPlayer';
-import { Logo } from './Logo';
 import ArtistProfilePage from './components/ArtistDashboard/ArtistProfilePage';
 import ArtistAlbum from './components/ArtistDashboard/ArtistAlbum';
-import ArtistTrack from './components/ArtistDashboard/ArtistTrack';
+import CreateArtistProfile from './components/UserDashboard/CreateArtistProfile';
 
 function App() {
   const { isAuthenticated, isLoading, currentUser } = useAuth();
-  console.log(isAuthenticated);
   const bg = useColorModeValue('white', 'gray.900');
 
   if (isLoading) {
@@ -112,41 +98,29 @@ function App() {
       name: 'Track',
       key: 'track',
       route: '/tracks/:track_id',
-      component: <div>Track page</div>,
+      component: <TrackPage />,
+    },
+    {
+      name: 'Create Artist Profile',
+      key: 'track',
+      route: '/become-artist',
+      component: <CreateArtistProfile />,
     },
   ];
 
   const artistRoutes = [
-    // {
-    //   name: 'ArtistDashboard',
-    //   key: 'artist-dashboard',
-    //   route: '/artist-dashboard',
-    //   component: <ArtistDashboard />,
-    // },
     {
       name: 'ArtistProfile',
       key: 'artist-profile',
       route: '/artist-profile',
       component: <ArtistProfilePage />,
     },
-    // {
-    //   name: 'ArtistAlbums',
-    //   key: 'artist-albums',
-    //   route: '/artist-albums',
-    //   component: <ArtistAlbums />,
-    // },
     {
       name: 'ArtistAlbum',
       key: 'artist-album',
       route: '/artist-albums/:album_id',
       component: <ArtistAlbum />,
     },
-    // {
-    //   name: 'ArtistTrack',
-    //   key: 'artist-track',
-    //   route: '/artist-tracks/:track_id',
-    //   component: <ArtistTrack />,
-    // },
   ];
 
   const getUserRoutes = () =>

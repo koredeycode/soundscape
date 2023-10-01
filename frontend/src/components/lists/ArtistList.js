@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Box, Stack, Text, Link as ChakraLink } from '@chakra-ui/react';
+import { Box, Stack, Link as ChakraLink } from '@chakra-ui/react';
 
 export default function ArtistList({ artists }) {
   return (
@@ -15,13 +15,7 @@ export default function ArtistList({ artists }) {
           justifyContent="space-between"
           alignItems="center"
         >
-          <ChakraLink
-            as={Link}
-            to={`/artists/${artist.id}`}
-            color="black"
-            // display="inline-block"
-            // p="3"
-          >
+          <ChakraLink as={Link} to={`/artists/${artist.id}`} color="black">
             {artist.name}
           </ChakraLink>
         </Box>

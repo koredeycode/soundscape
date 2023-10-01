@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import {
   Button,
   Modal,
@@ -8,22 +7,20 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Select,
-  FormControl,
-  FormLabel,
-  Input,
-  VStack,
   Text,
 } from '@chakra-ui/react';
 import { useAuth } from '../../../hooks/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 function DeleteTrack({ isOpen, onClose, album }) {
   const { sendAuthorizedRequest } = useAuth();
+  const navigate = useNavigate();
 
   const handleDelete = async () => {
     // Send a POST request to the selected album endpoint with the album_id
     await sendAuthorizedRequest(`/albums/${album.id}`, 'delete', {});
     onClose();
+    navigate('/artist-profile');
   };
 
   return (

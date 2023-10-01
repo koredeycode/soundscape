@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import {
   Button,
   Modal,
@@ -8,11 +7,6 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Select,
-  FormControl,
-  FormLabel,
-  Input,
-  VStack,
   Text,
 } from '@chakra-ui/react';
 import { useAuth } from '../../hooks/AuthContext';
@@ -24,6 +18,7 @@ function DeletePlaylist({ isOpen, onClose, playlist }) {
     // Send a POST request to the selected playlist endpoint with the track_id
     await sendAuthorizedRequest(`/user_playlists/${playlist.id}`, 'delete', {});
     onClose();
+    // window.location.reload();
   };
 
   return (

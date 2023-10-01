@@ -8,13 +8,11 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Select,
   FormControl,
   FormLabel,
   Input,
   VStack,
   Textarea,
-  Text,
 } from '@chakra-ui/react';
 import { useAuth } from '../../../hooks/AuthContext';
 

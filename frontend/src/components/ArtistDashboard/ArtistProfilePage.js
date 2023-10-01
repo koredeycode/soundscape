@@ -9,6 +9,7 @@ import {
   TabPanels,
   Tab,
   TabPanel,
+  Button,
 } from '@chakra-ui/react';
 import TrackList from '../artist_lists/TrackList';
 import AlbumList from '../artist_lists/AlbumList';
@@ -20,13 +21,13 @@ import {
   Text,
   IconButton,
   Icon,
-  Badge,
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useParams } from 'react-router-dom';
 import { FaEdit } from 'react-icons/fa';
 import EditArtistProfile from '../modals/Artist/EditArtistProfile';
+import CreateAlbum from '../modals/Artist/CreateAlbum';
+import CreateTrack from '../modals/Artist/CreateTrack';
 
 const editIcon = <Icon as={FaEdit} w="1.5em" h="1.5em" />;
 
@@ -34,6 +35,17 @@ function ArtistProfilePage() {
   const { sendAuthorizedRequest } = useAuth();
   const [artistData, setArtistData] = useState({});
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const {
+    isOpen: isCreateTrackOpen,
+    onOpen: onCreateTrackOpen,
+    onClose: onCreateTrackClose,
+  } = useDisclosure();
+  const {
+    isOpen: isCreateAlbumOpen,
+    onOpen: onCreateAlbumOpen,
+    onClose: onCreateAlbumClose,
+  } = useDisclosure();
+  const [genres, setGenres] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -45,6 +57,14 @@ function ArtistProfilePage() {
         {}
       );
       setArtistData(retdata);
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const data = await sendAuthorizedRequest('/genres', 'get', {});
+      console.log(data);
+      setGenres(data);
     })();
   }, []);
   return (
@@ -91,6 +111,9 @@ function ArtistProfilePage() {
             </TabList>
             <TabPanels>
               <TabPanel>
+                <Button colorScheme="teal" onClick={onCreateTrackOpen}>
+                  Create New Track
+                </Button>
                 {artistData.tracks?.length > 0 ? (
                   <Box>
                     <Stack spacing={2}>
@@ -102,6 +125,9 @@ function ArtistProfilePage() {
                 )}
               </TabPanel>
               <TabPanel>
+                <Button colorScheme="teal" onClick={onCreateAlbumOpen}>
+                  Create New Album
+                </Button>
                 {artistData.albums?.length > 0 ? (
                   <Box>
                     <Stack spacing={2}>
@@ -121,6 +147,12 @@ function ArtistProfilePage() {
         isOpen={isOpen}
         onClose={onClose}
       />
+      <CreateTrack
+        isOpen={isCreateTrackOpen}
+        onClose={onCreateTrackClose}
+        genres={genres}
+      />
+      <CreateAlbum isOpen={isCreateAlbumOpen} onClose={onCreateAlbumClose} />
     </>
   );
 }

@@ -21,7 +21,7 @@ export function AuthProvider({ children }) {
       title,
       description,
       status,
-      duration: 5000,
+      duration: 2000,
       isClosable: true,
       position: 'bottom-right',
     });
@@ -41,7 +41,7 @@ export function AuthProvider({ children }) {
       setIsAuthenticated(true);
       setCurrentUser(data);
     } catch (error) {
-      showToast('Error', error.response.data?.error, 'error');
+      // showToast('Error', error.response.data?.error, 'error');
       navigate('/');
     }
   };
@@ -76,6 +76,7 @@ export function AuthProvider({ children }) {
       setCurrentUser(null);
       Cookies.remove('token');
       localStorage.removeItem('user');
+      localStorage.removeItem('audioPlayerQueue');
       showToast('Success', 'Logged out successfully', 'success');
     } catch (error) {
       showToast('Error', error.response.data?.error, 'error');
@@ -105,8 +106,12 @@ export function AuthProvider({ children }) {
       });
       return response.data;
     } catch (error) {
-      console.log(error)
-      showToast('Error', error.response.data?.error, 'error');
+      console.log(error);
+      if (error.response.status === 401) {
+        showToast('Error', error.response.data?.error, 'error');
+        navigate('/');
+      }
+      // showToast('Error', error.response.data?.error, 'error');
       throw error;
     }
   };
