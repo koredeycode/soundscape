@@ -46,6 +46,7 @@ api_patterns = [
          AlbumTrackView.as_view(), name='album-track'),
     path('albums/<uuid:album_id>/tracks/<uuid:id>/',
          AlbumTrackView.as_view(), name='album-track'),
+    path('artists/', ArtistView.as_view(), name='artists'),
     path('artists/<uuid:id>/', ArtistView.as_view(), name='artist'),
     path('media/tracks/<uuid:id>', TrackMediaView.as_view(), name='track-media'),
     path('media/images/tracks/<uuid:id>/',

@@ -147,26 +147,29 @@ function App() {
       );
     });
 
-  return isAuthenticated ? (
-    <AudioPlayerProvider>
-      <Box>
-        <Box bg={bg}>
-          <SidebarContent display={{ base: 'none', md: 'block' }} />
-          {/* mobilenav */}
-          <NavBar />
-          <Box ml={{ base: 0, md: 60 }} p="4">
-            <Routes>
-              {getUserRoutes()}
-              {currentUser?.is_artist ? getArtistRoutes() : null}
-              <Route path="*" element={<Navigate to="/dashboard" />} />
-            </Routes>
+  if (isAuthenticated) {
+    return (
+      <AudioPlayerProvider>
+        <Box>
+          <Box bg={bg}>
+            <SidebarContent display={{ base: 'none', md: 'block' }} />
+            {/* mobilenav */}
+            <NavBar />
+            <Box ml={{ base: 0, md: 60 }} p="4">
+              <Routes>
+                {getUserRoutes()}
+                {currentUser?.is_artist ? getArtistRoutes() : null}
+                <Route path="*" element={<Navigate to="/dashboard" />} />
+              </Routes>
+            </Box>
           </Box>
+          <MusicPlayer />
+          <FootContent />
         </Box>
-        <MusicPlayer />
-        <FootContent />
-      </Box>
-    </AudioPlayerProvider>
-  ) : (
+      </AudioPlayerProvider>
+    );
+  }
+  return (
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/register" element={<Register />} />

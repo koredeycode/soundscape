@@ -23,7 +23,7 @@ class ArtistView(View):
             track).data for track in self.get_tracks(artist_id=id)]
         return JsonResponse({"artist": artist, "tracks": tracks, "albums": albums})
 
-    @method_decorator(artist_required)
+    @method_decorator(user_required)
     def post(self, request, id=None):
         """
         artists/
@@ -35,7 +35,7 @@ class ArtistView(View):
             data['profile_image'] = image
         if id:
             artist = request.user.artist
-            if artist.id != id:
+            if not artist or artist.id != id:
                 return JsonResponse({"error": "You don't have permission to edit this artist profile"}, status=403)
             serializer = ArtistSerializer(instance=artist, data=data)
             serializer.save()
@@ -43,6 +43,7 @@ class ArtistView(View):
                 return JsonResponse(serializer.errors, status=400)
             return JsonResponse(serializer.data, status=200)
         else:
+            data['user_id'] = request.user.id
             serializer = ArtistSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
@@ -58,7 +59,7 @@ class ArtistView(View):
         artists/id
         """
         artist = request.user.artist
-        if artist.id != id:
+        if not artist or artist.id != id:
             return JsonResponse({"error": "You don't have permission to edit this artist profile"}, status=403)
         artist.delete()
         return JsonResponse({}, status=204)
