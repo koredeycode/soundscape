@@ -82,6 +82,11 @@ class AlbumView(View):
         if album:
             if album.artist.id != request.user.artist.id:
                 return JsonResponse({"error": "You don't have permission to delete this album"}, status=403)
+            cover_image = album.cover_image
+            if not cover_image.name.endswith('default.jpg'):
+                cover_image.delete()
+            for track in album.albumtrack_set.all():
+                track.audio_file.delete()
             album.delete()
             return JsonResponse({}, status=204)
         return JsonResponse({"error": "Album not found"}, status=404)
