@@ -68,11 +68,11 @@ function MusicPlayer() {
   } = useAudioPlayerContext();
   return (
     <Box
-      bg={useColorModeValue('gray.50', 'gray.900')}
-      color={useColorModeValue('gray.700', 'gray.200')}
+      bg={{ base: 'blue.300', md: 'blue.400' }}
+      color={useColorModeValue('white', 'gray.200')}
       pos="fixed"
-      bottom={{ base: '65px', md: '0px' }}
-      p="5"
+      bottom={{ base: '63px', md: '0px' }}
+      p={{ base: '2', md: '5' }}
       w="100%"
     >
       <Stack
@@ -85,6 +85,7 @@ function MusicPlayer() {
           flexGrow="1"
           gap="1rem"
           display={{ base: 'none', md: 'flex' }}
+          alignItems="center"
         >
           <Square>
             <Image
@@ -102,7 +103,7 @@ function MusicPlayer() {
               {queue[currentIndex].artist.name}
             </Text>
             <Text fontSize="sm" fontWeight="thin">
-              Ft other artists name
+              {queue[currentIndex]?.featured_artists?.join(', ')}
             </Text>
           </VStack>
         </Stack>
@@ -112,7 +113,7 @@ function MusicPlayer() {
             <Slider
               aria-label="slider-ex-1"
               value={audioProgress ? audioProgress : 0}
-              colorScheme="gray"
+              colorScheme="white"
               onChange={handleSliderChange}
               focusThumbOnChange={false}
             >
@@ -194,7 +195,7 @@ function MusicPlayer() {
             min={0}
             max={1}
             step={0.1}
-            colorScheme="gray"
+            colorScheme="white"
             onChange={value => {
               audioRef.current.volume = value;
               setVolume(value);

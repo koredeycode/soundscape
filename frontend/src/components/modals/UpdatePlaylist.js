@@ -21,7 +21,7 @@ function UpdatePlaylist({ isOpen, onClose, playlist }) {
   const [formData, setFormData] = useState({
     title: '',
   });
-  const { sendAuthorizedRequest } = useAuth();
+  const { sendAuthorizedRequest, showToast } = useAuth();
 
   useEffect(() => {
     console.log('rec', playlist);
@@ -40,13 +40,18 @@ function UpdatePlaylist({ isOpen, onClose, playlist }) {
   };
 
   const handleUpdate = async () => {
-    // Send a POST request to the selected playlist endpoint with the track_id
-    await sendAuthorizedRequest(
-      `/user_playlists/${playlist.id}`,
-      'put',
-      formData
-    );
-    onClose();
+    try {
+      await sendAuthorizedRequest(
+        `/user_playlists/${playlist.id}`,
+        'put',
+        formData
+      );
+      onClose();
+
+      showToast('Success', 'Playlist Updated', 'success');
+    } catch (error) {
+      showToast('Error', error.response.data?.error, 'error');
+    }
   };
 
   return (
@@ -70,7 +75,7 @@ function UpdatePlaylist({ isOpen, onClose, playlist }) {
           </VStack>
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="teal" onClick={handleUpdate}>
+          <Button colorScheme="blue" onClick={handleUpdate}>
             Update
           </Button>
           <Button variant="ghost" onClick={onClose}>

@@ -24,7 +24,7 @@ function CreateAlbum({ isOpen, onClose }) {
     description: '',
     // cover_image: '',
   });
-  const { sendAuthorizedRequest } = useAuth();
+  const { sendAuthorizedRequest, showToast } = useAuth();
   const navigate = useNavigate();
 
   const handleInputChange = e => {
@@ -57,17 +57,22 @@ function CreateAlbum({ isOpen, onClose }) {
     if (formData.cover_image) {
       subformData.append('cover_image', formData.cover_image);
     }
-    console.log(subformData);
-    const response = await sendAuthorizedRequest(
-      '/albums',
-      'post',
-      subformData,
-      {
-        'Content-Type': 'multipart/form-data',
-      }
-    );
-    onClose();
-    navigate(`/artist-albums/${response.id}`);
+
+    try {
+      const response = await sendAuthorizedRequest(
+        '/albums',
+        'post',
+        subformData,
+        {
+          'Content-Type': 'multipart/form-data',
+        }
+      );
+      onClose();
+      showToast('Success', 'Album Created', 'success');
+      navigate(`/artist-albums/${response.id}`);
+    } catch (error) {
+      showToast('Error', error.response.data?.error, 'error');
+    }
   };
 
   return (
@@ -109,7 +114,7 @@ function CreateAlbum({ isOpen, onClose }) {
             </VStack>
           </ModalBody>
           <ModalFooter>
-            <Button type="submit" colorScheme="teal">
+            <Button type="submit" colorScheme="blue">
               Create
             </Button>
             <Button variant="ghost" onClick={onClose}>

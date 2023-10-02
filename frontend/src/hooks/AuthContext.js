@@ -109,7 +109,7 @@ export function AuthProvider({ children }) {
       console.log(error);
       if (error.response.status === 401) {
         showToast('Error', error.response.data?.error, 'error');
-        navigate('/');
+        setIsAuthenticated(false);
       }
       // showToast('Error', error.response.data?.error, 'error');
       throw error;

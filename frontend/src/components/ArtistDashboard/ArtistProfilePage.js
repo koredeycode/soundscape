@@ -32,7 +32,7 @@ import CreateTrack from '../modals/Artist/CreateTrack';
 const editIcon = <Icon as={FaEdit} w="1.5em" h="1.5em" />;
 
 function ArtistProfilePage() {
-  const { sendAuthorizedRequest } = useAuth();
+  const { sendAuthorizedRequest, showToast } = useAuth();
   const [artistData, setArtistData] = useState({});
   const { isOpen, onClose, onOpen } = useDisclosure();
   const {
@@ -49,14 +49,19 @@ function ArtistProfilePage() {
 
   useEffect(() => {
     (async () => {
-      const data = await sendAuthorizedRequest('/isartist', 'get', {});
-      console.log(data.id);
-      const retdata = await sendAuthorizedRequest(
-        `/artists/${data.id}`,
-        'get',
-        {}
-      );
-      setArtistData(retdata);
+      try {
+        const data = await sendAuthorizedRequest('/isartist', 'get', {});
+
+        const retdata = await sendAuthorizedRequest(
+          `/artists/${data.id}`,
+          'get',
+          {}
+        );
+        setArtistData(retdata);
+      } catch (error) {
+        showToast('Error', error.response.data?.error, 'error');
+        return;
+      }
     })();
   }, []);
 
@@ -111,7 +116,7 @@ function ArtistProfilePage() {
             </TabList>
             <TabPanels>
               <TabPanel>
-                <Button colorScheme="teal" onClick={onCreateTrackOpen}>
+                <Button colorScheme="blue" onClick={onCreateTrackOpen}>
                   Create New Track
                 </Button>
                 {artistData.tracks?.length > 0 ? (
@@ -125,7 +130,7 @@ function ArtistProfilePage() {
                 )}
               </TabPanel>
               <TabPanel>
-                <Button colorScheme="teal" onClick={onCreateAlbumOpen}>
+                <Button colorScheme="blue" onClick={onCreateAlbumOpen}>
                   Create New Album
                 </Button>
                 {artistData.albums?.length > 0 ? (

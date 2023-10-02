@@ -20,7 +20,7 @@ function CreatePlaylist({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
     title: '',
   });
-  const { sendAuthorizedRequest } = useAuth();
+  const { sendAuthorizedRequest, showToast } = useAuth();
   const navigate = useNavigate();
 
   const handleInputChange = e => {
@@ -33,14 +33,18 @@ function CreatePlaylist({ isOpen, onClose }) {
 
   const handleCreate = async () => {
     // Send a POST request to the selected playlist endpoint with the track_id
-    const response = await sendAuthorizedRequest(
-      '/user_playlists',
-      'post',
-      formData
-    );
-    console.log(response);
-    onClose();
-    navigate(`/playlists/${response.id}`);
+    try {
+      const response = await sendAuthorizedRequest(
+        '/user_playlists',
+        'post',
+        formData
+      );
+      showToast('Success', 'Playlist Created', 'success');
+      onClose();
+      navigate(`/playlists/${response.id}`);
+    } catch (error) {
+      showToast('Error', error.response.data?.error, 'error');
+    }
   };
 
   return (
@@ -64,7 +68,7 @@ function CreatePlaylist({ isOpen, onClose }) {
           </VStack>
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="teal" onClick={handleCreate}>
+          <Button colorScheme="blue" onClick={handleCreate}>
             Create
           </Button>
           <Button variant="ghost" onClick={onClose}>

@@ -23,21 +23,18 @@ function SearchPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const { sendAuthorizedRequest } = useAuth();
+  const { sendAuthorizedRequest, showToast } = useAuth();
 
   const handleSubmit = async e => {
     e.preventDefault();
     setIsLoading(true);
-
     try {
       const data = await sendAuthorizedRequest('/search', 'post', {
         search: searchTerm,
       });
-      console.log(data);
-
       setSearchResults(data);
     } catch (error) {
-      console.error('Error fetching search results:', error);
+      showToast('Error', error.response.data?.error, 'error');
     } finally {
       setIsLoading(false);
     }
@@ -72,9 +69,9 @@ function SearchPage() {
         </Text>
         <Tabs align="center">
           <TabList>
-            <Tab>Tracks</Tab>
-            <Tab>Artists</Tab>
-            <Tab>Albums</Tab>
+            <Tab>Tracks({searchResults.tracks?.length ?? 0})</Tab>
+            <Tab>Artists({searchResults.artists?.length ?? 0})</Tab>
+            <Tab>Albums({searchResults.albums?.length ?? 0})</Tab>
           </TabList>
 
           <TabPanels>

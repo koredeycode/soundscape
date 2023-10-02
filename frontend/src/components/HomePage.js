@@ -1,11 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Box,
-  Link as ChakraLink,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Link as ChakraLink, Stack, Text } from '@chakra-ui/react';
 
 function HomePage() {
   return (
@@ -14,7 +9,8 @@ function HomePage() {
         <Stack
           flexDirection="row"
           justifyContent="space-between"
-          bg="gray.200"
+          bg="blue.400"
+          color="white"
           py="4"
           px="4"
         >
@@ -24,10 +20,10 @@ function HomePage() {
             </Text>
           </Box>
           <Stack flexDirection="row">
-            <ChakraLink as={Link} to="/login" color="blue.500" fontSize="lg">
+            <ChakraLink as={Link} to="/login" fontSize="lg">
               Login
             </ChakraLink>
-            <ChakraLink as={Link} to="/register" color="blue.500" fontSize="lg">
+            <ChakraLink as={Link} to="/register" fontSize="lg">
               Register
             </ChakraLink>
           </Stack>

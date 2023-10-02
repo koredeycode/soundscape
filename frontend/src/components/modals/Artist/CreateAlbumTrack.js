@@ -26,7 +26,7 @@ function CreateAlbumTrack({ isOpen, onClose, genres }) {
     description: '',
     // cover_image: '',
   });
-  const { sendAuthorizedRequest } = useAuth();
+  const { sendAuthorizedRequest, showToast } = useAuth();
   const { album_id } = useParams();
 
   const handleInputChange = e => {
@@ -50,7 +50,6 @@ function CreateAlbumTrack({ isOpen, onClose, genres }) {
     // Send a POST request to the selected playlist endpoint with the track_id
     const subformData = new FormData();
 
-    console.log(formData);
     // Append form fields to the FormData object
     subformData.append('title', formData.title);
     subformData.append('genre_id', formData.genre_id);
@@ -61,17 +60,21 @@ function CreateAlbumTrack({ isOpen, onClose, genres }) {
       subformData.append('audio_file', formData.audio_file);
     }
 
-    console.log(subformData);
-    await sendAuthorizedRequest(
-      `/albums/${album_id}/tracks`,
-      'post',
-      subformData,
-      {
-        'Content-Type': 'multipart/form-data',
-      }
-    );
+    try {
+      await sendAuthorizedRequest(
+        `/albums/${album_id}/tracks`,
+        'post',
+        subformData,
+        {
+          'Content-Type': 'multipart/form-data',
+        }
+      );
+
+      showToast('Success', 'Track Added to Album', 'success');
+    } catch (error) {
+      showToast('Error', error.response.data?.error, 'error');
+    }
     onClose();
-    // window.location.reload();
   };
 
   return (
@@ -129,7 +132,7 @@ function CreateAlbumTrack({ isOpen, onClose, genres }) {
             </VStack>
           </ModalBody>
           <ModalFooter>
-            <Button type="submit" colorScheme="teal">
+            <Button type="submit" colorScheme="blue">
               Create
             </Button>
             <Button variant="ghost" onClick={onClose}>

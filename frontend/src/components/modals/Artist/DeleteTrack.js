@@ -18,11 +18,15 @@ import {
 import { useAuth } from '../../../hooks/AuthContext';
 
 function DeleteTrack({ isOpen, onClose, track }) {
-  const { sendAuthorizedRequest } = useAuth();
+  const { sendAuthorizedRequest, showToast } = useAuth();
 
   const handleDelete = async () => {
-    // Send a POST request to the selected track endpoint with the track_id
-    await sendAuthorizedRequest(`/tracks/${track.id}`, 'delete', {});
+    try {
+      await sendAuthorizedRequest(`/tracks/${track.id}`, 'delete', {});
+      showToast('Success', 'Track Deleted', 'success');
+    } catch (error) {
+      showToast('Error', error.response.data?.error, 'error');
+    }
     onClose();
   };
 

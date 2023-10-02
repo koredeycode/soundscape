@@ -37,21 +37,24 @@ export default function AlbumTrackList({ tracks }) {
     onOpen: onCreateAlbumTrackOpen,
     onClose: onCreateAlbumTrackClose,
   } = useDisclosure();
-  const { sendAuthorizedRequest } = useAuth();
+  const { sendAuthorizedRequest, showToast } = useAuth();
   const [genres, setGenres] = useState([]);
 
   useEffect(() => {
     (async () => {
-      const data = await sendAuthorizedRequest('/genres', 'get', {});
-      console.log(data);
-      setGenres(data);
+      try {
+        const data = await sendAuthorizedRequest('/genres', 'get', {});
+        setGenres(data);
+      } catch (error) {
+        showToast('Error', error.response.data?.error, 'error');
+      }
     })();
   }, []);
 
   return (
     <>
       <VStack align="start" spacing={4}>
-        <Button colorScheme="teal" onClick={onCreateAlbumTrackOpen}>
+        <Button colorScheme="blue" onClick={onCreateAlbumTrackOpen}>
           Create New Track
         </Button>
         {tracks.map((track, idx) => (

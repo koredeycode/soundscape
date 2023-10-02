@@ -1,13 +1,15 @@
 # serializers.py
 from api.models import Genre
+from api.serializers.track import TrackSerializer
 
 
 class GenreSerializer:
-    def __init__(self, instance=None, data=None):
+    def __init__(self, instance=None, data=None, full=False):
         self.instance = instance
         self.validated_data = data
         self.errors = {}
         self.required_fields = ['name']
+        self.full = full
 
     def is_valid(self):
         if not self.validated_data:
@@ -51,4 +53,7 @@ class GenreSerializer:
             'id': str(self.instance.id),
             'name': str(self.instance.name),
         }
+        if self.full:
+            serialized_data['tracks'] = [TrackSerializer(
+                track).data for track in self.instance.track_set.all()]
         return serialized_data

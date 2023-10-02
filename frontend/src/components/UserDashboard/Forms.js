@@ -79,7 +79,7 @@ function UploadForm() {
           />
           <FormHelperText>Upload an MP3 audio file.</FormHelperText>
         </FormControl>
-        <Button type="submit" colorScheme="teal">
+        <Button type="submit" colorScheme="blue">
           Upload
         </Button>
       </form>

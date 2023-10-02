@@ -8,7 +8,7 @@ import DeleteAlbum from '../modals/Artist/DeleteAlbum';
 
 export default function ArtistAlbum() {
   const { album_id } = useParams();
-  const { sendAuthorizedRequest } = useAuth();
+  const { sendAuthorizedRequest, showToast } = useAuth();
   const [albumData, setAlbumData] = useState(null);
   const {
     isOpen: isUpdateAlbumOpen,
@@ -24,13 +24,16 @@ export default function ArtistAlbum() {
 
   useEffect(() => {
     (async () => {
-      const data = await sendAuthorizedRequest(
-        `/albums/${album_id}`,
-        'get',
-        {}
-      );
-      console.log(data);
-      setAlbumData(data);
+      try {
+        const data = await sendAuthorizedRequest(
+          `/albums/${album_id}`,
+          'get',
+          {}
+        );
+        setAlbumData(data);
+      } catch (error) {
+        showToast('Error', error.response.data?.error, 'error');
+      }
     })();
   }, []);
 
@@ -48,10 +51,10 @@ export default function ArtistAlbum() {
           h="200px"
           objectFit="cover"
         />
-        <Button colorScheme="teal" onClick={onUpdateAlbumOpen}>
+        <Button colorScheme="blue" onClick={onUpdateAlbumOpen}>
           Update Album
         </Button>
-        <Button colorScheme="teal" onClick={onDeleteAlbumOpen}>
+        <Button colorScheme="blue" onClick={onDeleteAlbumOpen}>
           Delete Album
         </Button>
         <AlbumTrackList tracks={albumData.tracks} />

@@ -4,11 +4,11 @@ import json
 from api.models import Genre
 from api.serializers import GenreSerializer
 from django.utils.decorators import method_decorator
-from api.auth import user_required, artist_required, admin_required
+from api.auth import user_required, admin_required
 
 
 class GenreView(View):
-    # @method_decorator(artist_required)
+    @method_decorator(user_required)
     def get(self, request, id=None):
         """
         genres/

@@ -68,7 +68,7 @@ export const AudioPlayerProvider = ({ children }) => {
     return () => {
       audio.removeEventListener('ended', handleAudioEnd);
     };
-  }, [currentIndex]);
+  }, [queue, currentIndex]);
 
   // useEffect(() => {
   //   console.log('use effect 3');

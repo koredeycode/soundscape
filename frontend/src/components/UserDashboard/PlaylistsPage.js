@@ -15,15 +15,19 @@ import CreatePlaylist from '../modals/CreatePlaylist';
 function PlaylistsPage() {
   const [playlists, setPlaylists] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { sendAuthorizedRequest } = useAuth();
+  const { sendAuthorizedRequest, showToast } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     // Simulate an API request to fetch playlists (replace with actual API call)
     setIsLoading(true);
     (async () => {
-      const data = await sendAuthorizedRequest('/user_playlists', 'get', {});
-      setPlaylists(data);
+      try {
+        const data = await sendAuthorizedRequest('/user_playlists', 'get', {});
+        setPlaylists(data);
+      } catch (error) {
+        showToast('Error', error.response.data?.error, 'error');
+      }
       setIsLoading(false);
     })();
 
@@ -36,7 +40,7 @@ function PlaylistsPage() {
         <Text fontSize="2xl" fontWeight="bold" mb={4}>
           My Playlists
         </Text>
-        <Button colorScheme="teal" onClick={onOpen}>
+        <Button colorScheme="blue" onClick={onOpen}>
           Create Playlist
         </Button>
       </HStack>

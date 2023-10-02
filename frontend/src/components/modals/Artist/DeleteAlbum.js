@@ -13,14 +13,19 @@ import { useAuth } from '../../../hooks/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 function DeleteTrack({ isOpen, onClose, album }) {
-  const { sendAuthorizedRequest } = useAuth();
+  const { sendAuthorizedRequest, showToast } = useAuth();
   const navigate = useNavigate();
 
   const handleDelete = async () => {
-    // Send a POST request to the selected album endpoint with the album_id
-    await sendAuthorizedRequest(`/albums/${album.id}`, 'delete', {});
-    onClose();
-    navigate('/artist-profile');
+    try {
+      await sendAuthorizedRequest(`/albums/${album.id}`, 'delete', {});
+      onClose();
+      navigate('/artist-profile');
+
+      showToast('Success', 'Album Deleted!', 'success');
+    } catch (error) {
+      showToast('Error', error.response.data?.error, 'error');
+    }
   };
 
   return (

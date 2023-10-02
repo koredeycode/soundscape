@@ -26,7 +26,7 @@ function UpdateTrack({ isOpen, onClose, track, genres }) {
     description: '',
     // cover_image: '',
   });
-  const { sendAuthorizedRequest } = useAuth();
+  const { sendAuthorizedRequest, showToast } = useAuth();
 
   useEffect(() => {
     const prevData = {
@@ -60,12 +60,11 @@ function UpdateTrack({ isOpen, onClose, track, genres }) {
     // Send a POST request to the selected playlist endpoint with the track_id
     const subformData = new FormData();
 
-    console.log(updateFormData);
     // Append form fields to the FormData object
     // console.log(Boolean(formData.title));
     // if (formData.title) {
     subformData.append('title', updateFormData.title);
-    console.log(subformData);
+
     // }
     // if (formData.genre_id) {
     subformData.append('genre_id', updateFormData.genre_id);
@@ -81,10 +80,14 @@ function UpdateTrack({ isOpen, onClose, track, genres }) {
     if (updateFormData.cover_image) {
       subformData.append('cover_image', updateFormData.cover_image);
     }
-    console.log(subformData);
-    await sendAuthorizedRequest(`/tracks/${track.id}`, 'post', subformData, {
-      'Content-Type': 'multipart/form-data',
-    });
+    try {
+      await sendAuthorizedRequest(`/tracks/${track.id}`, 'post', subformData, {
+        'Content-Type': 'multipart/form-data',
+      });
+      showToast('Success', 'Trackk updated', 'success');
+    } catch (error) {
+      showToast('Error', error.response.data?.error, 'error');
+    }
     onClose();
     // window.location.reload();
   };
@@ -151,7 +154,7 @@ function UpdateTrack({ isOpen, onClose, track, genres }) {
             </VStack>
           </ModalBody>
           <ModalFooter>
-            <Button type="submit" colorScheme="teal">
+            <Button type="submit" colorScheme="blue">
               Update
             </Button>
             <Button variant="ghost" onClick={onClose}>

@@ -12,13 +12,20 @@ import {
 import { useAuth } from '../../hooks/AuthContext';
 
 function DeletePlaylist({ isOpen, onClose, playlist }) {
-  const { sendAuthorizedRequest } = useAuth();
+  const { sendAuthorizedRequest, showToast } = useAuth();
 
   const handleDelete = async () => {
-    // Send a POST request to the selected playlist endpoint with the track_id
-    await sendAuthorizedRequest(`/user_playlists/${playlist.id}`, 'delete', {});
-    onClose();
-    // window.location.reload();
+    try {
+      await sendAuthorizedRequest(
+        `/user_playlists/${playlist.id}`,
+        'delete',
+        {}
+      );
+      onClose();
+      showToast('Success', 'Playlist Deleted!', 'success');
+    } catch (error) {
+      showToast('Error', error.response.data?.error, 'error');
+    }
   };
 
   return (

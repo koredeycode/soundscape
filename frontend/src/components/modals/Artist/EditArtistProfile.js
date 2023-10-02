@@ -24,7 +24,7 @@ const EditArtistProfile = ({ artist, isOpen, onClose }) => {
     bio: '',
     // profile_image: null,
   });
-  const { sendAuthorizedRequest } = useAuth();
+  const { sendAuthorizedRequest, showToast } = useAuth();
 
   useEffect(() => {
     const prevData = {
@@ -58,7 +58,6 @@ const EditArtistProfile = ({ artist, isOpen, onClose }) => {
     // Send a POST request to the selected playlist endpoint with the track_id
     const subformData = new FormData();
 
-    console.log(formData);
     // Append form fields to the FormData object
     subformData.append('name', formData.name);
     subformData.append('bio', formData.bio);
@@ -66,12 +65,22 @@ const EditArtistProfile = ({ artist, isOpen, onClose }) => {
     if (formData.profile_image) {
       subformData.append('profile_image', formData.profile_image);
     }
-    console.log(subformData);
-    await sendAuthorizedRequest(`/artists/${artist.id}`, 'post', subformData, {
-      'Content-Type': 'multipart/form-data',
-    });
+    try {
+      await sendAuthorizedRequest(
+        `/artists/${artist.id}`,
+        'post',
+        subformData,
+        {
+          'Content-Type': 'multipart/form-data',
+        }
+      );
+
+      showToast('Success', 'Profile updated', 'success');
+    } catch (error) {
+      showToast('Error', error.response.data?.error, 'error');
+    }
+
     onClose();
-    // window.location.reload();
   };
 
   return (
@@ -112,7 +121,7 @@ const EditArtistProfile = ({ artist, isOpen, onClose }) => {
             </VStack>
           </ModalBody>
           <ModalFooter>
-            <Button type="submit" colorScheme="teal">
+            <Button type="submit" colorScheme="blue">
               Edit
             </Button>
             <Button variant="ghost" onClick={onClose}>

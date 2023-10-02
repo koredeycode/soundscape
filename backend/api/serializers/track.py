@@ -1,7 +1,6 @@
 # serializers.py
 from api.models import Track, SingleTrack, AlbumTrack
 from api.serializers.artist import ArtistSerializer
-from api.serializers.genre import GenreSerializer
 
 from django.conf import settings
 

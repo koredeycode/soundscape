@@ -30,14 +30,17 @@ export default function TrackList({ tracks }) {
     onOpen: onUpdateTrackOpen,
     onClose: onUpdateTrackClose,
   } = useDisclosure();
-  const { sendAuthorizedRequest } = useAuth();
+  const { sendAuthorizedRequest, showToast } = useAuth();
   const [genres, setGenres] = useState([]);
 
   useEffect(() => {
     (async () => {
-      const data = await sendAuthorizedRequest('/genres', 'get', {});
-      console.log(data);
-      setGenres(data);
+      try {
+        const data = await sendAuthorizedRequest('/genres', 'get', {});
+        setGenres(data);
+      } catch (error) {
+        showToast('Error', error.response.data?.error, 'error');
+      }
     })();
   }, []);
 

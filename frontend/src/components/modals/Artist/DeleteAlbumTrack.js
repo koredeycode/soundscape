@@ -19,16 +19,20 @@ import { useAuth } from '../../../hooks/AuthContext';
 import { useParams } from 'react-router-dom';
 
 function DeleteAlbumTrack({ isOpen, onClose, track }) {
-  const { sendAuthorizedRequest } = useAuth();
+  const { sendAuthorizedRequest, showToast } = useAuth();
   const { album_id } = useParams();
 
   const handleDelete = async () => {
-    // Send a POST request to the selected track endpoint with the track_id
-    await sendAuthorizedRequest(
-      `/albums/${album_id}/tracks/${track.id}`,
-      'delete',
-      {}
-    );
+    try {
+      await sendAuthorizedRequest(
+        `/albums/${album_id}/tracks/${track.id}`,
+        'delete',
+        {}
+      );
+      showToast('Success', 'Track deleted from album', 'success');
+    } catch (error) {
+      showToast('Error', error.response.data?.error, 'error');
+    }
     onClose();
   };
 

@@ -19,7 +19,7 @@ class TrackMediaView(View):
             response['Accept-Ranges'] = 'bytes'
             return response
         except Track.DoesNotExist:
-            return JsonResponse({'error': 'File not found'})
+            return JsonResponse({'error': 'File not found'}, status=400)
 
 
 class TrackCoverMediaView(View):
@@ -32,7 +32,7 @@ class TrackCoverMediaView(View):
             track = Track.objects.get(id=id)
             return FileResponse(track.image_file)
         except Track.DoesNotExist:
-            return JsonResponse({'error': 'File not found'})
+            return JsonResponse({'error': 'File not found'}, status=400)
 
 
 class AlbumCoverMediaView(View):
@@ -45,7 +45,7 @@ class AlbumCoverMediaView(View):
             album = Album.objects.get(id=id)
             return FileResponse(album.cover_image)
         except Album.DoesNotExist:
-            return JsonResponse({'error': 'File not found'})
+            return JsonResponse({'error': 'File not found'}, status=400)
 
 
 class ArtistProfileMediaView(View):
@@ -58,4 +58,4 @@ class ArtistProfileMediaView(View):
             artist = Artist.objects.get(id=id)
             return FileResponse(artist.profile_image)
         except Artist.DoesNotExist:
-            return JsonResponse({'error': 'File not found'})
+            return JsonResponse({'error': 'File not found'}, status=400)

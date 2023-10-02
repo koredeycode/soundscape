@@ -26,19 +26,22 @@ import {
 import { useParams } from 'react-router-dom';
 
 function ArtistPage() {
-  const { sendAuthorizedRequest } = useAuth();
+  const { sendAuthorizedRequest, showToast } = useAuth();
   const [artistData, setArtistData] = useState({});
   const { artist_id } = useParams();
 
   useEffect(() => {
     (async () => {
-      const data = await sendAuthorizedRequest(
-        `/artists/${artist_id}`,
-        'get',
-        {}
-      );
-      console.log(data);
-      setArtistData(data);
+      try {
+        const data = await sendAuthorizedRequest(
+          `/artists/${artist_id}`,
+          'get',
+          {}
+        );
+        setArtistData(data);
+      } catch (error) {
+        showToast('Error', error.response.data?.error, 'error');
+      }
     })();
   }, []);
   return (

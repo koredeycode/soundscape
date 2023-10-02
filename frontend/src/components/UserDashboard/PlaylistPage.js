@@ -5,18 +5,22 @@ import TrackList from '../lists/TrackList';
 import { useParams } from 'react-router-dom';
 
 function PlaylistPage() {
-  const { sendAuthorizedRequest } = useAuth();
+  const { sendAuthorizedRequest, showToast } = useAuth();
   const [playlistData, setPlayListData] = useState(null);
   const { playlist_id } = useParams();
   useEffect(() => {
     (async () => {
-      const data = await sendAuthorizedRequest(
-        `/user_playlists/${playlist_id}`,
-        'get',
-        {}
-      );
-      console.log(data);
-      setPlayListData(data);
+      try {
+        const data = await sendAuthorizedRequest(
+          `/user_playlists/${playlist_id}`,
+          'get',
+          {}
+        );
+
+        setPlayListData(data);
+      } catch (error) {
+        showToast('Error', error.response.data?.error, 'error');
+      }
     })();
   }, []);
   return (

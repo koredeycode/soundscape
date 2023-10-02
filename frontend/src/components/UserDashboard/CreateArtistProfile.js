@@ -6,9 +6,10 @@ import {
   Input,
   VStack,
   Textarea,
+  Box,
 } from '@chakra-ui/react';
 import { useAuth } from '../../hooks/AuthContext';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const CreateArtistProfile = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +17,7 @@ const CreateArtistProfile = () => {
     bio: '',
     // profile_image: null
   });
-  const { sendAuthorizedRequest } = useAuth();
+  const { sendAuthorizedRequest, showToast } = useAuth();
   const navigate = useNavigate();
 
   const handleInputChange = e => {
@@ -48,7 +49,6 @@ const CreateArtistProfile = () => {
     if (formData.profile_image) {
       subformData.append('profile_image', formData.profile_image);
     }
-    console.log(subformData);
     try {
       const response = await sendAuthorizedRequest(
         `/artists`,
@@ -58,47 +58,53 @@ const CreateArtistProfile = () => {
           'Content-Type': 'multipart/form-data',
         }
       );
+      showToast(
+        'Success',
+        'Artist profile created, refresh your browser',
+        'success'
+      );
+      navigate('/artist-profile');
     } catch (error) {
-      console.log(error);
+      showToast('Error', error.response.data?.error, 'error');
     }
-    // window.location.reload();
-    navigate('/artist-profile');
   };
 
   return (
-    <form id="editprofileform" onSubmit={handleCreate}>
-      <VStack spacing={4}>
-        <FormControl id="name" isRequired>
-          <FormLabel>Artist name</FormLabel>
-          <Input
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            type="text"
-          />
-        </FormControl>
-        <FormControl id="profile_image">
-          <FormLabel>Artist Profile Image</FormLabel>
-          <Input
-            name="profile_image"
-            onChange={handleInputChange}
-            type="file"
-            accept=".png, .jpg, .jpeg"
-          />
-        </FormControl>
-        <FormControl id="bio">
-          <FormLabel>Artist Bio</FormLabel>
-          <Textarea
-            name="bio"
-            value={formData.bio}
-            onChange={handleInputChange}
-          ></Textarea>
-        </FormControl>
-        <Button type="submit" colorScheme="teal">
-          Create Artist Profile
-        </Button>
-      </VStack>
-    </form>
+    <Box display="flex" justifyContent="center">
+      <form id="editprofileform" onSubmit={handleCreate}>
+        <VStack spacing={4}>
+          <FormControl id="name" isRequired>
+            <FormLabel>Artist name</FormLabel>
+            <Input
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              type="text"
+            />
+          </FormControl>
+          <FormControl id="profile_image">
+            <FormLabel>Artist Profile Image</FormLabel>
+            <Input
+              name="profile_image"
+              onChange={handleInputChange}
+              type="file"
+              accept=".png, .jpg, .jpeg"
+            />
+          </FormControl>
+          <FormControl id="bio">
+            <FormLabel>Artist Bio</FormLabel>
+            <Textarea
+              name="bio"
+              value={formData.bio}
+              onChange={handleInputChange}
+            ></Textarea>
+          </FormControl>
+          <Button type="submit" colorScheme="blue">
+            Create Artist Profile
+          </Button>
+        </VStack>
+      </form>
+    </Box>
   );
 };
 

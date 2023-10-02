@@ -71,7 +71,8 @@ export const FootContent = () => {
       justifyContent="space-around"
       py={{ base: 2, md: 4 }}
       alignItems="center"
-      bg={useColorModeValue('white', 'gray.900')}
+      bg={useColorModeValue('blue.400', 'gray.900')}
+      color="white"
       pos="fixed"
       bottom="0"
     >
@@ -117,7 +118,8 @@ export const SidebarContent = ({ ...rest }) => {
   return (
     <Box
       transition="3s ease"
-      bg={useColorModeValue('white', 'gray.900')}
+      bg={useColorModeValue('blue.400', 'gray.900')}
+      color="white"
       borderRight="1px"
       borderRightColor={useColorModeValue('gray.200', 'gray.700')}
       w={{ base: 'full', md: 60 }}
@@ -178,7 +180,7 @@ export const NavItem = ({ link, icon, isActive, onClick }) => {
         cursor="pointer"
         bg={{
           base: 'transparent',
-          md: `${isActive ? 'gray.100' : 'transparent'}`,
+          md: `${isActive ? 'blue.500' : 'transparent'}`,
         }}
         _hover={{
           textDecoration: 'none',
@@ -213,7 +215,8 @@ export const NavBar = ({ ...rest }) => {
       px={{ base: 4, md: 4 }}
       py={{ base: 2, md: 2 }}
       alignItems="center"
-      bg={useColorModeValue('white', 'gray.900')}
+      bg={useColorModeValue('blue.400', 'gray.900')}
+      color="white"
       borderBottomWidth="1px"
       borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
       justifyContent={{ base: 'space-between', md: 'flex-end' }}
@@ -237,6 +240,7 @@ export const NavBar = ({ ...rest }) => {
           variant="ghost"
           aria-label="open menu"
           icon={<FiBell />}
+          display="none"
         />
         <Flex alignItems={'center'}>
           <Menu>
@@ -246,19 +250,29 @@ export const NavBar = ({ ...rest }) => {
               _focus={{ boxShadow: 'none' }}
             >
               <HStack>
-                <Avatar size={'sm'} src={'https://via.placeholder.com/100'} />
+                {/* <Avatar size={'sm'} src={'https://via.placeholder.com/100'} /> */}
+                <Flex
+                  justifyContent="center"
+                  alignItems="center"
+                  w="2rem"
+                  h="2rem"
+                  bg="blue.300"
+                  color="white"
+                  borderRadius="full"
+                >
+                  <Text fontSize="xl" fontWeight="600">
+                    {user.first_name[0] ?? '?'}
+                  </Text>
+                </Flex>
                 <VStack
                   display={{ base: 'none', md: 'flex' }}
                   alignItems="flex-start"
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="sm">{`${user.first_name || 'Fname'} ${
-                    user.last_name || 'Lname'
+                  <Text fontSize="sm">{`${user.first_name || ''} ${
+                    user.last_name || ''
                   }`}</Text>
-                  <Text fontSize="xs" color="gray.600">
-                    User
-                  </Text>
                 </VStack>
                 <Box display={{ base: 'none', md: 'flex' }}>
                   <FiChevronDown />
@@ -273,6 +287,7 @@ export const NavBar = ({ ...rest }) => {
               <MenuItem>
                 <ChakraLink
                   as={Link}
+                  color="black"
                   to="/profile"
                   display="flex"
                   alignItems="center"
@@ -337,6 +352,7 @@ export const NavBar = ({ ...rest }) => {
                   stopAudio();
                   handleLogout();
                 }}
+                color="black"
               >
                 Sign out
               </MenuItem>

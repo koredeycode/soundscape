@@ -50,7 +50,7 @@ export default function PlaylistList({ playlists }) {
           </HStack>
           <HStack>
             <Button
-              colorScheme="teal"
+              colorScheme="blue"
               onClick={() => {
                 setSelectedPlaylist(playlist);
                 onOpenUpdateModal();

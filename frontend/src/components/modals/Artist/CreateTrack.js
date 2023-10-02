@@ -25,7 +25,7 @@ function CreateTrack({ isOpen, onClose, genres }) {
     description: '',
     // cover_image: '',
   });
-  const { sendAuthorizedRequest } = useAuth();
+  const { sendAuthorizedRequest, showToast } = useAuth();
 
   const handleInputChange = e => {
     const { name, value, type } = e.target;
@@ -62,11 +62,15 @@ function CreateTrack({ isOpen, onClose, genres }) {
       subformData.append('cover_image', formData.cover_image);
     }
     console.log(subformData);
-    await sendAuthorizedRequest('/tracks', 'post', subformData, {
-      'Content-Type': 'multipart/form-data',
-    });
+    try {
+      await sendAuthorizedRequest('/tracks', 'post', subformData, {
+        'Content-Type': 'multipart/form-data',
+      });
+      showToast('Success', 'Track Created!', 'success');
+    } catch (error) {
+      showToast('Error', error.response.data?.error, 'error');
+    }
     onClose();
-    // window.location.reload();
   };
 
   return (
@@ -133,7 +137,7 @@ function CreateTrack({ isOpen, onClose, genres }) {
             </VStack>
           </ModalBody>
           <ModalFooter>
-            <Button type="submit" colorScheme="teal">
+            <Button type="submit" colorScheme="blue">
               Create
             </Button>
             <Button variant="ghost" onClick={onClose}>

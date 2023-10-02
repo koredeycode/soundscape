@@ -15,6 +15,10 @@ import ProfilePage from './components/UserDashboard/ProfilePage';
 import ArtistPage from './components/UserDashboard/ArtistPage';
 import AlbumPage from './components/UserDashboard/AlbumPage';
 import TrackPage from './components/UserDashboard/TrackPage';
+import GenrePage from './components/UserDashboard/GenrePage';
+import RecentPlay from './components/UserDashboard/RecentPlay';
+
+import './App.css';
 import {
   FootContent,
   SidebarContent,
@@ -27,7 +31,7 @@ import CreateArtistProfile from './components/UserDashboard/CreateArtistProfile'
 
 function App() {
   const { isAuthenticated, isLoading, currentUser } = useAuth();
-  const bg = useColorModeValue('white', 'gray.900');
+  const bg = useColorModeValue('white', 'blue.900');
 
   if (isLoading) {
     return (
@@ -106,6 +110,18 @@ function App() {
       route: '/become-artist',
       component: <CreateArtistProfile />,
     },
+    {
+      name: 'Recent-play',
+      key: 'recent',
+      route: '/recent-play',
+      component: <RecentPlay />,
+    },
+    {
+      name: 'Genre',
+      key: 'genre',
+      route: '/genres/:genre_id',
+      component: <GenrePage />,
+    },
   ];
 
   const artistRoutes = [
@@ -150,12 +166,12 @@ function App() {
   if (isAuthenticated) {
     return (
       <AudioPlayerProvider>
-        <Box>
-          <Box bg={bg}>
+        <Box bg="gray.50" h="100vh">
+          <Box>
             <SidebarContent display={{ base: 'none', md: 'block' }} />
             {/* mobilenav */}
             <NavBar />
-            <Box ml={{ base: 0, md: 60 }} p="4">
+            <Box ml={{ base: 0, md: 60 }} p="4" maxH="73vh" overflowY="scroll">
               <Routes>
                 {getUserRoutes()}
                 {currentUser?.is_artist ? getArtistRoutes() : null}

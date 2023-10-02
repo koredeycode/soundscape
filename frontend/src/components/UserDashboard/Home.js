@@ -13,41 +13,56 @@ import {
   VStack,
   HStack,
   Heading,
+  Stack,
 } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../../hooks/AuthContext';
 
-const data = {
-  name: 'The Beatles',
-  imageURL:
-    'http://localhost:8000/media/images/tracks/cd192cd9-078e-4916-b7df-59a950a41d09',
-  isNew: true,
-};
-
-function Card() {
+function Card({ title }) {
   return (
     <VStack
-      bg={useColorModeValue('gray.100', 'gray.800')}
+      bg={useColorModeValue('blue.00', 'gray.800')}
+      color="white"
       p="3"
-      minW="0"
-      wordWrap="break-word"
-      w="170px"
+      w="175px"
       alignItems="flex-start"
+      minH="250px"
     >
-      <Image
-        src={data.imageURL}
-        alt={`Picture of ${data.name}`}
-        w="150px"
+      <Stack
         h="150px"
-        objectFit="cover"
-      />
+        w="150px"
+        justifyContent="center"
+        alignItems="center"
+        bg="blue.400"
+      >
+        <Text>{title}</Text>
+      </Stack>
+
       <Heading as="h3" fontSize="sm">
-        Recently Played
+        {title}
       </Heading>
-      <Text fontSize="sm">These are your recently played tracks</Text>
+
+      <Text fontSize="sm">Explore {title} tracks</Text>
     </VStack>
   );
 }
 
 function Home() {
+  const [genres, setGenres] = useState([]);
+  const { sendAuthorizedRequest, showToast } = useAuth();
+
+  useEffect(() => {
+    try {
+      (async () => {
+        const data = await sendAuthorizedRequest('/genres', 'get', {});
+        setGenres(data);
+      })();
+    } catch (error) {
+      showToast('Error', error.response.data?.error, 'error');
+    }
+  }, []);
+
   return (
     <VStack alignItems="flex-start" gap="4">
       <Box>
@@ -55,22 +70,23 @@ function Home() {
           Recently Played
         </Heading>
         <HStack>
-          <Card />
+          <Link to="/recent-play">
+            <Card title="Recently Played" />
+          </Link>
         </HStack>
       </Box>
       <Box>
         <Heading fontSize="xl" pb="2">
-          Explore Playlists
+          Explore Genres
         </Heading>
-        <Text>Unwind with these selected playlists</Text>
-        <HStack flexWrap="wrap" pb="2" gap="4">
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
+        <HStack flexWrap="wrap" pb="2" gap="4" alignItems="flex-start">
+          {genres.map(genre => {
+            return (
+              <Link to={`/genres/${genre.id}`}>
+                <Card key={genre.name} title={genre.name} />
+              </Link>
+            );
+          })}
         </HStack>
       </Box>
     </VStack>

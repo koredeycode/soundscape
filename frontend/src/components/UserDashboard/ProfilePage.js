@@ -15,7 +15,7 @@ import {
 import { useAuth } from '../../hooks/AuthContext';
 
 function ProfilePage() {
-  const { currentUser, sendAuthorizedRequest } = useAuth();
+  const { currentUser, sendAuthorizedRequest, showToast } = useAuth();
   // Mock user profile data (replace with actual user data from your API)
   const initialProfile = {
     first_name: currentUser?.first_name,
@@ -25,7 +25,6 @@ function ProfilePage() {
 
   const [profile, setProfile] = useState(initialProfile);
   const [isEditing, setIsEditing] = useState(false);
-  const [updateSuccess, setUpdateSuccess] = useState(false);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -38,8 +37,12 @@ function ProfilePage() {
   };
 
   const handleSaveClick = async () => {
-    await sendAuthorizedRequest('/profile', 'put', profile);
-    setUpdateSuccess(true);
+    try {
+      await sendAuthorizedRequest('/profile', 'put', profile);
+      showToast('Success', 'Profile Updated!', 'success');
+    } catch (error) {
+      showToast('Error', error.response.data?.error, 'error');
+    }
     setIsEditing(false);
   };
 
@@ -52,23 +55,12 @@ function ProfilePage() {
   };
 
   return (
-    <Box p={4}>
-      <Heading size="lg" mb={4}>
-        User Profile
-      </Heading>
-      {updateSuccess && (
-        <Alert status="success" mb={4}>
-          <AlertIcon />
-          Profile updated successfully.
-          <CloseButton
-            position="absolute"
-            right="8px"
-            top="8px"
-            onClick={() => setUpdateSuccess(false)}
-          />
-        </Alert>
-      )}
+    // <Box p={4}>
+    <Box display="flex" justifyContent="center">
       <VStack align="start" spacing={4}>
+        <Heading size="lg" mb={4}>
+          User Profile
+        </Heading>
         <FormControl>
           <FormLabel>First Name</FormLabel>
           <Input
@@ -109,11 +101,11 @@ function ProfilePage() {
           />
         </FormControl> */}
         {isEditing ? (
-          <Button colorScheme="teal" onClick={handleSaveClick}>
+          <Button colorScheme="blue" onClick={handleSaveClick}>
             Save
           </Button>
         ) : (
-          <Button colorScheme="teal" onClick={handleEditClick}>
+          <Button colorScheme="blue" onClick={handleEditClick}>
             Edit Profile
           </Button>
         )}

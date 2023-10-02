@@ -5,19 +5,23 @@ import TrackList from '../lists/TrackList';
 import { useAuth } from '../../hooks/AuthContext';
 
 function TrackPage() {
-  const { sendAuthorizedRequest } = useAuth();
+  const { sendAuthorizedRequest, showToast } = useAuth();
   const [trackData, setTrackData] = useState(null);
   const { track_id } = useParams();
 
   useEffect(() => {
     (async () => {
-      const data = await sendAuthorizedRequest(
-        `/tracks/${track_id}`,
-        'get',
-        {}
-      );
-      console.log(data);
-      setTrackData(data);
+      try {
+        const data = await sendAuthorizedRequest(
+          `/tracks/${track_id}`,
+          'get',
+          {}
+        );
+
+        setTrackData(data);
+      } catch (error) {
+        showToast('Error', error.response.data?.error, 'error');
+      }
     })();
   }, []);
   return (
