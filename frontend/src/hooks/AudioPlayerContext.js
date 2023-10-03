@@ -52,14 +52,9 @@ export const AudioPlayerProvider = ({ children }) => {
   const [playMode, setPlayMode] = useState('loop'); // 'single', 'loop', 'shuffle'
   const [showQueue, setShowQueue] = useState(false);
   const [volume, setVolume] = useState(1); // Initial volume is 1 (max)
-  // const [isQueueChanged, setIsQueueChanged] = useState(false);
+
   const [keepPlaying, setKeepPlaying] = useState(true);
   const audioRef = useRef(new Audio());
-
-  // useEffect(() => {
-  //   console.log('use effect 1');
-  //   setKeepPlaying(true);
-  // }, [isQueueChanged]);
 
   useEffect(() => {
     console.log('use effect 2');
@@ -73,12 +68,16 @@ export const AudioPlayerProvider = ({ children }) => {
       audioRef.current.src = queue[currentIndex].audio_file;
       const audio = audioRef.current;
       console.log(audio);
-      const handleAudioEnd = () => {
-        handleNextClick();
-      };
       if (isPlaying) {
         audio.play();
       }
+      const handleAudioEnd = () => {
+        console.log('audio end');
+        const [prevIndex, newNextIndex] = calculateIndexes(currentIndex);
+        setPreviousIndex(prevIndex);
+        setNextIndex(newNextIndex);
+        setCurrentIndex(newNextIndex);
+      };
       audio.addEventListener('ended', handleAudioEnd);
       return () => {
         audio.removeEventListener('ended', handleAudioEnd);
@@ -117,7 +116,7 @@ export const AudioPlayerProvider = ({ children }) => {
     const [prevIndex, nxtIndex] = calculateIndexes(currentIndex);
     setPreviousIndex(prevIndex);
     setNextIndex(nxtIndex);
-  }, [currentIndex, playMode]);
+  }, [playMode, currentIndex]);
 
   const calculateIndexes = currentIndex => {
     let prevIndex, nxtIndex;
