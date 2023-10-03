@@ -14,12 +14,25 @@ export const useAudioPlayerContext = () => {
 
 const default_tracks = [
   {
-    cover_image:
-      'http://localhost:8000/media/images/tracks/975769f3-3b5a-4d26-abfa-06b16e3a1450',
-    audio_file:
-      'http://localhost:8000/media/tracks/975769f3-3b5a-4d26-abfa-06b16e3a1450',
+    id: '1263e4dd-6003-4b96-870a-527c84eb67c1',
     title: 'Trabaye',
-    artist: 'Asake',
+    slug: 'trabaye',
+    description: '',
+    artist: {
+      id: '9896e7ff-1d19-4169-a165-052d86e7faf4',
+      name: 'Lil tunny',
+      bio: 'The best',
+      profile_image:
+        'http://localhost:8000/media/images/artists/9896e7ff-1d19-4169-a165-052d86e7faf4',
+    },
+    genre_id: '3b3f5771-f966-4eb3-a5cd-7e4494ca1650',
+    streams: 0,
+    release_date: '2023-10-03',
+    cover_image:
+      'http://localhost:8000/media/images/tracks/1263e4dd-6003-4b96-870a-527c84eb67c1',
+    audio_file:
+      'http://localhost:8000/media/tracks/1263e4dd-6003-4b96-870a-527c84eb67c1',
+    featured_artists: [],
   },
 ];
 const localStorageKey = 'audioPlayerQueue';
@@ -33,60 +46,47 @@ export const AudioPlayerProvider = ({ children }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [previousIndex, setPreviousIndex] = useState(null);
-  const [nextIndex, setNextIndex] = useState(null);
+  const [previousIndex, setPreviousIndex] = useState(0);
+  const [nextIndex, setNextIndex] = useState(0);
   const [audioProgress, setAudioProgress] = useState(0);
   const [playMode, setPlayMode] = useState('loop'); // 'single', 'loop', 'shuffle'
   const [showQueue, setShowQueue] = useState(false);
   const [volume, setVolume] = useState(1); // Initial volume is 1 (max)
-
-  // const audioRef = useRef(new Audio(queue[currentIndex].audio_file));
+  // const [isQueueChanged, setIsQueueChanged] = useState(false);
+  const [keepPlaying, setKeepPlaying] = useState(true);
   const audioRef = useRef(new Audio());
 
+  // useEffect(() => {
+  //   console.log('use effect 1');
+  //   setKeepPlaying(true);
+  // }, [isQueueChanged]);
+
   useEffect(() => {
-    console.log('use effect 1');
+    console.log('use effect 2');
     localStorage.setItem(localStorageKey, JSON.stringify(queue));
   }, [queue]);
 
   useEffect(() => {
-    console.log('use effect 2');
-    audioRef.current.src = queue[currentIndex].audio_file;
-    const audio = audioRef.current;
-    console.log(audio);
-    const handleAudioEnd = () => {
-      if (currentIndex < queue.length - 1) {
-        const nextIndex = currentIndex + 1;
-        setCurrentIndex(nextIndex);
-      } else {
-        setCurrentIndex(0);
+    console.log('use effect 3');
+    console.log(keepPlaying);
+    if (keepPlaying) {
+      audioRef.current.src = queue[currentIndex].audio_file;
+      const audio = audioRef.current;
+      console.log(audio);
+      const handleAudioEnd = () => {
+        handleNextClick();
+      };
+      if (isPlaying) {
+        audio.play();
       }
-    };
-    if (isPlaying) {
-      audio.play();
+      audio.addEventListener('ended', handleAudioEnd);
+      return () => {
+        audio.removeEventListener('ended', handleAudioEnd);
+      };
+    } else {
+      setKeepPlaying(true);
     }
-    audio.addEventListener('ended', handleAudioEnd);
-    return () => {
-      audio.removeEventListener('ended', handleAudioEnd);
-    };
   }, [queue, currentIndex]);
-
-  // useEffect(() => {
-  //   console.log('use effect 3');
-  //   const handleKeyDown = event => {
-  //     if (event.code === 'Space') {
-  //       if (isPlaying) {
-  //         audioRef.current.pause();
-  //       } else {
-  //         audioRef.current.play();
-  //       }
-  //       setIsPlaying(!isPlaying);
-  //     }
-  //   };
-  //   document.addEventListener('keydown', handleKeyDown);
-  //   return () => {
-  //     document.removeEventListener('keydown', handleKeyDown);
-  //   };
-  // }, [isPlaying]);
 
   useEffect(() => {
     console.log('use effect 4');
@@ -110,6 +110,14 @@ export const AudioPlayerProvider = ({ children }) => {
       audio.removeEventListener('canplaythrough', handleCanPlayThrough);
     };
   }, [isPlaying]);
+
+  useEffect(() => {
+    console.log('use effect 5');
+    // Calculate previous and next indexes based on current index
+    const [prevIndex, nxtIndex] = calculateIndexes(currentIndex);
+    setPreviousIndex(prevIndex);
+    setNextIndex(nxtIndex);
+  }, [currentIndex, playMode]);
 
   const calculateIndexes = currentIndex => {
     let prevIndex, nxtIndex;
@@ -144,14 +152,6 @@ export const AudioPlayerProvider = ({ children }) => {
     return [prevIndex, nxtIndex];
   };
 
-  useEffect(() => {
-    console.log('use effect 5');
-    // Calculate previous and next indexes based on current index
-    const [prevIndex, nxtIndex] = calculateIndexes(currentIndex);
-    setPreviousIndex(prevIndex);
-    setNextIndex(nxtIndex);
-  }, [currentIndex, playMode]);
-
   const handlePlayPauseClick = () => {
     if (isPlaying) {
       audioRef.current.pause();
@@ -184,19 +184,15 @@ export const AudioPlayerProvider = ({ children }) => {
   };
 
   const handleNextClick = () => {
-    if (nextIndex !== null) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      setCurrentIndex(nextIndex);
-    }
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+    setCurrentIndex(nextIndex);
   };
 
   const handlePreviousClick = () => {
-    if (previousIndex !== null) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      setCurrentIndex(previousIndex);
-    }
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+    setCurrentIndex(previousIndex);
   };
 
   const handleSliderChange = value => {
@@ -219,10 +215,11 @@ export const AudioPlayerProvider = ({ children }) => {
     newQueue.splice(currentIndex + 1, 0, track);
 
     // Set the updated queue
-    const [prevIndex, nxtIndex] = calculateIndexes(currentIndex + 1);
+    // const [prevIndex, nxtIndex] = calculateIndexes(currentIndex + 1);
+    setKeepPlaying(false);
     setQueue(newQueue);
-    setNextIndex(nxtIndex);
-    setPreviousIndex(prevIndex);
+    setNextIndex(currentIndex + 1);
+    // setPreviousIndex(prevIndex);
   };
 
   const handlePlayingATrack = (tracks, index) => {
