@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../hooks/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -49,10 +49,13 @@ function LoginForm() {
       bg={useColorModeValue('gray.50', 'gray.800')}
     >
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+        <Link to="/" cursor="pointer">
+          <Text fontSize="lg">Go home</Text>
+        </Link>
         <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Sign in to your account</Heading>
+          <Heading fontSize={'4xl'}>Sign in</Heading>
           <Text fontSize={'lg'} color={'gray.600'}>
-            to enjoy all of our cool <span color={'blue.400'}>features</span> ✌️
+            the musics can't wait <span color={'blue.400'}>for you</span> ✌️
           </Text>
         </Stack>
         <Box

@@ -48,14 +48,14 @@ function Register() {
       justify={'center'}
       bg={useColorModeValue('gray.50', 'gray.800')}
     >
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+      <Stack spacing={4} mx={'auto'} maxW={'lg'} py={6} px={6}>
+        <Link to="/" cursor="pointer">
+          <Text fontSize="lg">Go home</Text>
+        </Link>
         <Stack align={'center'}>
           <Heading fontSize={'4xl'} textAlign={'center'}>
             Sign up
           </Heading>
-          <Text fontSize={'lg'} color={'gray.600'}>
-            to enjoy all of our cool features ✌️
-          </Text>
         </Stack>
         <Box
           rounded={'lg'}

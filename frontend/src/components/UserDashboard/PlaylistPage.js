@@ -8,6 +8,7 @@ function PlaylistPage() {
   const { sendAuthorizedRequest, showToast } = useAuth();
   const [playlistData, setPlayListData] = useState(null);
   const { playlist_id } = useParams();
+
   useEffect(() => {
     (async () => {
       try {
