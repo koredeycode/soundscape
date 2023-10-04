@@ -167,6 +167,9 @@ if DEV:
         "http://localhost:3000",
     ]
 else:
-    BASE_URL = 'https://soundscape-api.koredeycode.tech'
+    BASE_URL = 'http://soundscape-api.koredeycode.tech'
     ALLOWED_HOSTS = ['soundscape.koredeycode.tech', '172.174.225.164']
     CORS_ALLOWED_ORIGINS = ['https://soundscape.koredeycode.tech']
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800
+FILE_UPLOAD_MAX_MEMORY_SIZE = 52428800
