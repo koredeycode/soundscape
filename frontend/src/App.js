@@ -31,7 +31,6 @@ import CreateArtistProfile from './components/UserDashboard/CreateArtistProfile'
 
 function App() {
   const { isAuthenticated, isLoading, currentUser } = useAuth();
-  const bg = useColorModeValue('white', 'blue.900');
 
   if (isLoading) {
     return (

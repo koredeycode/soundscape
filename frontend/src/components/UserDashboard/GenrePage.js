@@ -23,7 +23,7 @@ const GenrePage = () => {
         showToast('Error', error.response.data?.error, 'error');
       }
     })();
-  }, []);
+  }, [genre_id]);
 
   return (
     <>

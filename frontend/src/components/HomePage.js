@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import {
   Box,
   Link as ChakraLink,
-  Image,
   Stack,
   Text,
   HStack,

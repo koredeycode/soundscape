@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Heading, Image } from '@chakra-ui/react';
+import { Box, Heading } from '@chakra-ui/react';
 import { useAuth } from '../../hooks/AuthContext';
 import TrackList from '../lists/TrackList';
 import { useParams } from 'react-router-dom';

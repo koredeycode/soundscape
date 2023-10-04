@@ -18,9 +18,6 @@ import {
   Avatar,
   Center,
   Text,
-  Button,
-  Link,
-  Badge,
   useColorModeValue,
 } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
@@ -57,7 +54,7 @@ function ArtistPage() {
             size={'xl'}
             src={artistData.artist?.profile_image}
             mb={4}
-            pos={'relative'}
+            pos="relative"
           />
           <Box>
             <Heading fontSize={'2xl'} fontFamily={'body'}>

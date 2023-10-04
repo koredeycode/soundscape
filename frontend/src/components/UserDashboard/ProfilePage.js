@@ -7,10 +7,6 @@ import {
   Input,
   Button,
   VStack,
-  Textarea,
-  Alert,
-  AlertIcon,
-  CloseButton,
 } from '@chakra-ui/react';
 import { useAuth } from '../../hooks/AuthContext';
 

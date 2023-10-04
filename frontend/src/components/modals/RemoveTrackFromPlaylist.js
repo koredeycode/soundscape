@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import {
   Button,
   Modal,
@@ -8,10 +7,7 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Select,
-  VStack,
   Text,
-  useToast,
 } from '@chakra-ui/react';
 import { useAuth } from '../../hooks/AuthContext';
 

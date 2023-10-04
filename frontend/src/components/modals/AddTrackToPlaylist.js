@@ -11,7 +11,6 @@ import {
   Select,
   VStack,
   Text,
-  Link as ChakraLink,
   useToast,
 } from '@chakra-ui/react';
 import { useAuth } from '../../hooks/AuthContext';

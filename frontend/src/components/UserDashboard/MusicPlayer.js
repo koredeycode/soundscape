@@ -1,4 +1,3 @@
-import React, { useState, useEffect, useRef } from 'react';
 import {
   HStack,
   VStack,
@@ -45,10 +44,8 @@ const playModeIcons = {
 function MusicPlayer() {
   const {
     queue,
-    setQueue,
     isPlaying,
     playMode,
-    // playModeIcons,
     togglePlayMode,
     handlePreviousClick,
     handlePlayPauseClick,

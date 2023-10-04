@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import {
   IconButton,
-  Avatar,
   Box,
   Flex,
   HStack,
@@ -25,7 +24,6 @@ import {
   MdOutlineSearch,
   MdHome,
   MdOutlineHome,
-  MdOpenInNew,
   MdPerson,
   MdPersonOutline,
 } from 'react-icons/md';

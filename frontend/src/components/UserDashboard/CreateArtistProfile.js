@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   FormControl,
@@ -50,14 +50,9 @@ const CreateArtistProfile = () => {
       subformData.append('profile_image', formData.profile_image);
     }
     try {
-      const response = await sendAuthorizedRequest(
-        `/artists`,
-        'post',
-        subformData,
-        {
-          'Content-Type': 'multipart/form-data',
-        }
-      );
+      await sendAuthorizedRequest(`/artists`, 'post', subformData, {
+        'Content-Type': 'multipart/form-data',
+      });
       showToast(
         'Success',
         'Artist profile created, refresh your browser',

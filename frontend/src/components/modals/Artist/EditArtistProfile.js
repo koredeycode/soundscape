@@ -8,7 +8,6 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Select,
   FormControl,
   FormLabel,
   Input,

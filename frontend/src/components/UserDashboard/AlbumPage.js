@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Heading, Image, Text, Flex } from '@chakra-ui/react';
+import { Box, Heading, Avatar, Text, Flex } from '@chakra-ui/react';
 import { useAuth } from '../../hooks/AuthContext';
 import TrackList from '../lists/TrackList';
 import { useParams } from 'react-router-dom';
@@ -27,7 +27,7 @@ function AlbumPage() {
     albumData && (
       <>
         <Flex p={4} gap={4}>
-          <Image
+          <Avatar
             src={albumData.cover_image}
             alt="Album Cover"
             mb={4}

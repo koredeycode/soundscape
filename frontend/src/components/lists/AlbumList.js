@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Box, Stack, Text, Link as ChakraLink } from '@chakra-ui/react';
+import { Box, Stack, Link as ChakraLink } from '@chakra-ui/react';
 
 export default function AlbumList({ albums }) {
   return (

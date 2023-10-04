@@ -13,7 +13,7 @@ export function AuthProvider({ children }) {
   const navigate = useNavigate();
   const url = true
     ? 'http://127.0.0.1:8000'
-    : 'http://soundscape-api.koredeycode.tech';
+    : 'https://soundscape-api.koredeycode.tech';
   const toast = useToast();
 
   const showToast = (title, description, status) => {

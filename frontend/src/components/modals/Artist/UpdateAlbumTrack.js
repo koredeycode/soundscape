@@ -14,7 +14,6 @@ import {
   Input,
   VStack,
   Textarea,
-  Text,
 } from '@chakra-ui/react';
 import { useAuth } from '../../../hooks/AuthContext';
 import { useParams } from 'react-router-dom';

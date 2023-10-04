@@ -8,7 +8,7 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { FaPlay, FaEdit } from 'react-icons/fa';
-import { MdDelete, MdEdit, MdOutlineDelete } from 'react-icons/md';
+import { MdOutlineDelete } from 'react-icons/md';
 import { useAudioPlayerContext } from '../../hooks/AudioPlayerContext';
 import { useAuth } from '../../hooks/AuthContext';
 import DeleteTrack from '../modals/Artist/DeleteTrack';
@@ -85,8 +85,7 @@ function TrackItem({
   setSelectedTrack,
   playlist_id,
 }) {
-  const { handleAddingNextTrack, handlePlayingATrack } =
-    useAudioPlayerContext();
+  const { handlePlayingATrack } = useAudioPlayerContext();
   return (
     <HStack w="100%" justify="space-between">
       <Text>{`${index + 1}. ${track.title}`}</Text>

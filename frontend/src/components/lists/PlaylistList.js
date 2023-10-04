@@ -4,7 +4,6 @@ import {
   Box,
   Stack,
   HStack,
-  Text,
   Button,
   useDisclosure,
   Link as ChakraLink,

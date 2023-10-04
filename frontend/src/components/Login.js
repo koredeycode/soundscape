@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../hooks/AuthContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -10,7 +10,6 @@ import {
   Heading,
   Stack,
   Flex,
-  Checkbox,
   Text,
   useColorModeValue,
   InputGroup,
@@ -25,7 +24,6 @@ function LoginForm() {
     password: '',
   });
   const { login } = useAuth();
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleInputChange = e => {
